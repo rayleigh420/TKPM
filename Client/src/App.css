@@ -3,5 +3,6 @@
 @layer base {
     body {
         @apply font-inter !important;
+        @apply bg-[#202020]
     }
 }
