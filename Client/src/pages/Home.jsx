@@ -5,8 +5,8 @@ const data = [
         name: 'Boi hoi gia'
     },
     {
-        src: 'https://i.truyenvua.com/ebook/190x247/boi-hoi-gia_1663135088.jpg?gt=hdfgdfg&mobile=2',
-        name: 'Boi hoi gia'
+        src: 'https://cdn.wuxiaworld.com/images/covers/bfbt.jpg?ver=fbc27beb0a7017f23af5a9560099d3aeaa2b8d2b',
+        name: 'I Became the 1st Floor Boss of the Tower'
     },
     {
         src: 'https://i.truyenvua.com/ebook/190x247/boi-hoi-gia_1663135088.jpg?gt=hdfgdfg&mobile=2',
