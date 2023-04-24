@@ -1,4 +1,9 @@
+import { useState } from "react"
+
 const Book = () => {
+    const [tab, setTab] = useState(false)
+
+
     return (
         <>
             <div className="flex flex-col items-center">
@@ -14,15 +19,50 @@ const Book = () => {
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Year: 2023</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Producer: Wuxiaworld</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Publishing Location: Korean</p>
-                        <button className="btn w-[150px] mt-[55px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-500 hover:to-blue-500">Rent Book</button>
+                        <button className="btn w-[150px] mt-[55px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">Rent Book</button>
                     </div>
                 </div>
-                <div className="tabs">
-                    <a className="text-[#ffffff] text-[20px] font-semibold leading-[24px] tracking-[-0.4px] tab tab-bordered tab-active">Description</a>
-                    <a className="text-[#ffffff] text-[20px] font-semibold leading-[24px] tracking-[-0.4px] tab tab-bordered">Location</a>
+                <div className="tabs w-full tab-bordered flex flex-col items-center">
+                    <div className="w-[62%]">
+                        <a className="pb-[40px] text-[#ffffff] text-[20px] font-semibold leading-[24px] tracking-[-0.4px] tab tab-bordered tab-active">About</a>
+                        <a className="pb-[40px] text-[#ffffff] text-[20px] font-semibold leading-[24px] tracking-[-0.4px] tab tab-bordered">Location</a>
+                    </div>
                 </div>
+                <div className="w-[62%] mt-[30px]">
+                    <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px] mb-[20px]">Information</h4>
+                    <div className="overflow-x-auto">
+                        <table className="table w-full border-nones">
+                            <thead>
+                                <tr>
+                                    <th>Pages</th>
+                                    <th>Licensed from</th>
+                                    <th>Number of renter</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>83 Chapters</td>
+                                    <td>Si Reubereu / TITAN</td>
+                                    <td>100</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="divider bordered border-[#ffffff]"></div>
+                    <div className="text-[#e0e0e0] leading-[24px] tracking-[-0.32px]">
+                        <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px] mb-[25px]">Details</h4>
+                        Status in Korean: Completed @ 254 chapters <br />
+                        <br />
+                        Translator: Yeniverse <br />
+                        <br />
+                        Editor: Dot, SoSam <br />
+                        <br />
+                        Release rate: 5 chapters a week with an occasional bonus 6th chapter
+                    </div>
+                    <div className="divider bordered border-[#ffffff]"></div>
+                </div>
+
             </div >
-            {/* <img src="" /> */}
         </>
     )
 }
