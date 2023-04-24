@@ -5,6 +5,8 @@ import './App.css'
 import Navigation from './components/navigation'
 import Footer from './components/Footer'
 import Login from './components/Login'
+import SignUp from './components/SignUp'
+import Form from './components/Form'
 
 const data = [
 
@@ -50,7 +52,7 @@ function App() {
 
   return (
     <>
-      <Navigation />
+      <Form />
       <div className="px-[135px]   mt-[30px]">
         <p className='text-[28px] font-bold leading-[32.2px] tracking-[-0.56px] text-[#ffffff]'>Popular</p>
 
@@ -66,7 +68,6 @@ function App() {
 
         </div>
       </div >
-      <Login />
       <Footer />
     </>
   )

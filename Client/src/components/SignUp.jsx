@@ -1,21 +1,21 @@
-const Login = ({ log, setSign, setLog }) => {
+const SignUp = ({ sign, setLog, setSign }) => {
 
-    const handleSignUps = () => {
-        setSign(true)
-        setLog(false)
+    const handleLogIn = () => {
+        setLog(true)
+        setSign(false)
     }
 
-    const handleCloseLogIn = () => {
-        setLog(false)
+    const handleCloseSignUp = () => {
+        setSign(false)
     }
 
     return (
         <>
-            <input checked={log} type="checkbox" id="my-modal-4" className="modal-toggle" />
-            <label htmlFor="my-modal-4" className="modal cursor-pointer">
+            <input checked={sign} type="checkbox" id="my-modal-5" className="modal-toggle" />
+            <label htmlFor="my-modal-5" className="modal cursor-pointer">
                 <label className="modal-box relative flex flex-col items-center max-w-md" htmlFor="">
-                    <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={handleCloseLogIn}>✕</label>
-                    <h3 className="text-lg font-bold">Login</h3>
+                    <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={handleCloseSignUp}>✕</label>
+                    <h3 className="text-lg font-bold">Sign Up</h3>
                     <div className="w-full mt-[22px] flex justify-center">
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
@@ -35,17 +35,17 @@ const Login = ({ log, setSign, setLog }) => {
                     </div>
 
                     <div className="mt-[20px]">
-                        <p className="text-[13px] font-semibold leading-[19.5px]" >Don't have account?
-                            <label htmlFor="my-modal-5" >
-                                <label className="cursor-pointer" htmlFor="my-modal-4" onClick={handleSignUps}>    Sign Up</label>
+                        <p className="text-[13px] font-semibold leading-[19.5px]">Already have account?
+                            <label htmlFor="my-modal-4" >
+                                <label className="cursor-pointer" htmlFor="my-modal-5" onClick={handleLogIn}>    Log In</label>
                             </label>
                         </p>
                     </div>
-                    <button className="btn mt-[20px]">Sign In</button>
+                    <button className="btn mt-[20px]">Sign Up</button>
                 </label>
             </label>
         </>
     )
 }
 
-export default Login
+export default SignUp
