@@ -5,7 +5,7 @@ import Navigation from "./navigation"
 
 const Form = () => {
     const [sign, setSign] = useState(false)
-    const [log, setLog] = useState(true)
+    const [log, setLog] = useState(false)
 
     // console.log(log, login)
 

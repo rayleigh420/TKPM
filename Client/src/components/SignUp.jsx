@@ -1,8 +1,42 @@
+import { useState } from "react"
+
 const SignUp = ({ sign, setLog, setSign }) => {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [repassword, setRePassword] = useState('')
+
+    const handleChangeName = (e) => {
+        setName(e.target.value)
+    }
+
+    const handleChangeEmail = (e) => {
+        setEmail(e.target.value)
+    }
+
+    const handleChangePassword = (e) => {
+        setPassword(e.target.value)
+    }
+
+    const handleChangeRePassword = (e) => {
+        setRePassword(e.target.value)
+    }
+
+    const handleSignUp = () => {
+        console.log(name, email, password, repassword)
+        setName('')
+        setEmail('')
+        setPassword('')
+        setRePassword('')
+    }
 
     const handleLogIn = () => {
         setLog(true)
         setSign(false)
+        // setName('')
+        // setEmail('')
+        // setPassword('')
+        // setRePassword('')
     }
 
     const handleCloseSignUp = () => {
@@ -15,13 +49,13 @@ const SignUp = ({ sign, setLog, setSign }) => {
             <label htmlFor="my-modal-5" className="modal cursor-pointer">
                 <label className="modal-box relative flex flex-col items-center max-w-md" htmlFor="">
                     <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={handleCloseSignUp}>✕</label>
-                    <h3 className="text-lg font-bold text-[#ffffff]">Sign Up</h3>
+                    <h3 className="text-lg font-bold text-[#ffffff]">Register</h3>
                     <div className="w-full mt-[22px] flex justify-center">
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
                                 <span className="label-text text-[#ffffff]">Name</span>
                             </label>
-                            <input type="text" placeholder="Enter your name" className="input input-bordered w-full max-w-xs" />
+                            <input value={name} onChange={handleChangeName} type="text" placeholder="Enter your name" className="input input-bordered w-full max-w-xs" />
                         </div>
                     </div>
 
@@ -30,7 +64,7 @@ const SignUp = ({ sign, setLog, setSign }) => {
                             <label className="label">
                                 <span className="label-text text-[#ffffff]">Email</span>
                             </label>
-                            <input type="text" placeholder="Enter your email" className="input input-bordered w-full max-w-xs" />
+                            <input value={email} onChange={handleChangeEmail} type="email" placeholder="Enter your email" className="input input-bordered w-full max-w-xs" />
                         </div>
                     </div>
 
@@ -39,7 +73,7 @@ const SignUp = ({ sign, setLog, setSign }) => {
                             <label className="label">
                                 <span className="label-text text-[#ffffff]">Password</span>
                             </label>
-                            <input type="text" placeholder="Enter your password" className="input input-bordered w-full max-w-xs" />
+                            <input value={password} onChange={handleChangePassword} type="password" placeholder="Enter your password" className="input input-bordered w-full max-w-xs" />
                         </div>
                     </div>
 
@@ -48,18 +82,18 @@ const SignUp = ({ sign, setLog, setSign }) => {
                             <label className="label">
                                 <span className="label-text text-[#ffffff]">Confirm Password</span>
                             </label>
-                            <input type="text" placeholder="Re Enter your password" className="input input-bordered w-full max-w-xs" />
+                            <input value={repassword} onChange={handleChangeRePassword} type="password" placeholder="Re Enter your password" className="input input-bordered w-full max-w-xs" />
                         </div>
                     </div>
 
                     <div className="mt-[20px]">
-                        <p className="text-[13px] font-semibold leading-[19.5px]">Already have account?
+                        <p className="text-[13px] font-semibold leading-[19.5px]">Already have an account?
                             <label htmlFor="my-modal-4" >
                                 <label className="cursor-pointer text-[#ffffff]" htmlFor="my-modal-5" onClick={handleLogIn}>    Log In</label>
                             </label>
                         </p>
                     </div>
-                    <button className="btn mt-[20px]">Sign Up</button>
+                    <button className="btn mt-[20px]" onClick={handleSignUp}>Sign Up</button>
                 </label>
             </label>
         </>

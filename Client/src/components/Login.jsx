@@ -1,4 +1,23 @@
+import { useState } from "react"
+
 const Login = ({ log, setSign, setLog }) => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleChangeEmail = (e) => {
+        setEmail(e.target.value)
+    }
+
+    const handleChangePassword = (e) => {
+        setPassword(e.target.value)
+    }
+
+    const handleSignIn = () => {
+        console.log(email, password)
+        setEmail('')
+        setPassword('')
+
+    }
 
     const handleSignUps = () => {
         setSign(true)
@@ -21,7 +40,7 @@ const Login = ({ log, setSign, setLog }) => {
                             <label className="label">
                                 <span className="label-text text-[#ffffff]">Email</span>
                             </label>
-                            <input type="text" placeholder="Enter your email" className="input input-bordered w-full max-w-xs" />
+                            <input value={email} onChange={handleChangeEmail} type="email" placeholder="Enter your email" className="input input-bordered w-full max-w-xs" />
                         </div>
                     </div>
 
@@ -30,7 +49,7 @@ const Login = ({ log, setSign, setLog }) => {
                             <label className="label">
                                 <span className="label-text text-[#ffffff]">Password</span>
                             </label>
-                            <input type="text" placeholder="Enter your password" className="input input-bordered w-full max-w-xs" />
+                            <input value={password} onChange={handleChangePassword} type="password" placeholder="Enter your password" className="input input-bordered w-full max-w-xs" />
                         </div>
                     </div>
 
@@ -41,7 +60,7 @@ const Login = ({ log, setSign, setLog }) => {
                             </label>
                         </p>
                     </div>
-                    <button className="btn mt-[20px]">Sign In</button>
+                    <button className="btn mt-[20px]" onClick={handleSignIn}>Sign In</button>
                 </label>
             </label>
         </>
