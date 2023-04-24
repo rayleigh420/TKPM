@@ -13,20 +13,20 @@ const data = [
         name: 'Overgeared'
     },
     {
-        src: 'https://i.truyenvua.com/ebook/190x247/boi-hoi-gia_1663135088.jpg?gt=hdfgdfg&mobile=2',
-        name: 'Boi hoi gia'
+        src: 'https://cdn.wuxiaworld.com/images/covers/tnc.jpg?ver=c0680298ea85209c0849028819aeed49338dbead',
+        name: "The Nebula's Civilization"
     },
     {
-        src: 'https://i.truyenvua.com/ebook/190x247/boi-hoi-gia_1663135088.jpg?gt=hdfgdfg&mobile=2',
-        name: 'Boi hoi gia'
+        src: 'https://cdn.wuxiaworld.com/images/covers/fpr.jpg?ver=5b17aa9dc43f6baf7ed45215a1bef4353ac95cd9',
+        name: 'The Frozen Player Returns'
     },
     {
-        src: 'https://i.truyenvua.com/ebook/190x247/boi-hoi-gia_1663135088.jpg?gt=hdfgdfg&mobile=2',
-        name: 'Boi hoi gia'
+        src: 'https://cdn.wuxiaworld.com/images/covers/ar.jpg?ver=b97c8f3393471b676dfc0a360179b41c6c11443b',
+        name: 'Absolute Resonance'
     },
     {
-        src: 'https://i.truyenvua.com/ebook/190x247/boi-hoi-gia_1663135088.jpg?gt=hdfgdfg&mobile=2',
-        name: 'Boi hoi gia'
+        src: 'https://cdn.wuxiaworld.com/images/covers/dr.jpg?ver=8c9af357b85339cbe8bc8b7ad08ee564ee6cf168',
+        name: 'Damn Reincarnation'
     }
 ]
 

@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Form from "./Form"
+import { Link } from "react-router-dom"
 
 const Navigation = ({ setLog }) => {
 
@@ -21,7 +22,9 @@ const Navigation = ({ setLog }) => {
         <>
             <div className="navbar bg-[#131415] px-[120px]">
                 <div className="flex-1">
-                    <a className="btn normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Library</a>
+                    <Link to="/home">
+                        <p className="btn normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Library</p>
+                    </Link>
                 </div>
                 <div className="flex-none gap-2">
                     <div className="form-control">
