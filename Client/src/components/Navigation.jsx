@@ -22,7 +22,7 @@ const Navigation = ({ setLog }) => {
         <>
             <div className="navbar bg-[#131415] px-[120px]">
                 <div className="flex-1">
-                    <Link to="/home">
+                    <Link to="/">
                         <p className="btn normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Library</p>
                     </Link>
                 </div>
