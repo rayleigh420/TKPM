@@ -3,6 +3,12 @@ import BookList from "../components/BookList"
 import { data } from "./home"
 import HistoryBook from "../components/HistoryBook"
 
+//status:
+
+// red: borrowed
+// yellow: booked
+// green: available
+
 const Book = () => {
     const [tab, setTab] = useState(false)
 
@@ -96,22 +102,22 @@ const Book = () => {
                                             <tr>
                                                 <td>ABCD6969</td>
                                                 <td>123456</td>
-                                                <td ><div className="badge badge-info gap-2 w-[50px]">O</div></td>
+                                                <td ><div className="badge bg-green-500 gap-2 w-[80px] text-[#ffffff]">Available</div></td>
                                             </tr>
                                             <tr>
                                                 <td>ABCD6970</td>
                                                 <td>123457</td>
-                                                <td><div className="badge badge-warning gap-2 w-[50px]">~</div></td>
+                                                <td><div className="badge bg-yellow-500 gap-2 w-[80px] text-[#ffffff]">Booked</div></td>
                                             </tr>
                                             <tr>
                                                 <td>ABCD6971</td>
                                                 <td>123458</td>
-                                                <td><div className="badge badge-warning gap-2 w-[50px]">X</div></td>
+                                                <td><div className="badge bg-red-500 gap-2 w-[80px] text-[#ffffff]">Borrowed</div></td>
                                             </tr>
                                             <tr>
                                                 <td>ABCD6972</td>
                                                 <td>123459</td>
-                                                <td><div className="badge badge-error gap-2 w-[50px]">X</div></td>
+                                                <td><div className="badge bg-red-500 gap-2 w-[80px] text-[#ffffff]">Borrowed</div></td>
                                             </tr>
                                         </tbody>
                                     </table>
