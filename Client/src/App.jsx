@@ -6,6 +6,8 @@ import Book from './pages/Book'
 import UserLayout from './pages/UserLayout'
 import ProfileForm from './components/ProfileForm'
 import ListRentedBook from './components/ListRentedBook'
+import ManageUser from './components/ManageUser'
+import ManageBook from './components/ManageBook'
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
           <Route path='user' element={<UserLayout />} >
             <Route path='profile' element={<ProfileForm />} />
             <Route path='listrented' element={< ListRentedBook />} />
+            <Route path='manage/viewer' element={<ManageUser />} />
+            <Route path='manage/book' element={<ManageBook />} />
           </Route>
         </Route>
       </Routes>

@@ -5,7 +5,7 @@ const ListRentedBook = () => {
     return (
         <div className="ml-[180px] w-[880px]">
             <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">List rented book</h1>
-            <div className="divider bordered border-[#ffffff] w-[850px]"></div>
+            <div className="divider bordered border-[#ffffff] w-[880px]"></div>
             <div className="overflow-x-auto overflow-y-auto w-full h-[800px]">
                 <table className="table w-full">
                     <thead>
