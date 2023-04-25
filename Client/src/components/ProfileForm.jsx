@@ -18,7 +18,7 @@ const ProfileForm = () => {
 
     return (
 
-        <div className="ml-[200px]">
+        <div className="ml-[180px]">
             <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">Your profile</h1>
             <div className="divider bordered border-[#ffffff] w-[750px]"></div>
             <div className="mt-[50px] w-[300px]">
