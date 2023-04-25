@@ -74,21 +74,37 @@ const Book = () => {
                             <div className="w-[62%] mt-[30px] mb-[150px]">
                                 <div className="overflow-x-auto">
                                     <table className="table w-full border-nones">
-                                        <thead>
+                                        <thead className="text-[#ffffff] font-bold text-[15px]">
                                             <tr>
-                                                <th>Pages</th>
-                                                <th>Licensed from</th>
-                                                <th>Number of renter</th>
+                                                <th>ID Book</th>
+                                                <th>Location</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody className="font-semibold text-[13px]">
                                             <tr>
-                                                <td>83 Chapters</td>
-                                                <td>Si Reubereu / TITAN</td>
-                                                <td>100</td>
+                                                <td>ABCD6969</td>
+                                                <td>123456</td>
+                                                <td ><div className="badge badge-info gap-2 w-[50px]">O</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td>ABCD6970</td>
+                                                <td>123457</td>
+                                                <td><div className="badge badge-warning gap-2 w-[50px]">~</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td>ABCD6971</td>
+                                                <td>123458</td>
+                                                <td><div className="badge badge-warning gap-2 w-[50px]">X</div></td>
+                                            </tr>
+                                            <tr>
+                                                <td>ABCD6972</td>
+                                                <td>123459</td>
+                                                <td><div className="badge badge-error gap-2 w-[50px]">X</div></td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <div className="divider bordered border-[#ffffff]"></div>
                                 </div>
                             </div>
                         )
