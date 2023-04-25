@@ -58,6 +58,8 @@ const Profile = () => {
                                 <input value="strip@gmail.com" type="email" placeholder="strip@gmail.com" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
+                        <button className="lg:ml-[600px] btn w-[125px] mt-[35px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">Save</button>
+
                     </div>
                 </div>
             </div>
