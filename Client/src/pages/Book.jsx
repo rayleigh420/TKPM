@@ -1,6 +1,7 @@
 import { useState } from "react"
 import BookList from "../components/BookList"
 import { data } from "./home"
+import HistoryBook from "../components/HistoryBook"
 
 const Book = () => {
     const [tab, setTab] = useState(false)
@@ -75,6 +76,14 @@ const Book = () => {
                         (
                             <div className="w-[62%] mt-[30px] mb-[150px]">
                                 <div className="overflow-x-auto">
+                                    <div className="flex flex-row justify-between mb-[20px]">
+                                        <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px]">Status of all versions</h4>
+                                        <button className="btn btn-ghost text-[#ffffff]">
+                                            <label htmlFor="history_book" className="cursor-pointer">
+                                                Watch History Rent
+                                            </label>
+                                        </button>
+                                    </div>
                                     <table className="table w-full border-nones">
                                         <thead className="text-[#ffffff] font-bold text-[15px]">
                                             <tr>
@@ -116,6 +125,7 @@ const Book = () => {
                 </div>
             </div >
             <div className="divider bordered border-[#ffffff]"></div>
+            <HistoryBook />
         </>
     )
 }
