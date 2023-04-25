@@ -1,4 +1,6 @@
 import { useState } from "react"
+import BookList from "../components/BookList"
+import { data } from "./home"
 
 const Book = () => {
     const [tab, setTab] = useState(false)
@@ -109,8 +111,11 @@ const Book = () => {
                             </div>
                         )
                 }
-
+                <div className="w-[62%]">
+                    <BookList nameList="Related Book" data={data} />
+                </div>
             </div >
+            <div className="divider bordered border-[#ffffff]"></div>
         </>
     )
 }
