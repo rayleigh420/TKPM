@@ -18,7 +18,9 @@ const ProfileForm = () => {
 
     return (
 
-        <>
+        <div className="ml-[200px]">
+            <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">Your profile</h1>
+            <div className="divider bordered border-[#ffffff] w-[750px]"></div>
             <div className="mt-[50px] w-[300px]">
                 <div className="w-full mt-[22px] flex justify-center">
                     <div className="form-control w-full max-w-xs">
@@ -39,7 +41,7 @@ const ProfileForm = () => {
                 </div>
                 <button className="lg:ml-[600px] btn w-[125px] mt-[35px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600" onClick={handleSaveProfile}>Save</button>
             </div>
-        </>
+        </div>
     )
 }
 

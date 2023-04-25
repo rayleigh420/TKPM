@@ -3,9 +3,9 @@ import { Route, Routes } from 'react-router-dom'
 import Layout from './pages/Layout'
 import Home from './pages/home'
 import Book from './pages/Book'
-import ListRentedBook from './pages/ListRentedBook'
 import UserLayout from './pages/UserLayout'
 import ProfileForm from './components/ProfileForm'
+import ListRentedBook from './components/ListRentedBook'
 
 function App() {
 
