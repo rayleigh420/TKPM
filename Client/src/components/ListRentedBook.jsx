@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { data } from "../pages/home"
 
 const ListRentedBook = () => {
@@ -29,7 +30,9 @@ const ListRentedBook = () => {
                                                 </div>
                                             </div>
                                             <div>
-                                                <div className="font-bold">{item.name}</div>
+                                                <Link to="/book">
+                                                    <div className="font-bold">{item.name}</div>
+                                                </Link>
                                             </div>
                                         </div>
                                     </td>
