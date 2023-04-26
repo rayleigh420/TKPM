@@ -1,8 +1,13 @@
 import { useState } from "react"
 
 const ProfileForm = () => {
+    const [img, setImg] = useState(null)
     const [name, setName] = useState('Le Nhat Duy')
     const [email, setEmail] = useState('strip@gmail.com')
+
+    const handleChangeImage = (e) => {
+        setImg(URL.createObjectURL(e.target.files[0]))
+    }
 
     const handleChangeName = (e) => {
         setName(e.target.value)
@@ -13,6 +18,9 @@ const ProfileForm = () => {
     }
 
     const handleSaveProfile = () => {
+        setImg(null)
+        setName('')
+        setEmail('')
         console.log(name, email)
     }
 
@@ -22,6 +30,17 @@ const ProfileForm = () => {
             <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">Your profile</h1>
             <div className="divider bordered border-[#ffffff] w-[750px]"></div>
             <div className="mt-[50px] w-[300px]">
+                <div className="flex flex-row justify-center mt-[30px]">
+                    <div className="avatar">
+                        <div className="w-24 rounded-full hover:shadow-md ring ring-[#121314] hover:ring-[#eeeeee] ring-offset-base-100 ring-offset-2">
+                            <label className="cursor-pointer" htmlFor="ava_input">
+                                <img src={img || "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/1200px-OOjs_UI_icon_userAvatar.svg.png"} />
+                            </label>
+                            <input className="hidden" id="ava_input" type="file" accept=".jpg,.jpeg,.png" onChange={handleChangeImage}></input>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="w-full mt-[22px] flex justify-center">
                     <div className="form-control w-full max-w-xs">
                         <label className="label">
