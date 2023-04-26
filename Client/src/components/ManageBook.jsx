@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import { data } from "../pages/home"
+import AddBook from "./modals/AddBook"
 
 const ManageBook = () => {
     return (
@@ -8,12 +9,13 @@ const ManageBook = () => {
                 <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">Manage Book</h1>
                 <div className="divider bordered border-[#ffffff] w-[880px]"></div>
                 <div className="flex justify-end mb-[20px]">
-                    <button className="btn w-[140px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">
+                    <AddBook />
+                    <label htmlFor="modal_addBook" className="btn w-[140px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Add book
-                    </button>
+                    </label>
                 </div>
                 <div className="overflow-x-auto overflow-y-auto w-full h-[800px]">
                     <table className="table w-full">

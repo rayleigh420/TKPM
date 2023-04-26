@@ -46,7 +46,7 @@ const AddVersionBook = () => {
                         </div>
                     </div>
                     <div className="flex flex-row justify-end mt-[20px]">
-                        <button className="btn" onClick={handleAddVersion}>Create</button>
+                        <label htmlFor="modal_addVersion" className="btn" onClick={handleAddVersion}>Create</label>
                     </div>
                 </label>
             </label>
