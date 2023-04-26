@@ -8,7 +8,17 @@ const ManageBook = () => {
             <div className="ml-[180px] w-[880px]">
                 <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">Manage Book</h1>
                 <div className="divider bordered border-[#ffffff] w-[880px]"></div>
-                <div className="flex justify-end mb-[20px]">
+                <div className="flex justify-between mb-[20px]">
+                    <div className="flex flex-row gap-[20px]">
+                        <div className="form-control">
+                            <input type="text" placeholder="Search" className="input input-bordered bg-[#262627] w-[300px]  focus:ease-out" />
+                        </div>
+                        <select className="select select-bordered max-w-[140px]">
+                            <option disabled selected>Type</option>
+                            <option>Light Novel</option>
+                            <option>Manga</option>
+                        </select>
+                    </div>
                     <AddBook />
                     <label htmlFor="modal_addBook" className="btn w-[140px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -111,7 +121,7 @@ const ManageBook = () => {
                     </tfoot> */}
                     </table>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
