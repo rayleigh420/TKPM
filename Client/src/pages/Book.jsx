@@ -3,6 +3,7 @@ import BookList from "../components/BookList"
 import { data } from "./home"
 import HistoryBook from "../components/HistoryBook"
 import AddVersionBook from "../components/modals/AddVersionBook"
+import RelatedBook from "../components/RelatedBook"
 
 //status:
 
@@ -146,7 +147,7 @@ const Book = () => {
                         )
                 }
                 <div className="w-[62%]">
-                    <BookList nameList="Related Book" data={data} />
+                    <RelatedBook />
                 </div>
             </div >
             <div className="divider bordered border-[#ffffff]"></div>
