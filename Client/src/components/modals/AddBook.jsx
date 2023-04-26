@@ -8,6 +8,7 @@ const AddBook = () => {
     const [year, setYear] = useState(2023)
     const [producer, setProducer] = useState('')
     const [publishing, setPublishing] = useState('')
+    const [description, setDescription] = useState('')
 
     const handleChangeImage = (e) => {
         setImg(URL.createObjectURL(e.target.files[0]))
@@ -37,14 +38,19 @@ const AddBook = () => {
         setName(e.target.value)
     }
 
+    const handleChangeDescription = (e) => {
+        setDescription(e.target.value)
+    }
+
     const handleAddBook = () => {
-        console.log(name, author, type, year, producer, publishing)
+        console.log(name, author, type, year, producer, publishing, description)
         setName('')
         setAuthor('')
         setType('')
         setYear('')
         setProducer('')
         setPublishing('')
+        setDescription('')
     }
 
     return (
@@ -123,6 +129,14 @@ const AddBook = () => {
                                 </label>
                                 <input value={publishing} onChange={handleChangePublishing} type="text" placeholder="Enter publishing location of book" className="input input-bordered w-full max-w-xs" />
                             </div>
+                        </div>
+                    </div>
+                    <div className="w-full mt-[22px]">
+                        <div className="form-control w-full">
+                            <label className="label">
+                                <span className="label-text text-[#ffffff]">Description</span>
+                            </label>
+                            <textarea value={description} onChange={handleChangeDescription} className="textarea textarea-bordered" placeholder="Enter description of book"></textarea>
                         </div>
                     </div>
                     <div className="flex flex-row justify-end mt-[30px]">
