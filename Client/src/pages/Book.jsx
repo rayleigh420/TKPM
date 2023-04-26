@@ -2,6 +2,7 @@ import { useState } from "react"
 import BookList from "../components/BookList"
 import { data } from "./home"
 import HistoryBook from "../components/HistoryBook"
+import AddVersionBook from "../components/modals/AddVersionBook"
 
 //status:
 
@@ -81,20 +82,22 @@ const Book = () => {
                         </div>) :
                         (
                             <div className="w-[62%] mt-[30px] mb-[150px]">
-                                <div className="overflow-x-auto">
+                                <div className="">
                                     <div className="flex flex-row justify-between mb-[20px]">
                                         <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px]">Status of all versions</h4>
                                         <div>
-                                            <button className="btn bg-[#eeeeee] text-[#00000] mr-[10px] hover:text-[#ffffff]">
-                                                <label htmlFor="history_book" className="cursor-pointer">
-                                                    Watch History Rent
-                                                </label>
-                                            </button>
-                                            <button className="btn w-[140px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">
-                                                <label htmlFor="" className="cursor-pointer">
-                                                    Add version
-                                                </label>
-                                            </button>
+                                            <HistoryBook />
+                                            {/* <button className="btn "> */}
+                                            <label htmlFor="history_book" className="cursor-pointer btn bg-[#eeeeee] text-[#000000] mr-[10px] hover:text-[#ffffff]">
+                                                Watch History Rent
+                                            </label>
+                                            {/* </button> */}
+                                            <AddVersionBook />
+                                            {/* <button className=""> */}
+                                            <label htmlFor="modal_addVersion" className="cursor-pointer btn w-[140px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">
+                                                Add version
+                                            </label>
+                                            {/* </button> */}
                                         </div>
 
                                     </div>
@@ -139,7 +142,6 @@ const Book = () => {
                 </div>
             </div >
             <div className="divider bordered border-[#ffffff]"></div>
-            <HistoryBook />
         </>
     )
 }

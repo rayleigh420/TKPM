@@ -11,7 +11,7 @@ const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 const HistoryBook = () => {
     return (
         <>
-            <label htmlFor="history_book" className="btn">open modal</label>
+            {/* <label htmlFor="history_book" className="btn">open modal</label> */}
 
             {/* Put this part before </body> tag */}
             <input type="checkbox" id="history_book" className="modal-toggle" />
