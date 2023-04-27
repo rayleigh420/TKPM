@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
-import { data } from "../pages/home"
-import AddBook from "./modals/AddBook"
-import EditBook from "./modals/EditBook"
+import { data } from "../../pages/home"
+import AddBook from "../modals/AddBook"
+import EditBook from "../modals/EditBook"
 import { useState } from "react"
 
 const ManageBook = () => {
@@ -46,8 +46,8 @@ const ManageBook = () => {
                     </label>
                 </div>
                 <div className="overflow-x-auto overflow-y-auto w-full h-[800px]">
-                    <table className="table w-full">
-                        <thead>
+                    <table className="table w-full relative">
+                        <thead className="sticky top-0">
                             <tr>
                                 <th>Name Book</th>
                                 <th>Type</th>
@@ -134,15 +134,13 @@ const ManageBook = () => {
                             }
                         </tbody>
                         {/* foot */}
-                        {/* <tfoot>
-                        <tr>
-                            <th>Name Book</th>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </tfoot> */}
+                        <tfoot className="sticky bottom-0">
+                            <tr>
+                                <th>Name Book</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div >

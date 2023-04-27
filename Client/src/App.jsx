@@ -6,8 +6,9 @@ import Book from './pages/Book'
 import UserLayout from './pages/UserLayout'
 import ProfileForm from './components/ProfileForm'
 import ListRentedBook from './components/ListRentedBook'
-import ManageUser from './components/ManageUser'
-import ManageBook from './components/ManageBook'
+import ManageUser from './components/manages/ManageUser'
+import ManageBook from './components/manages/ManageBook'
+import BookedBook from './components/status/BookedBook'
 
 function App() {
 
@@ -22,6 +23,9 @@ function App() {
             <Route path='listrented' element={< ListRentedBook />} />
             <Route path='manage/viewer' element={<ManageUser />} />
             <Route path='manage/book' element={<ManageBook />} />
+            <Route path='status/booked' element={<BookedBook />} />
+            <Route path='status/borrowed' element={<></>} />
+            <Route path='status/paid' element={<></>} />
           </Route>
         </Route>
       </Routes>
