@@ -6,8 +6,11 @@ const AddBook = () => {
     const [author, setAuthor] = useState('')
     const [type, setType] = useState('')
     const [year, setYear] = useState(2023)
+    const [page, setPage] = useState('')
+    const [licensed, setLicensed] = useState('')
     const [producer, setProducer] = useState('')
     const [publishing, setPublishing] = useState('')
+    const [detail, setDetail] = useState('')
     const [description, setDescription] = useState('')
 
     const handleChangeImage = (e) => {
@@ -26,6 +29,14 @@ const AddBook = () => {
         setYear(e.target.value)
     }
 
+    const handleChangePage = (e) => {
+        setPage(e.target.value)
+    }
+
+    const handleChangeLicensed = (e) => {
+        setLicensed(e.target.value)
+    }
+
     const handleChangeProducer = (e) => {
         setProducer(e.target.value)
     }
@@ -42,12 +53,18 @@ const AddBook = () => {
         setDescription(e.target.value)
     }
 
+    const handleChangeDetail = (e) => {
+        setDetail(e.target.value)
+    }
+
     const handleAddBook = () => {
-        console.log(name, author, type, year, producer, publishing, description)
+        console.log(name, author, type, year, page, licensed, producer, publishing, detail, description)
         setName('')
         setAuthor('')
         setType('')
         setYear('')
+        setPage('')
+        setLicensed('')
         setProducer('')
         setPublishing('')
         setDescription('')
@@ -129,6 +146,36 @@ const AddBook = () => {
                                 </label>
                                 <input value={publishing} onChange={handleChangePublishing} type="text" placeholder="Enter publishing location of book" className="input input-bordered w-full max-w-xs" />
                             </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-row">
+
+                        <div className="w-full mt-[24px]">
+                            <div className="form-control w-full max-w-xs">
+                                <label className="label">
+                                    <span className="label-text text-[#ffffff]">Pages</span>
+                                </label>
+                                <input value={page} onChange={handleChangePage} type="number" min="1" max="3000" step="1" placeholder="Enter page of book" className="input input-bordered w-full max-w-xs" />
+                            </div>
+                        </div>
+                        <div className="w-full mt-[22px]">
+                            <div className="form-control w-full max-w-xs">
+                                <label className="label">
+                                    <span className="label-text text-[#ffffff]">Licensed</span>
+                                </label>
+                                <input value={licensed} onChange={handleChangeLicensed} type="text" placeholder="Enter licensed of book" className="input input-bordered w-full max-w-xs" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div className="w-full mt-[22px]">
+                        <div className="form-control w-full">
+                            <label className="label">
+                                <span className="label-text text-[#ffffff]">Detail</span>
+                            </label>
+                            <textarea value={detail} onChange={handleChangeDetail} className="textarea textarea-bordered" placeholder="Enter description of book"></textarea>
                         </div>
                     </div>
                     <div className="w-full mt-[22px]">

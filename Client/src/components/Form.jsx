@@ -13,7 +13,9 @@ const Form = () => {
         <>
             <Login log={log} setSign={setSign} setLog={setLog} />
             <SignUp sign={sign} setLog={setLog} setSign={setSign} />
-            <Navigation setLog={setLog} />
+            <div className="relative">
+                <Navigation setLog={setLog} />
+            </div>
         </>
     )
 }

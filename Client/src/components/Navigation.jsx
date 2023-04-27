@@ -20,7 +20,7 @@ const Navigation = ({ setLog }) => {
 
     return (
         <>
-            <div className="navbar bg-[#131415] px-[120px]">
+            <div className="navbar bg-[#131415] px-[120px] fixed top-0">
                 <div className="flex-1">
                     <Link to="/">
                         <p className="btn normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Library</p>

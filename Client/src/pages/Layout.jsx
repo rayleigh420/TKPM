@@ -6,7 +6,9 @@ const Layout = () => {
     return (
         <>
             <Form />
-            <Outlet />
+            <div className="pt-[65px]">
+                <Outlet />
+            </div>
             <Footer />
         </>
     )
