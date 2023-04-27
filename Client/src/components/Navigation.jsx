@@ -22,14 +22,28 @@ const Navigation = ({ setLog }) => {
     return (
         <>
             <div className="navbar bg-[#131415] px-[120px] fixed top-0 z-50">
-                <div className="flex-1">
-                    <Link to="/">
-                        <p className="btn normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Library</p>
+                <div className="flex-1 flex flex-row gap-[25px]">
+                    <div>
+                    </div>
+                    <Link to="/" className="pr-[30px]">
+                        <p className="normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Library</p>
                     </Link>
+                    <Link to="/" className="pr-[12px]">
+                        <p className="normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]">Newest</p>
+                    </Link>
+                    <Link to="/" className="pr-[12px]">
+                        <p className="normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]">Popular</p>
+                    </Link>
+                    <select className="bg-transparent normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]">
+                        <option value="">Generics</option>
+                        <option value="">Novel</option>
+                    </select>
+                    {/* <div>
+                    </div> */}
                 </div>
                 <div className="flex-none gap-2">
                     <div className="form-control">
-                        <input type="text" placeholder="Search" className="input input-bordered rounded-full bg-[#262627] w-[150px] focus:w-[220px] focus:ease-out duration-200" onChange={handleChangeSearch} value={search} onSubmit={handleSubmit} />
+                        <input type="text" placeholder="Search" className="input input-bo   rdered rounded-full bg-[#262627] w-[150px] focus:w-[220px] focus:ease-out duration-200" onChange={handleChangeSearch} value={search} onSubmit={handleSubmit} />
                     </div>
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="btn btn-ghost btn-circle avatar" htmlFor="" onClick={handleOpen}>
