@@ -133,6 +133,7 @@ const BookedBook = () => {
                         {/* foot */}
                         <tfoot className="sticky bottom-0">
                             <tr>
+                                <th>Borrowed</th>
                                 <th>User</th>
                                 <th>Book</th>
                                 <th>From</th>

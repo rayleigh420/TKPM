@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom"
 import { data } from "../../pages/home"
-import AddBook from "../modals/AddBook"
-import EditBook from "../modals/EditBook"
 import { useState } from "react"
 
-const BookedBook = () => {
+const BorrowedBook = () => {
     const [search, setSearch] = useState('')
 
     const handleChangeSeach = (e) => {
@@ -36,11 +34,12 @@ const BookedBook = () => {
                     <table className="table w-full relative">
                         <thead className="sticky top-0">
                             <tr>
-                                <th>Borrowed</th>
+                                <th>Paid</th>
                                 <th>User</th>
                                 <th>Book</th>
                                 <th>From</th>
                                 <th>To</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,6 +83,9 @@ const BookedBook = () => {
                                         </td>
                                         <td>27/03/2023</td>
                                         <td>27/04/2023</td>
+                                        <td>
+                                            <div className="badge bg-red-500 text-[#ffffff] font-semibold">Overdue</div>
+                                        </td>
                                     </tr>
                                 ))
                             }
@@ -126,6 +128,9 @@ const BookedBook = () => {
                                         </td>
                                         <td>27/03/2023</td>
                                         <td>27/04/2023</td>
+                                        <td>
+                                            <div className="badge bg-yellow-500 text-[#ffffff] font-semibold">Waiting</div>
+                                        </td>
                                     </tr>
                                 ))
                             }
@@ -133,10 +138,12 @@ const BookedBook = () => {
                         {/* foot */}
                         <tfoot className="sticky bottom-0">
                             <tr>
+                                <th>Paid</th>
                                 <th>User</th>
                                 <th>Book</th>
                                 <th>From</th>
                                 <th>To</th>
+                                <th>Status</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -146,5 +153,5 @@ const BookedBook = () => {
     )
 }
 
-export default BookedBook
+export default BorrowedBook
 

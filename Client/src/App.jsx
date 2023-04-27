@@ -9,6 +9,7 @@ import ListRentedBook from './components/ListRentedBook'
 import ManageUser from './components/manages/ManageUser'
 import ManageBook from './components/manages/ManageBook'
 import BookedBook from './components/status/BookedBook'
+import BorrowedBook from './components/status/BorrowedBook'
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
             <Route path='manage/viewer' element={<ManageUser />} />
             <Route path='manage/book' element={<ManageBook />} />
             <Route path='status/booked' element={<BookedBook />} />
-            <Route path='status/borrowed' element={<></>} />
+            <Route path='status/borrowed' element={<BorrowedBook />} />
             <Route path='status/paid' element={<></>} />
           </Route>
         </Route>
