@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Form from "./Form"
 import { Link } from "react-router-dom"
+import { avaURL } from "../pages/UserLayout"
 
 const Navigation = ({ setLog }) => {
 
@@ -38,6 +39,13 @@ const Navigation = ({ setLog }) => {
                         </label>
                         <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 font-semibold">
                             <li><a className="text-[15px] font-bold py-[16px] text-[#ffffff]">
+                                {avaURL &&
+                                    <div className="avatar">
+                                        <div className="w-7 rounded-full ring ring-[#413ACB]">
+                                            <img src="https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg" />
+                                        </div>
+                                    </div>
+                                }
                                 Le Nhat Duy
                             </a></li>
                             <li>
