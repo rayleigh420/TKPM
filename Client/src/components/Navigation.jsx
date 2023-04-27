@@ -29,7 +29,7 @@ const Navigation = ({ setLog }) => {
                 </div>
                 <div className="flex-none gap-2">
                     <div className="form-control">
-                        <input type="text" placeholder="Search" className="input input-bordered rounded-full bg-[#262627] w-[150px] focus:w-[220px] focus:ease-out" onChange={handleChangeSearch} value={search} onSubmit={handleSubmit} />
+                        <input type="text" placeholder="Search" className="input input-bordered rounded-full bg-[#262627] w-[150px] focus:w-[220px] focus:ease-out duration-200" onChange={handleChangeSearch} value={search} onSubmit={handleSubmit} />
                     </div>
                     <div className="dropdown dropdown-end">
                         <label tabIndex={0} className="btn btn-ghost btn-circle avatar" htmlFor="" onClick={handleOpen}>
