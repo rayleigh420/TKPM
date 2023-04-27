@@ -8,7 +8,7 @@ const UserLayout = () => {
         <>
             <div className="flex flex-row justify-start">
                 <div className="w-[310px] pl-[135px] mt-[100px] relative">
-                    <ul className="menu menu-compact flex flex-col p-0 py-[10px] px-[5px] w-[300px] border border-[#191D24] text-[#ffffff] font-medium leading-[24px] bg-[#2a303c] rounded-[10px] shadow-md sticky top-0">
+                    <ul className="menu menu-compact flex flex-col p-0 py-[10px] px-[5px] w-[300px] border border-[#191D24] text-[#ffffff] font-medium leading-[24px] bg-[#2a303c] rounded-[10px] shadow-md sticky top-[70px]">
                         <li><a className="text-[20px] font-semibold py-[23px] text-[#ffffff]">
                             {avaURL &&
                                 <div className="avatar">

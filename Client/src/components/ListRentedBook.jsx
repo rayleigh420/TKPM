@@ -3,12 +3,12 @@ import { data } from "../pages/home"
 
 const ListRentedBook = () => {
     return (
-        <div className="ml-[180px] w-[880px]">
+        <div className="ml-[180px] w-[880px]" >
             <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">List rented book</h1>
             <div className="divider bordered border-[#ffffff] w-[880px]"></div>
             <div className="overflow-x-auto overflow-y-auto w-full h-[800px]">
-                <table className="table w-full">
-                    <thead>
+                <table className="table w-full relative">
+                    <thead className="sticky top-0">
                         <tr>
                             <th>Name Book</th>
                             <th>ID Book</th>
@@ -17,7 +17,7 @@ const ListRentedBook = () => {
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="mt-[30px]">
                         {/* row 1 */}
                         {
                             data.map(item => (
@@ -73,15 +73,15 @@ const ListRentedBook = () => {
                         }
                     </tbody>
                     {/* foot */}
-                    {/* <tfoot>
+                    <tfoot className="sticky bottom-0">
                         <tr>
                             <th>Name Book</th>
-                            <th>ID</th>
-                            <th>Date</th>
+                            <th>ID Book</th>
+                            <th>From</th>
+                            <th>To</th>
                             <th>Status</th>
-                            <th></th>
                         </tr>
-                    </tfoot> */}
+                    </tfoot>
 
                 </table>
             </div>
