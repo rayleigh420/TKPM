@@ -2,24 +2,41 @@ import { Link } from "react-router-dom"
 import { data } from "../pages/home"
 import AddBook from "./modals/AddBook"
 import EditBook from "./modals/EditBook"
+import { useState } from "react"
 
 const ManageBook = () => {
+    const [search, setSearch] = useState('')
+    const [typeSearch, setTypeSearch] = useState('')
+
+    const handleChangeSeach = (e) => {
+        setSearch(e.target.value)
+    }
+
+    const handleChangeType = (e) => {
+        setTypeSearch(e.target.value)
+    }
+
+    const handleSubmitSearch = (e) => {
+        e.preventDefault()
+        console.log(search, typeSearch)
+    }
+
     return (
         <>
             <div className="ml-[180px] w-[880px]">
                 <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">Manage Book</h1>
                 <div className="divider bordered border-[#ffffff] w-[880px]"></div>
                 <div className="flex justify-between mb-[20px]">
-                    <div className="flex flex-row gap-[20px]">
+                    <form className="flex flex-row gap-[20px]" onSubmit={handleSubmitSearch}>
                         <div className="form-control">
-                            <input type="text" placeholder="Search" className="input input-bordered bg-[#262627] w-[300px]  focus:ease-out" />
+                            <input value={search} onChange={handleChangeSeach} type="text" placeholder="Search" className="input input-bordered bg-[#262627] w-[300px]  focus:ease-out" />
                         </div>
-                        <select className="select select-bordered max-w-[140px]">
+                        <select className="select select-bordered max-w-[140px]" value={typeSearch} onChange={handleChangeType}>
                             <option disabled selected>Type</option>
-                            <option>Light Novel</option>
-                            <option>Manga</option>
+                            <option value="ln">Light Novel</option>
+                            <option value="mg">Manga</option>
                         </select>
-                    </div>
+                    </form>
                     <AddBook />
                     <label htmlFor="modal_addBook" className="btn w-[140px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
