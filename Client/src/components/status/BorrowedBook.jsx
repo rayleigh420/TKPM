@@ -14,14 +14,14 @@ const BorrowedBook = () => {
         console.log(search, typeSearch)
     }
 
-    const handleChangeBorrowed = (index) => {
+    const handleChangePaid = (index) => {
         console.log("Change to borrowed: ", index)
     }
 
     return (
         <>
             <div className="ml-[180px] w-[880px]">
-                <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">List Booked Book</h1>
+                <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">List Borrowed Book</h1>
                 <div className="divider bordered border-[#ffffff] w-[880px]"></div>
                 <div className="flex justify-end mb-[20px]">
                     <form className="flex flex-row gap-[20px]" onSubmit={handleSubmitSearch}>
@@ -49,7 +49,7 @@ const BorrowedBook = () => {
                                     <tr key={index}>
                                         <td>
                                             <label>
-                                                <input type="checkbox" className="checkbox" onChange={() => handleChangeBorrowed(index)} />
+                                                <input type="checkbox" className="checkbox" onChange={() => handleChangePaid(index)} />
                                             </label>
                                         </td>
                                         <td>
@@ -94,7 +94,7 @@ const BorrowedBook = () => {
                                     <tr key={index}>
                                         <td>
                                             <label>
-                                                <input type="checkbox" className="checkbox" onChange={() => handleChangeBorrowed(index)} />
+                                                <input type="checkbox" className="checkbox" onChange={() => handleChangePaid(index)} />
                                             </label>
                                         </td>
                                         <td>
