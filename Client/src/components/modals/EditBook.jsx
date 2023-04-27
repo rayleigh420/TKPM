@@ -1,15 +1,15 @@
 import { useState } from "react"
 
-const AddBook = () => {
+const EditBook = () => {
     const [img, setImg] = useState(null)
-    const [name, setName] = useState('')
-    const [author, setAuthor] = useState('')
-    const [type, setType] = useState('')
+    const [name, setName] = useState('Overgeard')
+    const [author, setAuthor] = useState('Han Soo Young')
+    const [type, setType] = useState('ln')
     const [year, setYear] = useState(2023)
-    const [page, setPage] = useState('')
-    const [licensed, setLicensed] = useState('')
-    const [producer, setProducer] = useState('')
-    const [publishing, setPublishing] = useState('')
+    const [page, setPage] = useState(100)
+    const [licensed, setLicensed] = useState('MIT')
+    const [producer, setProducer] = useState('NXB')
+    const [publishing, setPublishing] = useState('Korean Tower')
     const [detail, setDetail] = useState('')
     const [description, setDescription] = useState('')
 
@@ -57,7 +57,7 @@ const AddBook = () => {
         setDetail(e.target.value)
     }
 
-    const handleAddBook = () => {
+    const handleUpdateBook = () => {
         console.log(name, author, type, year, page, licensed, producer, publishing, detail, description)
         setName('')
         setAuthor('')
@@ -72,8 +72,8 @@ const AddBook = () => {
 
     return (
         <>
-            <input type="checkbox" id="modal_addBook" className="modal-toggle" />
-            <label htmlFor="modal_addBook" className="modal cursor-pointer">
+            <input type="checkbox" id="modal_editBook" className="modal-toggle" />
+            <label htmlFor="modal_editBook" className="modal cursor-pointer">
                 <label className="modal-box relative w-11/12 max-w-3xl" htmlFor="">
                     <h3 className="text-lg font-bold text-center">Add new book</h3>
                     <div className="flex flex-row justify-center mt-[30px]">
@@ -113,8 +113,8 @@ const AddBook = () => {
                                 </label>
                                 <select className="select select-bordered w-full max-w-xs" value={type} onChange={handleChangeType}>
                                     <option disabled selected>Enter type of book</option>
-                                    <option value="ln">Light Novel</option>
-                                    <option value="mg">Manga</option>
+                                    <option>Light Novel</option>
+                                    <option>Manga</option>
                                 </select>
                             </div>
                         </div>
@@ -187,7 +187,7 @@ const AddBook = () => {
                         </div>
                     </div>
                     <div className="flex flex-row justify-end mt-[30px]">
-                        <label htmlFor="modal_addBook" className="btn" onClick={handleAddBook} >Create</label>
+                        <label htmlFor="modal_editBook" className="btn" onClick={handleUpdateBook} >Update</label>
                     </div>
                 </label>
             </label>
@@ -195,4 +195,4 @@ const AddBook = () => {
     )
 }
 
-export default AddBook
+export default EditBook
