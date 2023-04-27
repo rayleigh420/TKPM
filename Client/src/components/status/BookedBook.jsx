@@ -50,7 +50,7 @@ const BookedBook = () => {
                                     <tr key={index}>
                                         <td>
                                             <label>
-                                                <input type="checkbox" className="checkbox" onChange={(index) => handleChangeBorrowed(index)} />
+                                                <input type="checkbox" className="checkbox" onChange={() => handleChangeBorrowed(index)} />
                                             </label>
                                         </td>
                                         <td>
@@ -92,7 +92,7 @@ const BookedBook = () => {
                                     <tr key={index}>
                                         <td>
                                             <label>
-                                                <input type="checkbox" className="checkbox" onChange={handleChangeBorrowed} />
+                                                <input type="checkbox" className="checkbox" onChange={() => handleChangeBorrowed(index)} />
                                             </label>
                                         </td>
                                         <td>
