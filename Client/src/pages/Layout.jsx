@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import Footer from "../components/layout/Footer"
-import Form from "../components/Form"
+import Form from "../components/forms/Form"
 
 const Layout = () => {
     return (

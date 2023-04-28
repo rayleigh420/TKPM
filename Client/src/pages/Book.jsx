@@ -2,7 +2,7 @@ import { useState } from "react"
 import { data } from "./home"
 import HistoryBook from "../components/HistoryBook"
 import AddVersionBook from "../components/modals/AddVersionBook"
-import RelatedBook from "../components/RelatedBook"
+import RelatedBook from "../components/list/RelatedBook"
 
 //status:
 
