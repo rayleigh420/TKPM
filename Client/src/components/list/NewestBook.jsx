@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom"
-import { data } from "../pages/home"
-import BookList from "./BookList"
+import { data } from "../../pages/home"
 
 const NewestBook = () => {
     return (

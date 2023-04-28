@@ -1,4 +1,4 @@
-import { data } from "../pages/home"
+import { data } from "../../pages/home"
 import BookList from "./BookList"
 
 const PopularBook = () => {

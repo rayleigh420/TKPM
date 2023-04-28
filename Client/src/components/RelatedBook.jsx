@@ -1,5 +1,5 @@
 import { data } from "../pages/home"
-import BookList from "./BookList"
+import BookList from "./list/BookList"
 
 const RelatedBook = () => {
     return (

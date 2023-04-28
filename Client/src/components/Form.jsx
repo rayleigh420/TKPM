@@ -1,7 +1,7 @@
-import Login from "./Login"
-import SignUp from "./SignUp"
+import Login from "./auth/Login"
+import SignUp from "./auth/SignUp"
 import { useState } from "react"
-import Navigation from "./Layout/Navigation"
+import Navigation from "./layout/Navigation"
 
 const Form = () => {
     const [sign, setSign] = useState(false)

@@ -11,6 +11,7 @@ import ManageBook from './components/manages/ManageBook'
 import BookedBook from './components/status/BookedBook'
 import BorrowedBook from './components/status/BorrowedBook'
 import PaidBook from './components/status/PaidBook'
+import GenericBook from './pages/GenericBook'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
             <Route path='status/borrowed' element={<BorrowedBook />} />
             <Route path='status/paid' element={<PaidBook />} />
           </Route>
+          <Route path="/:generic" element={<GenericBook />} />
         </Route>
       </Routes>
     </>

@@ -1,5 +1,5 @@
-import NewestBook from "../components/NewestBook"
-import PopularBook from "../components/PopularBook"
+import NewestBook from "../components/list/NewestBook"
+import PopularBook from "../components/list/PopularBook"
 
 export const data = [
 

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import BookList from "../components/BookList"
 import { data } from "./home"
 import HistoryBook from "../components/HistoryBook"
 import AddVersionBook from "../components/modals/AddVersionBook"
@@ -26,7 +25,7 @@ const Book = () => {
         <>
             <div className="flex flex-col items-center">
                 <div className=" w-[62%] py-[60px] flex flex-row">
-                    <div className="w-[240px] h-[350px] bg-contain hover:border-[1.75px] bg-[url('https://cdn.wuxiaworld.com/images/covers/bfbt.jpg?ver=fbc27beb0a7017f23af5a9560099d3aeaa2b8d2b')] rounded-[7px]">
+                    <div className="w-[240px] h-[350px] bg-cover hover:border-[1.75px] bg-[url('https://cdn.wuxiaworld.com/images/covers/bfbt.jpg?ver=fbc27beb0a7017f23af5a9560099d3aeaa2b8d2b')] rounded-[7px]">
                     </div>
                     <div className="ml-[30px]">
                         <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
