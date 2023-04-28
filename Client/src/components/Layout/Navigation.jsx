@@ -1,7 +1,6 @@
 import { useState } from "react"
-import Form from "./Form"
 import { Link } from "react-router-dom"
-import { avaURL } from "../pages/UserLayout"
+import { avaURL } from "../../pages/UserLayout"
 
 const Navigation = ({ setLog }) => {
 
@@ -28,16 +27,34 @@ const Navigation = ({ setLog }) => {
                     <Link to="/" className="pr-[30px]">
                         <p className="normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Library</p>
                     </Link>
-                    <Link to="/" className="pr-[12px]">
+                    <Link to="newest" className="pr-[12px]">
                         <p className="normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]">Newest</p>
                     </Link>
-                    <Link to="/" className="pr-[12px]">
+                    <Link to="popular" className="pr-[12px]">
                         <p className="normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]">Popular</p>
                     </Link>
-                    <select className="bg-transparent normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]">
-                        <option value="">Generics</option>
-                        <option value="">Novel</option>
-                    </select>
+                    <div className="dropdown dropdown-end">
+                        <label tabIndex={0} className="cursor-pointer normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]" htmlFor="" onClick={handleOpen}>
+                            <div className="">Generics</div>
+                        </label>
+                        <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 font-semibold">
+                            <li>
+                                <Link to="novel">
+                                    Novel
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="education">
+                                    Education
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to='IT'>
+                                    Information Technology
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
                     {/* <div>
                     </div> */}
                 </div>
