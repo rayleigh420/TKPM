@@ -1,6 +1,5 @@
 import { useState } from "react"
-import { data } from "./home"
-import HistoryBook from "../components/HistoryBook"
+import HistoryBook from "../components/admin/HistoryBook"
 import AddVersionBook from "../components/modals/AddVersionBook"
 import RelatedBook from "../components/list/RelatedBook"
 

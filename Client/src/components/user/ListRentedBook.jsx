@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { data } from "../pages/home"
+import { data } from "../../pages/home"
 
 const ListRentedBook = () => {
     return (
