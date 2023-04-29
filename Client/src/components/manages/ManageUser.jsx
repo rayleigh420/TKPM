@@ -6,15 +6,10 @@ import { useState } from "react"
 
 const ManageUser = () => {
     const [search, setSearch] = useState('')
-    const [typeSearch, setTypeSearch] = useState('')
 
     const handleChangeSeach = (e) => {
         setSearch(e.target.value)
     }
-
-    // const handleChangeType = (e) => {
-    //     setTypeSearch(e.target.value)
-    // }
 
     const handleSubmitSearch = (e) => {
         e.preventDefault()

@@ -37,7 +37,7 @@ const Navigation = ({ setLog }) => {
                         <label tabIndex={0} className="cursor-pointer normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]" htmlFor="" onClick={handleOpen}>
                             <div className="">Generics</div>
                         </label>
-                        <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 font-semibold">
+                        <ul tabIndex={0} className="bg-[#202020] mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-52 font-semibold">
                             <li>
                                 <Link to="novel">
                                     Novel
