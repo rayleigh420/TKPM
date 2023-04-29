@@ -3,9 +3,11 @@ import { data } from "../../pages/home"
 import AddBook from "../modals/AddBook"
 import EditBook from "../modals/EditBook"
 import { useState } from "react"
+import useDebounce from "../../hooks/useDebounce"
 
 const ManageUser = () => {
     const [search, setSearch] = useState('')
+    const debounced = useDebounce(search, 1000)
 
     const handleChangeSeach = (e) => {
         setSearch(e.target.value)
@@ -26,19 +28,7 @@ const ManageUser = () => {
                         <div className="form-control">
                             <input value={search} onChange={handleChangeSeach} type="text" placeholder="Search" className="input input-bordered bg-[#262627] w-[300px]  focus:ease-out" />
                         </div>
-                        {/* <select className="select select-bordered max-w-[140px]" value={typeSearch} onChange={handleChangeType}>
-                            <option disabled selected>Type</option>
-                            <option value="ln">Light Novel</option>
-                            <option value="mg">Manga</option>
-                        </select> */}
                     </form>
-                    {/* <AddBook /> */}
-                    {/* <label htmlFor="modal_addBook" className="btn w-[140px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Add book
-                    </label> */}
                 </div>
                 <div className="overflow-x-auto overflow-y-auto w-full h-[800px]">
                     <table className="table w-full relative">
