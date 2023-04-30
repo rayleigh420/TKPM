@@ -12,6 +12,7 @@ import BookedBook from './components/status/BookedBook'
 import BorrowedBook from './components/status/BorrowedBook'
 import PaidBook from './components/status/PaidBook'
 import GenericBook from './pages/GenericBook'
+import RequireAuth from './components/auth/RequireAuth'
 
 function App() {
 
@@ -22,14 +23,29 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='book' element={<Book />} />
           <Route path='user' element={<UserLayout />} >
+
             <Route path='profile' element={<ProfileForm />} />
             <Route path='listrented' element={< ListRentedBook />} />
 
-            <Route path='manage/viewer' element={<ManageUser />} />
-            <Route path='manage/book' element={<ManageBook />} />
-            <Route path='status/booked' element={<BookedBook />} />
-            <Route path='status/borrowed' element={<BorrowedBook />} />
-            <Route path='status/paid' element={<PaidBook />} />
+            <Route element={<RequireAuth role="admin" />}>
+              <Route path='manage/viewer' element={<ManageUser />} />
+            </Route>
+
+            <Route element={<RequireAuth role="admin" />}>
+              <Route path='manage/book' element={<ManageBook />} />
+            </Route>
+
+            <Route element={<RequireAuth role="admin" />}>
+              <Route path='status/booked' element={<BookedBook />} />
+            </Route>
+
+            <Route element={<RequireAuth role="admin" />}>
+              <Route path='status/borrowed' element={<BorrowedBook />} />
+            </Route>
+
+            <Route element={<RequireAuth role="admin" />}>
+              <Route path='status/paid' element={<PaidBook />} />
+            </Route>
 
           </Route>
           <Route path="/:generic" element={<GenericBook />} />
