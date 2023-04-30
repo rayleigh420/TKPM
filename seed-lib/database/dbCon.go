@@ -4,14 +4,20 @@ import (
 	// "os"b
 	"context"
 	"log"
+	"os"
 	"time"
+
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func DBInstance() *mongo.Client {
+	if err := godotenv.Load(".env");err != nil {
+		panic(err)
+	}
 	ctx,cancel := context.WithTimeout(context.Background(),50*time.Second)
-	dbclient, err := mongo.NewClient(options.Client().ApplyURI("mongodb://127.0.0.1:27017"))
+	dbclient, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_URI")))
 	
 	if err != nil {
 		log.Fatal(err.Error())
