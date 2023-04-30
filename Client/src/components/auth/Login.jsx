@@ -1,8 +1,10 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
+import AuthContext from "../../context/AuthProvider"
 
 const Login = ({ log, setSign, setLog }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const { setAuth } = useContext(AuthContext)
 
     const handleChangeEmail = (e) => {
         setEmail(e.target.value)
@@ -16,7 +18,11 @@ const Login = ({ log, setSign, setLog }) => {
         console.log(email, password)
         setEmail('')
         setPassword('')
-
+        setAuth({
+            name: "Le Nhat Duy",
+            email: 'nhatduy0409@gmail.com'
+        })
+        setLog(false)
     }
 
     const handleSignUps = () => {
