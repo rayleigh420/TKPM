@@ -20,7 +20,8 @@ const Login = ({ log, setSign, setLog }) => {
         setPassword('')
         setAuth({
             name: "Le Nhat Duy",
-            email: 'nhatduy0409@gmail.com'
+            email: 'nhatduy0409@gmail.com',
+            role: email === "admin" ? "admin" : 'user'
         })
         setLog(false)
     }

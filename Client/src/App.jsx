@@ -24,11 +24,13 @@ function App() {
           <Route path='user' element={<UserLayout />} >
             <Route path='profile' element={<ProfileForm />} />
             <Route path='listrented' element={< ListRentedBook />} />
+
             <Route path='manage/viewer' element={<ManageUser />} />
             <Route path='manage/book' element={<ManageBook />} />
             <Route path='status/booked' element={<BookedBook />} />
             <Route path='status/borrowed' element={<BorrowedBook />} />
             <Route path='status/paid' element={<PaidBook />} />
+
           </Route>
           <Route path="/:generic" element={<GenericBook />} />
         </Route>
