@@ -1,0 +1,58 @@
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+    "name":"Long2",
+    "phone":"0100",
+    "email":"klong1@gmail.com",
+    "password":"123"
+}
+
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+    "email":"user23@gmail.com",
+    "password":"1234"
+}
+###
+GET http://localhost:8080/books?page=1
+
+### 
+GET http://localhost:8080/books/search?search_text=Ob
+
+###
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{
+   "name":"Giai thuat 5",
+   "publisher":"Fahasa",
+   "yearpublished": 2020,
+   "author":"Tang Kim Long",
+   "book_image":"https://example.com/hhgttg.jpg",
+   "amount":20,
+   "type_id":"2"
+}
+
+###
+POST http://localhost:8080/books/book_detail/6449d83967b05b84f16cfe38
+Content-Type: application/json
+
+{
+   "location":"ABC 5"
+}
+
+
+###
+GET http://localhost:8080/RentList
+
+###
+GET http://localhost:8080/books/type?book_type=Manga&page=1
+
+###
+GET http://localhost:8080/books/latest
+
+###
+GET http://localhost:8080/books/popular

@@ -1,0 +1,160 @@
+###
+First of, the user's data in seeding file:
+email is formatted by user + number and password is bydefault "123" ex: "user1@gmail.com" p: "123" 
+user1: admin
+user2-5: user
+
+
+###
+Sign in
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+    "email":"user2@gmail.com",
+    "password":"123"
+}
+
+Result:
+Success:
+{
+  "status": "accepted"
+}
+Not:
+{
+  "error": "Password incorrect"
+}
+Not:
+{
+  "error": "email not found"
+}
+###
+Sign up
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+    "name":"Long2",
+    "phone":"010",
+    "email":"klong@gmail",
+    "password":"123"
+}
+
+Result:
+Success: 
+{
+  "success": {
+    "InsertedID": "644e24e27435bfd26148eb23"
+  }
+}
+Not:
+{
+  "error": "email or phone already exists"
+}
+
+###
+Get Books
+GET http://localhost:8080/books?page=n
+
+Return: [
+    {
+        "bookItems: [
+            {book1},
+            {book2},
+            {book3},
+            type: [
+                {
+                "typeid":"",
+                "typename":"",
+            },
+            ]
+        ]
+    }
+]
+
+### 
+Search books
+GET http://localhost:8080/books/search?search_text=abc&page=n
+
+Return: [
+    {
+        "bookItems: [
+            {book1},
+            {book2},
+            {book3},
+            type: [
+                {
+                "typeid":"",
+                "typename":"",
+            },
+            ]
+        ]
+    }
+]
+
+###
+Get book by types
+GET http://localhost:8080/books/type?book_type=Manga&page=n
+Return: [
+    {
+        "bookItems: [
+            {book1},
+            {book2},
+            {book3},
+            type: [
+                {
+                "typeid":"",
+                "typename":"",
+            },
+            ]
+        ]
+    }
+]
+
+###
+Get popular books
+GET http://localhost:8080/books/popular?page=n
+Return: [
+    {
+        "bookItems: [
+            {book1},
+            {book2},
+            {book3},
+            type: [
+                {
+                "typeid":"",
+                "typename":"",
+            },
+            ]
+        ]
+    }
+]
+
+###
+Get lastest update books
+GET http://localhost:8080/books/latest?page
+Return: [
+    {
+        "bookItems: [
+            {book1},
+            {book2},
+            {book3},
+            type: [
+                {
+                "typeid":"",
+                "typename":"",
+            },
+            ]
+        ]
+    }
+]
+
+###
+Get RentList 
+GET http://localhost:8080/RentList
+return:
+{
+    "_id": "",
+    "book": {
+    }
+}
