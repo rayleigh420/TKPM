@@ -1,7 +1,9 @@
 package models
 
 import (
-    "go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type BookModel struct {
@@ -15,4 +17,6 @@ type BookModel struct {
 	Amount			int64					`json:"amount"`
 	Type_id			string					`json:"type_id"`
 	Borrowed_quantity int64					`json:"borrowed_quantity"`
+	Created_at		time.Time				`json:"created_at"`
+	Updated_at		time.Time				`json:"updated_at"`
 }

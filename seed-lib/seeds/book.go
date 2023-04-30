@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 var now,_ = time.Parse(time.RFC3339,time.Now().Format(time.RFC3339))
+var week1,_ = time.Parse(time.RFC3339,time.Now().Add(-7*24*time.Hour).Format(time.RFC3339))
 func SeedBook(){
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancel()
@@ -111,28 +112,6 @@ func SeedBook(){
 		Amount: 50,
 		Type_id: "3",
 	}
-	
-	// Book1.Book_id = primitive.NewObjectID().Hex()
-	// Book2.Book_id = primitive.NewObjectID().Hex()
-	// Book3.Book_id = primitive.NewObjectID().Hex()
-	// Book4.Book_id = primitive.NewObjectID().Hex()
-	// Book5.Book_id = primitive.NewObjectID().Hex()
-	// Book6.Book_id = primitive.NewObjectID().Hex()
-	// Book7.Book_id = primitive.NewObjectID().Hex()
-	// Book8.Book_id = primitive.NewObjectID().Hex()
-	// Book9.Book_id = primitive.NewObjectID().Hex()
-	// Book10.Book_id= primitive.NewObjectID().Hex()
-	// Book1.Id,_ = primitive.ObjectIDFromHex(Book1.Book_id)
-	// Book2.Id,_ = primitive.ObjectIDFromHex(Book2.Book_id)
-	// Book3.Id,_ = primitive.ObjectIDFromHex(Book3.Book_id)
-	// Book4.Id,_ = primitive.ObjectIDFromHex(Book4.Book_id)
-	// Book5.Id,_ = primitive.ObjectIDFromHex(Book5.Book_id)
-	// Book6.Id,_ = primitive.ObjectIDFromHex(Book6.Book_id)
-	// Book7.Id,_ = primitive.ObjectIDFromHex(Book7.Book_id)
-	// Book8.Id,_ = primitive.ObjectIDFromHex(Book8.Book_id)
-	// Book9.Id,_ = primitive.ObjectIDFromHex(Book9.Book_id)
-	// Book10.Id,_ = primitive.ObjectIDFromHex(Book10.Book_id)
-
 	Book1.Book_id = "8bNiueHjc9cU"
 	Book2.Book_id = "TXefnQqaL3C3"
 	Book3.Book_id = "faHvUfqdd87I"
@@ -153,6 +132,28 @@ func SeedBook(){
 	Book8.Id = primitive.NewObjectID()
 	Book9.Id = primitive.NewObjectID()
 	Book10.Id= primitive.NewObjectID()
+
+	Book1.Created_at = week1
+	Book1.Updated_at = week1
+	Book2.Created_at = week1
+	Book2.Updated_at = now
+	Book3.Created_at = week1
+	Book3.Updated_at = now
+	Book4.Created_at = week1
+	Book4.Updated_at = week1
+	Book5.Created_at = week1
+	Book5.Updated_at = now
+	Book6.Created_at = week1
+	Book6.Updated_at = now
+	Book7.Created_at = week1
+	Book7.Updated_at = week1
+	Book8.Created_at = week1
+	Book8.Updated_at = week1
+	Book9.Created_at = week1
+	Book9.Updated_at = week1
+	Book10.Created_at = week1
+	Book10.Updated_at = now
+
 
 	books := []interface{}{}
 	books = append(books, Book1)
@@ -402,7 +403,7 @@ func SeedBookBorrow(){
 func SeedHistory(){
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancel()
-	var week1,_ = time.Parse(time.RFC3339,time.Now().Add(-7*24*time.Hour).Format(time.RFC3339))
+	
 	History1 := models.HistoryModel{
 		User_id: "6clomWjyrM1n",
 		Book_id: "TXefnQqaL3C3",
@@ -535,4 +536,30 @@ func SeedHistory(){
 		History12,
 	}
 	HistoryCollection.InsertMany(ctx,Histories)
+}
+
+func SeedType(){
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+	defer cancel()
+	Type1 := models.BookTypeModel{
+		TypeId: "1",
+		TypeName: "Manga",
+	}
+	Type2 := models.BookTypeModel{
+		TypeId: "2",
+		TypeName: "Education",
+	}
+	Type3 := models.BookTypeModel{
+		TypeId: "3",
+		TypeName: "IT",
+	}
+	Type1.Id = primitive.NewObjectID()
+	Type2.Id = primitive.NewObjectID()
+	Type3.Id = primitive.NewObjectID()
+	Types := []interface{}{
+		Type1,
+		Type2,
+		Type3,
+	}
+	TypeCollections.InsertMany(ctx,Types)
 }
