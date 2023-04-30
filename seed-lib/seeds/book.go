@@ -542,20 +542,23 @@ func SeedType(){
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancel()
 	Type1 := models.BookTypeModel{
-		TypeId: "1",
-		TypeName: "Manga",
+		
+		Type_name: "Manga",
 	}
 	Type2 := models.BookTypeModel{
-		TypeId: "2",
-		TypeName: "Education",
+		
+		Type_name: "Education",
 	}
 	Type3 := models.BookTypeModel{
-		TypeId: "3",
-		TypeName: "IT",
+		
+		Type_name: "IT",
 	}
 	Type1.Id = primitive.NewObjectID()
 	Type2.Id = primitive.NewObjectID()
 	Type3.Id = primitive.NewObjectID()
+	Type1.Type_id = "1"
+	Type2.Type_id = "2"
+	Type3.Type_id = "3"
 	Types := []interface{}{
 		Type1,
 		Type2,

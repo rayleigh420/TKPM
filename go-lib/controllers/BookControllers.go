@@ -58,7 +58,7 @@ func GetBooks2() gin.HandlerFunc {
 			{"$lookup", bson.D{
 				{"from", "book_types"},
 				{"localField", "type_id"},
-				{"foreignField", "typeid"},
+				{"foreignField", "type_id"},
 				{"as", "type"},
 			}},
 		}
@@ -131,7 +131,7 @@ func GetBooksByName() gin.HandlerFunc {
 			{"$lookup", bson.D{
 				{"from", "book_types"},
 				{"localField", "type_id"},
-				{"foreignField", "typeid"},
+				{"foreignField", "type_id"},
 				{"as", "type"},
 			}},
 		}
@@ -265,7 +265,7 @@ func GetLatestBooks() gin.HandlerFunc {
 			{"$lookup", bson.D{
 				{"from", "book_types"},
 				{"localField", "type_id"},
-				{"foreignField", "typeid"},
+				{"foreignField", "type_id"},
 				{"as", "type"},
 			}},
 		}
