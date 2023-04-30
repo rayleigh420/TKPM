@@ -39,7 +39,7 @@ const Navigation = ({ setLog }) => {
                         <p className="normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]">Popular</p>
                     </Link>
                     <div className="dropdown dropdown-end">
-                        <label tabIndex={0} className="cursor-pointer normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]" htmlFor="" onClick={handleOpen}>
+                        <label tabIndex={0} className="cursor-pointer normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]" htmlFor="">
                             <div className="">Generics</div>
                         </label>
                         <ul tabIndex={0} className="bg-[#202020] mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-52 font-semibold">
