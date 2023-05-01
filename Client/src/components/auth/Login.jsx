@@ -15,10 +15,14 @@ const Login = ({ log, setSign, setLog }) => {
             setEmail('');
             setPassword("")
             setLog(false)
+            console.log(data)
             setAuth({
+                ava: data.ava,
                 name: data.name,
                 email: data.email,
-                role: data.role
+                role: data.role,
+                user_id: data.user_id,
+                token: data.token
             })
             toast.info("Login success!")
         },
