@@ -63,7 +63,7 @@ func SignUp() gin.HandlerFunc {
 		userModel.Password, _ = HashPassword(userModel.Password)
 		userModel.Role = "user"
 		insertRes, insertErr := UserCollection.InsertOne(ctx, userModel)
-		token,_ := helper.GenerateToken(userModel.User_id,userModel.Email,userModel.Role)
+		token,_ := helper.GenerateToken(userModel.Name,userModel.Email,userModel.Role)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "insert user error"})
 			return
@@ -99,7 +99,7 @@ func Login() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
-		token,_ := helper.GenerateToken(foundUser.User_id,foundUser.Email,foundUser.Role)
+		token,_ := helper.GenerateToken(foundUser.Name,foundUser.Email,foundUser.Role)
 		//true
 		c.JSON(http.StatusOK, gin.H{
 			"status": "accepted",
@@ -110,5 +110,22 @@ func Login() gin.HandlerFunc {
 			"role":foundUser.Role,
 			"token":token,
 		})
+	}
+}
+
+func CheckToken() gin.HandlerFunc{
+	return func(c *gin.Context) {
+		token := c.Query("token")
+		claim,err := helper.ValidateToken(token)
+		if err != "" {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":err})
+			return
+		}
+		res := bson.M{}
+		res["name"] = claim.Name
+		res["email"] = claim.Email
+		res["token"] = token
+		res["exp"] = claim.ExpiresAt
+		c.JSON(http.StatusOK,res)
 	}
 }

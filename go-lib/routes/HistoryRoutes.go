@@ -5,5 +5,5 @@ import (
 )
 
 func HistoryRoute(router *gin.Engine){
-	
+	router.GET("/history/:book_id")
 }

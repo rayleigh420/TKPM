@@ -9,22 +9,22 @@ import (
 )
 
 type UserClaim struct {
-	Userid	string
-	Email	string
-	Role 	string
+	Name	string		`json:"name"`
+	Email	string		`json:"email"`
+	Role 	string		`json:"role"`
 	jwt.StandardClaims
 }
 
-func GenerateToken(userid string,email string,role string) (string,error){
+func GenerateToken(name string,email string,role string) (string,error){
 	if err := godotenv.Load(".env");err != nil {
 		panic(err)
 	}
 	claims := UserClaim{
-		Userid:userid,
+		Name:name,
 		Email: email,
 		Role: role,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour).Unix(),
+			ExpiresAt: time.Now().Add(1*time.Hour).Unix(),
 		},
 	}
 	result,err := jwt.NewWithClaims(jwt.SigningMethodHS256,claims).SignedString([]byte(os.Getenv("SECRET_KEY")))

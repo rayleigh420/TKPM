@@ -16,9 +16,14 @@ func GetRentList() gin.HandlerFunc {
 		defer cancel()
 		now, _ := time.Parse(time.RFC3339, time.Now().Add(-24*time.Hour).Format(time.RFC3339))
 		//delete rent request that is over 24 hrs
+		updateObj := bson.D{{"$set", bson.D{{"status", "ready"}}}}
+		BookDetailCollection.UpdateMany(ctx,bson.D{
+			{"reserve_date", bson.D{{"gt", now}}},
+		},updateObj)
 		BookRentCollection.DeleteMany(ctx, bson.D{
-			{"date_reserved", bson.D{{"gt", now}}},
+			{"reserve_date", bson.D{{"gt", now}}},
 		})
+		
 		result := []bson.M{}
 		lookupStage := bson.D{
 			{"$lookup", bson.D{
@@ -29,8 +34,14 @@ func GetRentList() gin.HandlerFunc {
 			}},
 		}
 		unwindStage := bson.D{{"$unwind", bson.D{{"path", "$book"}, {"preserveNullAndEmptyArrays", false}}}}
+		projectStage :=bson.D{
+			{"$project",bson.D{
+				{"_id",0},
+				{"book._id",0},
+			}},
+		}
 		rentListCursor,rentListErr := BookRentCollection.Aggregate(ctx,mongo.Pipeline{
-			lookupStage,unwindStage,
+			lookupStage,unwindStage,projectStage,
 		})
 		if rentListErr != nil {
 			c.JSON(http.StatusInternalServerError,gin.H{"error":"error getting list"})

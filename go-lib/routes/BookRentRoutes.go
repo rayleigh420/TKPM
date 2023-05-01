@@ -6,5 +6,6 @@ import (
 )
 
 func BookRentRoutes(router *gin.Engine){
-	router.GET("/RentList",controllers.GetRentList())
+	router.GET("/rentlist",controllers.GetRentList())
+	router.POST("/rent/:book_id",controllers.RentABook())
 }

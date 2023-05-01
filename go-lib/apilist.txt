@@ -29,7 +29,7 @@ Not:
   "error": "email not found"
 }
 ###
-Sign up
+Sign up *updated
 POST http://localhost:8080/signup
 Content-Type: application/json
 

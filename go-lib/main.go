@@ -21,7 +21,7 @@ func main() {
 	routes.UserRoute(router)
 	routes.BookRoutes(router)
 	routes.BookDetailRoute(router)	
-	// routes.BookBorrowedRoute(router)
+	routes.BookBorrowedRoute(router)
 	routes.BookRentRoutes(router)
 	// routes.HistoryRoute(router)
 

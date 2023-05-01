@@ -2,9 +2,9 @@ POST http://localhost:8080/signup
 Content-Type: application/json
 
 {
-    "name":"Long2",
-    "phone":"0100",
-    "email":"klong1@gmail.com",
+    "name":"Long",
+    "phone":"097",
+    "email":"klong3112@gmail.com",
     "password":"123"
 }
 
@@ -16,6 +16,10 @@ Content-Type: application/json
     "email":"user3@gmail.com",
     "password":"123"
 }
+
+###
+GET http://localhost:8080/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjMiLCJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNjgyOTUwNjMyfQ.XFgELgFJ0inwtrQiDNuWh7WK1dSvVxCyHNyPqIGiyTg
+
 ###
 GET http://localhost:8080/books?page=1
 
@@ -56,3 +60,12 @@ GET http://localhost:8080/books/latest
 
 ###
 GET http://localhost:8080/books/popular
+
+###
+GET http://localhost:8080/books/RbPuAnhCPQsw/detail
+
+###
+GET http://localhost:8080/books/RbPuAnhCPQsw
+
+###
+GET http://localhost:8080/borrowlist

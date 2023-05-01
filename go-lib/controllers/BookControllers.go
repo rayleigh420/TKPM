@@ -432,13 +432,13 @@ func FindBookToRentWithId(book_id string) (bson.M, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancel()
 	bookToRent := bson.M{}
-	bookModel := models.BookModel{}
+	// bookModel := models.BookModel{}
 	bookDetail := models.BookDetailModel{}
-	BookCollection.FindOne(ctx, bson.M{"book_id": book_id}).Decode(&bookModel)
+	// BookCollection.FindOne(ctx, bson.M{"book_id": book_id}).Decode(&bookModel)
 	if err := BookDetailCollection.FindOne(ctx, bson.M{"book_id": book_id, "status": "ready"}).Decode(&bookDetail); err != nil {
 		return bookToRent, err
 	}
-	bookToRent["book_id"] = bookModel.Book_id
+	bookToRent["book_id"] = bookDetail.Book_id
 	bookToRent["book_detail_id"] = bookDetail.Book_detail_id
 	bookToRent["location"] = bookDetail.Location
 	return bookToRent, nil
@@ -454,9 +454,11 @@ func RentABook() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		// book_id := obj["book_id"].(string)
 		book_id := c.Param("book_id")
-
+		bookToRent,err := FindBookToRentWithId(book_id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error finding book to rent"})
+		}
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		// nextMonth, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
 		// rent request
@@ -465,13 +467,22 @@ func RentABook() gin.HandlerFunc {
 		bookRentModel.Book_id = book_id
 		bookRentModel.Reserve_date = now
 		bookRentModel.Book_rent_id, _ = gonanoid.Generate(NanoidString, 12)
+		bookRentModel.Book_detail_id = bookToRent["book_detail_id"].(string)
 		bookRentModel.User_id = obj["user_id"].(string)
 		insertRes, insertErr := BookRentCollection.InsertOne(ctx, bookRentModel)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error renting"})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"succeeded": insertRes})
+		updateObj := bson.D{{"$set", bson.D{{"status", "booked"}}}}
+		//
+		BookDetailCollection.UpdateOne(ctx,bson.M{"book_detail_id":bookToRent["book_detail_id"].(string)},updateObj)
+		c.JSON(http.StatusOK, gin.H{
+			"succeeded": insertRes,
+			"user_id":obj["user_id"].(string),
+			"book_detail_id":bookToRent["book_detail_id"].(string),
+			"reserve_date":now,
+		})
 	}
 }
 
@@ -480,41 +491,18 @@ func GetBookDetail() gin.HandlerFunc{
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		bookDetail := []bson.M{}
-		book_detail_id := c.Param("book_detail_id")
-		matchStage := bson.D{{"$match",bson.D{{"book_id",book_detail_id}}}}
-		lookupStage := bson.D{
-			{"$lookup",bson.D{
-				{"from","book_types"},
-				{"localField","type_id"},
-				{"foreignField","typeid"},
-				{"as","type"},
-			}},
+		book_id := c.Param("book_id")
+		page, _ := strconv.Atoi(c.Query("page"))
+		if page <= 0 {
+			page = 1
 		}
-		lookupStage2 := bson.D{
-			{"$lookup",bson.D{
-				{"from","book_detail"},
-				{"localField","book_id"},
-				{"foreignField","book_id"},
-				{"as","type"},
-			}},
-		}
-		groupStage := bson.D{
-			{Key: "$group", Value: bson.D{
-				{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}},
-				{Key: "items", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}},
-			}},
-		}
-		projectStage := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "_id", Value: 0},
-				{Key: "bookItems", Value: bson.D{{Key: "$slice", Value: []interface{}{"$items"}}}},
-			}},
-		}
-		cursor,err := BookCollection.Aggregate(ctx,mongo.Pipeline{
-			matchStage,lookupStage,lookupStage2,groupStage,projectStage,
-		})
+		recordPerPage := 5
+		startIndex := (page - 1) * recordPerPage
+		opt := options.Find().SetSkip(int64(startIndex)).SetLimit(int64(recordPerPage))	
+		cursor,err := BookDetailCollection.Find(ctx,bson.M{"book_id":book_id},opt)
+		
 		if err != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"error aggregating"})
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error finding"})
 			return
 		}
 		cursor.All(ctx,&bookDetail)
