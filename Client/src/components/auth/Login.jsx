@@ -1,10 +1,21 @@
 import { useContext, useState } from "react"
 import AuthContext from "../../context/AuthProvider"
+import { useMutation } from "@tanstack/react-query"
+import { login } from "../../api/authApi"
 
 const Login = ({ log, setSign, setLog }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const { setAuth } = useContext(AuthContext)
+
+    const loginMutate = useMutation({
+        mutationFn: ({ email, password }) => login({ email, password }),
+        onSuccess: (data) => {
+            setEmail('');
+            setPassword("")
+            console.log(data)
+        }
+    })
 
     const handleChangeEmail = (e) => {
         setEmail(e.target.value)
@@ -18,12 +29,16 @@ const Login = ({ log, setSign, setLog }) => {
         console.log(email, password)
         setEmail('')
         setPassword('')
-        setAuth({
-            name: "Le Nhat Duy",
-            email: 'nhatduy0409@gmail.com',
-            role: email === "admin" ? "admin" : 'user'
+        loginMutate.mutate({
+            email: email,
+            password: password
         })
-        setLog(false)
+        // setAuth({
+        //     name: "Le Nhat Duy",
+        //     email: 'nhatduy0409@gmail.com',
+        //     role: email === "admin" ? "admin" : 'user'
+        // })
+        // setLog(false)
     }
 
     const handleSignUps = () => {
