@@ -15,7 +15,7 @@ func GetRentList() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		now, _ := time.Parse(time.RFC3339, time.Now().Add(-24*time.Hour).Format(time.RFC3339))
-		//delete rent request that is over 24 hrs
+		//delete rent request and update status to ready if over 24 hrs
 		updateObj := bson.D{{"$set", bson.D{{"status", "ready"}}}}
 		BookDetailCollection.UpdateMany(ctx,bson.D{
 			{"reserve_date", bson.D{{"gt", now}}},

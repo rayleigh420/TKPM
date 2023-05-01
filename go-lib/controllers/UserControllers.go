@@ -63,7 +63,7 @@ func SignUp() gin.HandlerFunc {
 		userModel.Password, _ = HashPassword(userModel.Password)
 		userModel.Role = "user"
 		insertRes, insertErr := UserCollection.InsertOne(ctx, userModel)
-		token,_ := helper.GenerateToken(userModel.Name,userModel.Email,userModel.Role)
+		token,_ := helper.GenerateToken(userModel.Name,userModel.Email,userModel.Role,userModel.User_id,userModel.Avatar)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "insert user error"})
 			return
@@ -99,7 +99,7 @@ func Login() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
-		token,_ := helper.GenerateToken(foundUser.Name,foundUser.Email,foundUser.Role)
+		token,_ := helper.GenerateToken(foundUser.Name,foundUser.Email,foundUser.Role,foundUser.User_id,foundUser.Avatar)
 		//true
 		c.JSON(http.StatusOK, gin.H{
 			"status": "accepted",
@@ -125,6 +125,9 @@ func CheckToken() gin.HandlerFunc{
 		res["name"] = claim.Name
 		res["email"] = claim.Email
 		res["token"] = token
+		res["role"] = claim.Role
+		res["user_id"] = claim.User_id
+		res["avatar"] = claim.Avatar
 		res["exp"] = claim.ExpiresAt
 		c.JSON(http.StatusOK,res)
 	}
