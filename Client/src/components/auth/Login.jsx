@@ -16,9 +16,9 @@ const Login = ({ log, setSign, setLog }) => {
             setPassword("")
             setLog(false)
             setAuth({
-                name: "Le Nhat Duy",
-                email: email,
-                role: "user"
+                name: data.name,
+                email: data.email,
+                role: data.role
             })
             toast.info("Login success!")
         },

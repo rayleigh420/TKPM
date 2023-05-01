@@ -47,7 +47,7 @@ const UserLayout = () => {
                                 </NavLink>
                             </li>
                             <li></li>
-                            {!auth.role == "admin" && (
+                            {auth.role == "user" && (
                                 <>
                                     <li className="menu-title">
                                         <span>History</span>
