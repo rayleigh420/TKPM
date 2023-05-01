@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
 import { signUp } from "../../api/authApi"
+import { toast } from "react-toastify"
 
 const SignUp = ({ sign, setLog, setSign }) => {
     const [name, setName] = useState('')
@@ -11,14 +12,15 @@ const SignUp = ({ sign, setLog, setSign }) => {
     const signUpMutation = useMutation({
         mutationFn: ({ name, phone, email, password }) => signUp({ name, phone, email, password }),
         onSuccess: (data) => {
-            console.log(data)
             setName('')
             setEmail('')
             setPassword('')
             setRePassword('')
+            toast.info("Register Success!")
+            setSign(false)
         },
         onError: (err) => {
-            console.log(err)
+            toast.warn(err.response.data.error)
         }
     })
 

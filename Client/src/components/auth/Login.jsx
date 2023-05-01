@@ -2,6 +2,7 @@ import { useContext, useState } from "react"
 import AuthContext from "../../context/AuthProvider"
 import { useMutation } from "@tanstack/react-query"
 import { login } from "../../api/authApi"
+import { toast } from "react-toastify"
 
 const Login = ({ log, setSign, setLog }) => {
     const [email, setEmail] = useState('')
@@ -13,10 +14,16 @@ const Login = ({ log, setSign, setLog }) => {
         onSuccess: (data) => {
             setEmail('');
             setPassword("")
-            console.log(data)
+            setLog(false)
+            setAuth({
+                name: "Le Nhat Duy",
+                email: email,
+                role: "user"
+            })
+            toast.info("Login success!")
         },
         onError: (err) => {
-            console.log("Error: ", err.response.data.error)
+            toast.warn(err.response.data.error)
         }
     })
 
@@ -33,12 +40,6 @@ const Login = ({ log, setSign, setLog }) => {
             email: email,
             password: password
         })
-        // setAuth({
-        //     name: "Le Nhat Duy",
-        //     email: 'nhatduy0409@gmail.com',
-        //     role: email === "admin" ? "admin" : 'user'
-        // })
-        // setLog(false)
     }
 
     const handleSignUps = () => {
