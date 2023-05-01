@@ -70,7 +70,8 @@ const Navigation = ({ setLog }) => {
                     <div className="dropdown dropdown-end">
                         <label tabIndex={auth?.name && 0} className="btn btn-ghost btn-circle avatar" onClick={handleOpen}>
                             <div className="w-10 rounded-full">
-                                <img src="https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg" />
+                                <img src={auth.ava ? auth.ava : "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"} />
+                                {/* <img src="https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg" /> */}
                             </div>
                         </label>
                         {auth?.name &&
@@ -79,7 +80,9 @@ const Navigation = ({ setLog }) => {
                                     {avaURL &&
                                         <div className="avatar">
                                             <div className="w-7 rounded-full ring ring-[#413ACB]">
-                                                <img src="https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg" />
+                                                <img src={auth.ava ? auth.ava : "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"} />
+
+                                                {/* <img src="https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg" /> */}
                                             </div>
                                         </div>
                                     }

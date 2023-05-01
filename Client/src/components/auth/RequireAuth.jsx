@@ -8,12 +8,6 @@ const RequireAuth = ({ allowedRoles }) => {
 
     console.log(allowedRoles)
 
-    // console.log(admin, auth.admin)
-
-    // if (auth) {
-    //     auth.admin = Boolean(auth.admin)
-    // }
-
     return (
         allowedRoles.includes(auth?.role)
             ? <Outlet />
