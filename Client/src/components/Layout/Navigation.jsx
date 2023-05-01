@@ -83,7 +83,7 @@ const Navigation = ({ setLog }) => {
                                             </div>
                                         </div>
                                     }
-                                    Le Nhat Duy
+                                    {auth.name}
                                 </a></li>
                                 <li>
                                     <Link to="user/profile">
