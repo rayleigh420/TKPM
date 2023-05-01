@@ -3,6 +3,7 @@ import { useContext, useState } from "react"
 import { signUp } from "../../api/authApi"
 import { toast } from "react-toastify"
 import AuthContext from "../../context/AuthProvider"
+import useLocalStorage from "../../hooks/useLocalStorage"
 
 const SignUp = ({ sign, setLog, setSign }) => {
     const [name, setName] = useState('')
@@ -11,6 +12,7 @@ const SignUp = ({ sign, setLog, setSign }) => {
     const [repassword, setRePassword] = useState('')
 
     const { setAuth } = useContext(AuthContext)
+    const [value, setValue] = useLocalStorage("token", '')
 
     const signUpMutation = useMutation({
         mutationFn: ({ name, phone, email, password }) => signUp({ name, phone, email, password }),
@@ -21,6 +23,7 @@ const SignUp = ({ sign, setLog, setSign }) => {
             setRePassword('')
             toast.info("Register Success!")
             setSign(false)
+            setValue(data.token)
             setAuth({
                 ava: data.ava,
                 name: data.name,

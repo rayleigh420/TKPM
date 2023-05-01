@@ -3,11 +3,14 @@ import AuthContext from "../../context/AuthProvider"
 import { useMutation } from "@tanstack/react-query"
 import { login } from "../../api/authApi"
 import { toast } from "react-toastify"
+import useLocalStorage from "../../hooks/useLocalStorage"
 
 const Login = ({ log, setSign, setLog }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
     const { setAuth } = useContext(AuthContext)
+    const [value, setValue] = useLocalStorage('token', '')
 
     const loginMutate = useMutation({
         mutationFn: ({ email, password }) => login({ email, password }),
@@ -15,7 +18,7 @@ const Login = ({ log, setSign, setLog }) => {
             setEmail('');
             setPassword("")
             setLog(false)
-            console.log(data)
+            setValue(data.token)
             setAuth({
                 ava: data.ava,
                 name: data.name,
