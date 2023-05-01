@@ -1,9 +1,12 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
+import AuthContext from "../../context/AuthProvider"
 
 const ProfileForm = () => {
-    const [img, setImg] = useState(null)
-    const [name, setName] = useState('Le Nhat Duy')
-    const [email, setEmail] = useState('strip@gmail.com')
+    const { auth } = useContext(AuthContext)
+
+    const [img, setImg] = useState(auth.ava)
+    const [name, setName] = useState(auth.name)
+    const [email, setEmail] = useState(auth.email)
 
     const handleChangeImage = (e) => {
         setImg(URL.createObjectURL(e.target.files[0]))
