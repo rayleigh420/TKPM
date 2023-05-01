@@ -98,9 +98,9 @@ func GetBookByID() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
-		id := c.Param("id")
+		id := c.Param("book_id")
 		bookModel := models.BookModel{}
-		if err := BookCollection.FindOne(ctx, bson.D{{Key: "_id", Value: id}}).Decode(&bookModel); err != nil {
+		if err := BookCollection.FindOne(ctx, bson.D{{Key: "book_id", Value: id}}).Decode(&bookModel); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -475,10 +475,49 @@ func RentABook() gin.HandlerFunc {
 	}
 }
 
-// func GetLocationOfBook(book_id string) (string, error) {
-// 	objectBook, err := FindBookWithId(book_id)
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return objectBook["book-detail-items"].(map[string]interface{})["location"].(string), nil
-// }
+func GetBookDetail() gin.HandlerFunc{
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+		defer cancel()
+		bookDetail := []bson.M{}
+		book_detail_id := c.Param("book_detail_id")
+		matchStage := bson.D{{"$match",bson.D{{"book_id",book_detail_id}}}}
+		lookupStage := bson.D{
+			{"$lookup",bson.D{
+				{"from","book_types"},
+				{"localField","type_id"},
+				{"foreignField","typeid"},
+				{"as","type"},
+			}},
+		}
+		lookupStage2 := bson.D{
+			{"$lookup",bson.D{
+				{"from","book_detail"},
+				{"localField","book_id"},
+				{"foreignField","book_id"},
+				{"as","type"},
+			}},
+		}
+		groupStage := bson.D{
+			{Key: "$group", Value: bson.D{
+				{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}},
+				{Key: "items", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}},
+			}},
+		}
+		projectStage := bson.D{
+			{Key: "$project", Value: bson.D{
+				{Key: "_id", Value: 0},
+				{Key: "bookItems", Value: bson.D{{Key: "$slice", Value: []interface{}{"$items"}}}},
+			}},
+		}
+		cursor,err := BookCollection.Aggregate(ctx,mongo.Pipeline{
+			matchStage,lookupStage,lookupStage2,groupStage,projectStage,
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error aggregating"})
+			return
+		}
+		cursor.All(ctx,&bookDetail)
+		c.JSON(http.StatusOK,bookDetail)
+	}
+}

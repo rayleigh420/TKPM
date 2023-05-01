@@ -11,6 +11,7 @@ func BookRoutes(router *gin.Engine){
 	router.GET("/books/latest",controllers.GetLatestBooks())
 	router.GET("/books/popular",controllers.GetPopularBooks())
 	router.GET("/books/:book_id",controllers.GetBookByID())
+	router.GET("/books/:book_id/detail",controllers.GetBookDetail())
 	router.GET("/books/search",controllers.GetBooksByName())
 	router.POST("/books",controllers.CreateBook())
 	router.POST("/books/:book_id/rent",controllers.RentABook())

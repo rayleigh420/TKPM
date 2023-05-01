@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/baguette/go-lib/database"
+	"github.com/baguette/go-lib/helper"
 	"github.com/baguette/go-lib/models"
 	"github.com/gin-gonic/gin"
 	gonanoid "github.com/matoous/go-nanoid/v2"
@@ -18,7 +19,7 @@ var UserCollection = database.OpenCollection(database.Client, "users")
 var NanoidString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 func HashPassword(password string) (string, error) {
-	pwd, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	pwd, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", err
 	}
@@ -62,11 +63,19 @@ func SignUp() gin.HandlerFunc {
 		userModel.Password, _ = HashPassword(userModel.Password)
 		userModel.Role = "user"
 		insertRes, insertErr := UserCollection.InsertOne(ctx, userModel)
+		token,_ := helper.GenerateToken(userModel.User_id,userModel.Email,userModel.Role)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "insert user error"})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"success":insertRes})
+		c.JSON(http.StatusOK, gin.H{
+			"success":insertRes,
+			"name":userModel.Name,
+			"email":userModel.Email,
+			"user_id":userModel.User_id,
+			"role":userModel.Role,
+			"token":token,
+		})
 	}
 }
 
@@ -89,7 +98,15 @@ func Login() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
+		token,_ := helper.GenerateToken(foundUser.User_id,foundUser.Email,foundUser.Role)
 		//true
-		c.JSON(http.StatusOK, gin.H{"status": "accepted"})
+		c.JSON(http.StatusOK, gin.H{
+			"status": "accepted",
+			"name":foundUser.Name,
+			"email":foundUser.Email,
+			"user_id":foundUser.User_id,
+			"role":foundUser.Role,
+			"token":token,
+		})
 	}
 }
