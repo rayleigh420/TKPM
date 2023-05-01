@@ -12,6 +12,13 @@ const SignUp = ({ sign, setLog, setSign }) => {
         mutationFn: ({ name, phone, email, password }) => signUp({ name, phone, email, password }),
         onSuccess: (data) => {
             console.log(data)
+            setName('')
+            setEmail('')
+            setPassword('')
+            setRePassword('')
+        },
+        onError: (err) => {
+            console.log(err)
         }
     })
 
@@ -39,10 +46,6 @@ const SignUp = ({ sign, setLog, setSign }) => {
             email: email,
             password: password
         })
-        // setName('')
-        // setEmail('')
-        // setPassword('')
-        // setRePassword('')
     }
 
     const handleLogIn = () => {

@@ -14,6 +14,9 @@ const Login = ({ log, setSign, setLog }) => {
             setEmail('');
             setPassword("")
             console.log(data)
+        },
+        onError: (err) => {
+            console.log("Error: ", err.response.data.error)
         }
     })
 
@@ -26,9 +29,6 @@ const Login = ({ log, setSign, setLog }) => {
     }
 
     const handleSignIn = () => {
-        // console.log(email, password)
-        setEmail('')
-        setPassword('')
         loginMutate.mutate({
             email: email,
             password: password
