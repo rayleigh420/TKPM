@@ -73,6 +73,7 @@ func SignUp() gin.HandlerFunc {
 			"name":userModel.Name,
 			"email":userModel.Email,
 			"user_id":userModel.User_id,
+			"avatar":userModel.Avatar,
 			"role":userModel.Role,
 			"token":token,
 		})
@@ -105,6 +106,7 @@ func Login() gin.HandlerFunc {
 			"name":foundUser.Name,
 			"email":foundUser.Email,
 			"user_id":foundUser.User_id,
+			"avatar":foundUser.Avatar,
 			"role":foundUser.Role,
 			"token":token,
 		})
