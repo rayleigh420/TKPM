@@ -26,7 +26,7 @@ const Login = ({ log, setSign, setLog }) => {
     }
 
     const handleSignIn = () => {
-        console.log(email, password)
+        // console.log(email, password)
         setEmail('')
         setPassword('')
         loginMutate.mutate({

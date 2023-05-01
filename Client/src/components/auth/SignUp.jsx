@@ -1,10 +1,19 @@
+import { useMutation } from "@tanstack/react-query"
 import { useState } from "react"
+import { signUp } from "../../api/authApi"
 
 const SignUp = ({ sign, setLog, setSign }) => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [repassword, setRePassword] = useState('')
+
+    const signUpMutation = useMutation({
+        mutationFn: ({ name, phone, email, password }) => signUp({ name, phone, email, password }),
+        onSuccess: (data) => {
+            console.log(data)
+        }
+    })
 
     const handleChangeName = (e) => {
         setName(e.target.value)
@@ -23,11 +32,17 @@ const SignUp = ({ sign, setLog, setSign }) => {
     }
 
     const handleSignUp = () => {
-        console.log(name, email, password, repassword)
-        setName('')
-        setEmail('')
-        setPassword('')
-        setRePassword('')
+        // console.log(name, email, password, repassword)
+        signUpMutation.mutate({
+            name: name,
+            phone: '123123',
+            email: email,
+            password: password
+        })
+        // setName('')
+        // setEmail('')
+        // setPassword('')
+        // setRePassword('')
     }
 
     const handleLogIn = () => {

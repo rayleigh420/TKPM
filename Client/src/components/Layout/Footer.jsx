@@ -10,7 +10,7 @@ const Footer = () => {
                 <div className="grid grid-flow-col gap-4">
                     <a href="https://www.linkedin.com/in/lnduy/" target="_blank"><svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
+                        className="h-5 w-5"
                         fill="currentColor"
                         viewBox="0 0 24 24">
                         <path
@@ -19,7 +19,7 @@ const Footer = () => {
                     <a href="https://github.com/rayleigh420/TKPM" target="_blank">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
+                            className="h-5 w-5"
                             fill="currentColor"
                             viewBox="0 0 24 24">
                             <path
@@ -29,7 +29,7 @@ const Footer = () => {
                     <a href="https://www.facebook.com/nhatduy1412.2002/" target="_blank">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5"
+                            className="h-5 w-5"
                             fill="currentColor"
                             viewBox="0 0 24 24">
                             <path
