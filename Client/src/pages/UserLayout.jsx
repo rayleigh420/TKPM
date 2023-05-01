@@ -1,6 +1,9 @@
 import { useContext, useEffect, useLayoutEffect } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom"
 import AuthContext from "../context/AuthProvider";
+import { useMutation } from "@tanstack/react-query";
+import { checkToken } from "../api/authApi";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export const avaURL = "https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg"
 
@@ -9,13 +12,38 @@ const UserLayout = () => {
     const location = useLocation();
     const from = location.state?.from?.pathname || '/'
 
-    const { auth } = useContext(AuthContext)
+    const { auth, setAuth } = useContext(AuthContext)
 
-    useEffect(() => {
-        if (!auth?.name) {
-            navigate(from, { replace: true })
+    const [value, setValue] = useLocalStorage("token", '')
+
+    // console.log("Token in Layout: ", value)
+    const checkTokenMutate = useMutation({
+        mutationFn: (token) => checkToken(token),
+        onSuccess: (data) => {
+            setAuth({
+                ava: data.ava,
+                name: data.name,
+                email: data.email,
+                role: data.role,
+                user_id: data.user_id,
+                token: data.token
+            })
         }
     })
+
+    useEffect(() => {
+        if (value) {
+            checkTokenMutate.mutate(value)
+        }
+        else {
+            navigate(from, { replace: true })
+        }
+    }, [])
+
+    // useEffect(() => {
+    //     if (!auth?.name) {
+    //     }
+    // })
 
     return (
         <>

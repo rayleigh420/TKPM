@@ -4,15 +4,25 @@ import Form from "../components/forms/Form"
 import { useMutation } from "@tanstack/react-query"
 import { checkToken } from "../api/authApi"
 import useLocalStorage from "../hooks/useLocalStorage"
-import { useEffect } from "react"
+import { useContext, useEffect } from "react"
+import AuthContext from "../context/AuthProvider"
 
 const Layout = () => {
+    const { setAuth } = useContext(AuthContext)
     const [value, setValue] = useLocalStorage("token", '')
-    console.log("Token in Layout: ", value)
+
+    // console.log("Token in Layout: ", value)
     const checkTokenMutate = useMutation({
         mutationFn: (token) => checkToken(token),
         onSuccess: (data) => {
-            console.log("USer login: ", data)
+            setAuth({
+                ava: data.ava,
+                name: data.name,
+                email: data.email,
+                role: data.role,
+                user_id: data.user_id,
+                token: data.token
+            })
         }
     })
 
