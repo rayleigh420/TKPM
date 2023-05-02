@@ -83,23 +83,28 @@ func SignUp() gin.HandlerFunc {
 func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-		userModel := models.UserModel{}
+		userModel := bson.M{}
 		foundUser := models.UserModel{}
 		defer cancel()
+		// t1 := time.Now()
 		if err := c.ShouldBindJSON(&userModel); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "bad user model"})
 			return
 		}
-		if err := UserCollection.FindOne(ctx, bson.D{{Key: "email", Value: userModel.Email}}).Decode(&foundUser); err != nil {
+		// t2 := time.Now()
+		if err := UserCollection.FindOne(ctx, bson.D{{Key: "email", Value: userModel["email"].(string)}}).Decode(&foundUser); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "email not found"})
 			return
 		}
-		passwordIsValid, msg := VerifyPassword(userModel.Password, foundUser.Password)
+		// t3 := time.Now()
+		passwordIsValid, msg := VerifyPassword(userModel["password"].(string), foundUser.Password)
+		// t4 := time.Now()
 		if !passwordIsValid {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": msg})
 			return
 		}
 		token,_ := helper.GenerateToken(foundUser.Name,foundUser.Email,foundUser.Role,foundUser.User_id,foundUser.Avatar)
+		// t5 := time.Now()
 		//true
 		c.JSON(http.StatusOK, gin.H{
 			"status": "accepted",
