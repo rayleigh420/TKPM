@@ -56,6 +56,10 @@ const SignUp = ({ sign, setLog, setSign }) => {
 
     const handleSignUp = () => {
         // console.log(name, email, password, repassword)
+        if (password != repassword) {
+            toast.warn("Confirm Password is not match! Please enter again!")
+            return;
+        }
         signUpMutation.mutate({
             name: name,
             phone: '9191919',
