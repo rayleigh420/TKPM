@@ -396,7 +396,12 @@ func FindBookToRentWithId(book_id string) (bson.M, error) {
 	// bookModel := models.BookModel{}
 	bookDetail := models.BookDetailModel{}
 	// BookCollection.FindOne(ctx, bson.M{"book_id": book_id}).Decode(&bookModel)
-	if err := BookDetailCollection.FindOne(ctx, bson.M{"book_id": book_id, "status": "ready"}).Decode(&bookDetail); err != nil {
+	if err := BookDetailCollection.FindOne(ctx, bson.D{
+		{Key: "$and",Value: bson.A{
+			bson.D{{Key: "book_id",Value: book_id}},
+			bson.D{{Key: "status",Value: "ready"}},
+		}},
+	}).Decode(&bookDetail); err != nil {
 		return bookToRent, err
 	}
 	bookToRent["book_id"] = bookDetail.Book_id
@@ -419,6 +424,7 @@ func RentABook() gin.HandlerFunc {
 		bookToRent, err := FindBookToRentWithId(book_id)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error finding book to rent"})
+			return
 		}
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		// nextMonth, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
