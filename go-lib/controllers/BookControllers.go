@@ -30,7 +30,10 @@ func GetBooks() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		books := []models.BookModel{}
-		cursor, cursorErr := BookCollection.Find(ctx, bson.D{{}})
+		cursor, cursorErr := BookCollection.Find(ctx, bson.D{{
+			Key:   "",
+			Value: nil,
+		}})
 		if cursorErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": cursorErr.Error()})
 			return
@@ -54,34 +57,27 @@ func GetBooks2() gin.HandlerFunc {
 		startIndex := (page - 1) * recordPerPage
 		books := []bson.M{}
 		matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}}
+		skipStage := bson.D{{Key: "$skip", Value: startIndex}}
 		lookupStage := bson.D{
-			{"$lookup", bson.D{
-				{"from", "book_types"},
-				{"localField", "type_id"},
-				{"foreignField", "typeid"},
-				{"as", "type"},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_types"},
+				{Key: "localField", Value: "type_id"},
+				{Key: "foreignField", Value: "typeid"},
+				{Key: "as", Value: "type"},
 			}},
 		}
-		groupStage := bson.D{
-			{Key: "$group", Value: bson.D{
-				{Key: "_id", Value: bson.D{{Key: "id", Value: "null"}}},
-				{Key: "items", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}},
+		unwindStage := bson.D{
+			{Key: "$unwind", Value: bson.D{
+				{Key: "path", Value: "$type"},
+				{Key: "preserveNullAndEmptyArrays", Value: false},
 			}},
 		}
-		projectStage := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "_id", Value: 0},
-				{Key: "bookItems", Value: bson.D{{Key: "$slice", Value: []interface{}{"$items", startIndex, recordPerPage}}}},
-			}},
-		}
-		projectStage2 := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "bookItems.type._id", Value: 0},
-				{Key: "bookItems.type_id", Value: 0},
-			}},
-		}
+		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
+			"type._id", "type_id", "_id", "amount", "author", "created_at", "updated_at",
+		}}}
+		limitStage := bson.D{{Key: "$limit", Value: recordPerPage}}
 		cursor, err := BookCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage, lookupStage, groupStage, projectStage, projectStage2,
+			matchStage, skipStage, limitStage, lookupStage, unwindStage, unsetStage,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -127,40 +123,33 @@ func GetBooksByName() gin.HandlerFunc {
 				{Key: "name", Value: bson.D{{Key: "$regex", Value: name}, {Key: "$options", Value: "i"}}},
 			}},
 		}
+		skipStage := bson.D{{Key: "$skip", Value: startIndex}}
 		lookupStage := bson.D{
-			{"$lookup", bson.D{
-				{"from", "book_types"},
-				{"localField", "type_id"},
-				{"foreignField", "typeid"},
-				{"as", "type"},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_types"},
+				{Key: "localField", Value: "type_id"},
+				{Key: "foreignField", Value: "typeid"},
+				{Key: "as", Value: "type"},
 			}},
 		}
-		groupStage := bson.D{
-			{Key: "$group", Value: bson.D{
-				{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}},
-				{Key: "items", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}},
+		unwindStage := bson.D{
+			{Key: "$unwind", Value: bson.D{
+				{Key: "path", Value: "$type"},
+				{Key: "preserveNullAndEmptyArrays", Value: false},
 			}},
 		}
-		projectStage := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "_id", Value: 0},
-				{Key: "bookItems", Value: bson.D{{Key: "$slice", Value: []interface{}{"$items", startIndex, recordPerPage}}}},
-			}},
-		}
-		projectStage2 := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "bookItems.type._id", Value: 0},
-				{Key: "bookItems.type_id", Value: 0},
-			}},
-		}
+		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
+			"type._id", "type_id", "_id", "amount", "author", "created_at", "updated_at",
+		}}}
+		limitStage := bson.D{{Key: "$limit", Value: recordPerPage}}
 		cursor, err := BookCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage,lookupStage, groupStage, projectStage,projectStage2,
+			matchStage, skipStage, limitStage, lookupStage, unwindStage, unsetStage,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		if err = cursor.All(ctx, &books); err != nil {
+		if err := cursor.All(ctx, &books); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
@@ -208,11 +197,7 @@ func UpdateBook() gin.HandlerFunc {
 		if bookModel.Type_id != "" {
 			updateObj = append(updateObj, bson.E{Key: "type_id", Value: bookModel.Type_id})
 		}
-		upsert := true
-		opt := options.UpdateOptions{
-			Upsert: &upsert,
-		}
-		updateRes, updateErr := BookCollection.UpdateOne(ctx, bson.M{"book_id": id}, updateObj, &opt)
+		updateRes, updateErr := BookCollection.UpdateOne(ctx, bson.M{"book_id": id}, bson.D{{Key: "$set", Value: updateObj}})
 		if updateErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "cannot update"})
 			return
@@ -221,30 +206,30 @@ func UpdateBook() gin.HandlerFunc {
 	}
 }
 
-// func GetLatestBooks() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
-// 		defer cancel()
-// 		latestBooks := []bson.M{}
-// 		page, _ := strconv.Atoi(c.Query("page"))
-// 		if page <= 0 {
-// 			page = 1
-// 		}
-// 		recordPerPage := 30
-// 		skip := (page - 1) * recordPerPage
-// 		opts := options.Find().SetSort(bson.M{"updated_at": -1}).SetLimit(int64(recordPerPage)).SetSkip(int64(skip))
-// 		cursor, err := BookCollection.Find(ctx, bson.M{}, opts)
-// 		if err != nil {
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error somewhere"})
-// 			return
-// 		}
-// 		if err := cursor.All(ctx, &latestBooks); err != nil {
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error somewhere 2"})
-// 			return
-// 		}
-// 		c.JSON(http.StatusOK, latestBooks)
-// 	}
-// }
+//	func GetLatestBooks() gin.HandlerFunc {
+//		return func(c *gin.Context) {
+//			ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+//			defer cancel()
+//			latestBooks := []bson.M{}
+//			page, _ := strconv.Atoi(c.Query("page"))
+//			if page <= 0 {
+//				page = 1
+//			}
+//			recordPerPage := 30
+//			skip := (page - 1) * recordPerPage
+//			opts := options.Find().SetSort(bson.M{"updated_at": -1}).SetLimit(int64(recordPerPage)).SetSkip(int64(skip))
+//			cursor, err := BookCollection.Find(ctx, bson.M{}, opts)
+//			if err != nil {
+//				c.JSON(http.StatusInternalServerError, gin.H{"error": "error somewhere"})
+//				return
+//			}
+//			if err := cursor.All(ctx, &latestBooks); err != nil {
+//				c.JSON(http.StatusInternalServerError, gin.H{"error": "error somewhere 2"})
+//				return
+//			}
+//			c.JSON(http.StatusOK, latestBooks)
+//		}
+//	}
 func GetLatestBooks() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
@@ -261,40 +246,31 @@ func GetLatestBooks() gin.HandlerFunc {
 				{},
 			}},
 		}
+		skipStage := bson.D{{Key: "$skip", Value: startIndex}}
 		lookupStage := bson.D{
-			{"$lookup", bson.D{
-				{"from", "book_types"},
-				{"localField", "type_id"},
-				{"foreignField", "typeid"},
-				{"as", "type"},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_types"},
+				{Key: "localField", Value: "type_id"},
+				{Key: "foreignField", Value: "typeid"},
+				{Key: "as", Value: "type"},
 			}},
 		}
-		groupStage := bson.D{
-			{Key: "$group", Value: bson.D{
-				{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}},
-				{Key: "items", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}},
+		unwindStage := bson.D{
+			{Key: "$unwind", Value: bson.D{
+				{Key: "path", Value: "$type"},
+				{Key: "preserveNullAndEmptyArrays", Value: false},
 			}},
 		}
-		projectStage := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "_id", Value: 0},
-				{Key: "bookItems", Value: bson.D{{Key: "$slice", Value: []interface{}{"$items", startIndex, recordPerPage}}}},
-			}},
-		}
-		projectStage2 := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "bookItems.type._id", Value: 0},
-				{Key: "bookItems.type_id", Value: 0},
-			}},
-		}
+		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
+			"type._id", "type_id", "_id", "author", "created_at",
+		}}}
+		limitStage := bson.D{{Key: "$limit", Value: recordPerPage}}
 		sortStage := bson.D{
-				{Key:"$sort",Value:bson.D{{Key:"updated_at",Value:-1}}},
+			{Key: "$sort", Value: bson.D{{Key: "updated_at", Value: -1}}},
 		}
 		cursor, err := BookCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage,sortStage,lookupStage, groupStage, projectStage,projectStage2,
-			
+			matchStage, skipStage, limitStage, sortStage, lookupStage, unwindStage, unsetStage,
 		})
-		
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error somewhere"})
 			return
@@ -317,45 +293,37 @@ func GetPopularBooks() gin.HandlerFunc {
 		}
 		recordPerPage := 30
 		startIndex := (page - 1) * recordPerPage
-		matchStage := bson.D{
-			{Key: "$match", Value: bson.D{
-				{},
-			}},
-		}
+		// matchStage := bson.D{
+		// 	{Key: "$match", Value: bson.D{
+		// 		{},
+		// 	}},
+		// }
+		skipStage := bson.D{{Key: "$skip", Value: startIndex}}
 		lookupStage := bson.D{
-			{"$lookup", bson.D{
-				{"from", "book_types"},
-				{"localField", "type_id"},
-				{"foreignField", "typeid"},
-				{"as", "type"},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_types"},
+				{Key: "localField", Value: "type_id"},
+				{Key: "foreignField", Value: "typeid"},
+				{Key: "as", Value: "type"},
 			}},
 		}
-		groupStage := bson.D{
-			{Key: "$group", Value: bson.D{
-				{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}},
-				{Key: "items", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}},
+		unwindStage := bson.D{
+			{Key: "$unwind", Value: bson.D{
+				{Key: "path", Value: "$type"},
+				{Key: "preserveNullAndEmptyArrays", Value: false},
 			}},
 		}
-		projectStage := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "_id", Value: 0},
-				{Key: "bookItems", Value: bson.D{{Key: "$slice", Value: []interface{}{"$items", startIndex, recordPerPage}}}},
-			}},
-		}
-		projectStage2 := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "bookItems.type._id", Value: 0},
-				{Key: "bookItems.type_id", Value: 0},
-			}},
-		}
+		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
+			"type._id", "type_id", "_id", "created_at",
+		}}}
+		limitStage := bson.D{{Key: "$limit", Value: recordPerPage}}
 		sortStage := bson.D{
-				{Key:"$sort",Value:bson.D{{Key:"borrowed_quantity",Value:-1}}},
+			{Key: "$sort", Value: bson.D{{Key: "borrowed_quantity", Value: -1}}},
 		}
 		cursor, err := BookCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage,sortStage,lookupStage, groupStage, projectStage,projectStage2,
-			
+			skipStage, limitStage, sortStage, lookupStage, unwindStage, unsetStage,
 		})
-		
+
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error somewhere"})
 			return
@@ -389,34 +357,27 @@ func GetBooksByType() gin.HandlerFunc {
 				{Key: "type_id", Value: typeModel.TypeId},
 			}},
 		}
+		skipStage := bson.D{{Key: "$skip", Value: startIndex}}
 		lookupStage := bson.D{
-			{"$lookup", bson.D{
-				{"from", "book_types"},
-				{"localField", "type_id"},
-				{"foreignField", "typeid"},
-				{"as", "type"},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_types"},
+				{Key: "localField", Value: "type_id"},
+				{Key: "foreignField", Value: "typeid"},
+				{Key: "as", Value: "type"},
 			}},
 		}
-		groupStage := bson.D{
-			{Key: "$group", Value: bson.D{
-				{Key: "_id", Value: bson.D{{Key: "_id", Value: "null"}}},
-				{Key: "items", Value: bson.D{{Key: "$push", Value: "$$ROOT"}}},
+		unwindStage := bson.D{
+			{Key: "$unwind", Value: bson.D{
+				{Key: "path", Value: "$type"},
+				{Key: "preserveNullAndEmptyArrays", Value: false},
 			}},
 		}
-		projectStage := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "_id", Value: 0},
-				{Key: "bookItems", Value: bson.D{{Key: "$slice", Value: []interface{}{"$items", startIndex, recordPerPage}}}},
-			}},
-		}
-		projectStage2 := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "bookItems.type._id", Value: 0},
-				{Key: "bookItems.type_id", Value: 0},
-			}},
-		}
+		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
+			"type._id", "type_id", "_id", "created_at",
+		}}}
+		limitStage := bson.D{{Key: "$limit", Value: recordPerPage}}
 		cursor, err := BookCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage,lookupStage, groupStage, projectStage,projectStage2,
+			matchStage, skipStage, limitStage, lookupStage, unwindStage, unsetStage,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})
@@ -435,7 +396,12 @@ func FindBookToRentWithId(book_id string) (bson.M, error) {
 	// bookModel := models.BookModel{}
 	bookDetail := models.BookDetailModel{}
 	// BookCollection.FindOne(ctx, bson.M{"book_id": book_id}).Decode(&bookModel)
-	if err := BookDetailCollection.FindOne(ctx, bson.M{"book_id": book_id, "status": "ready"}).Decode(&bookDetail); err != nil {
+	if err := BookDetailCollection.FindOne(ctx, bson.D{
+		{Key: "$and",Value: bson.A{
+			bson.D{{Key: "book_id",Value: book_id}},
+			bson.D{{Key: "status",Value: "ready"}},
+		}},
+	}).Decode(&bookDetail); err != nil {
 		return bookToRent, err
 	}
 	bookToRent["book_id"] = bookDetail.Book_id
@@ -447,17 +413,18 @@ func RentABook() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
-		obj := map[string]interface{}{}
+		obj := bson.M{}
 		// userid
 		// bookid
 		if err := c.ShouldBindJSON(&obj); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		book_id := c.Param("book_id")
-		bookToRent,err := FindBookToRentWithId(book_id)
+		book_id := obj["book_id"].(string)
+		bookToRent, err := FindBookToRentWithId(book_id)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"error finding book to rent"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error finding book to rent"})
+			return
 		}
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		// nextMonth, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
@@ -474,19 +441,19 @@ func RentABook() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error renting"})
 			return
 		}
-		updateObj := bson.D{{"$set", bson.D{{"status", "booked"}}}}
+		updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "booked"},{Key: "updated_at",Value: now}}}}
 		//
-		BookDetailCollection.UpdateOne(ctx,bson.M{"book_detail_id":bookToRent["book_detail_id"].(string)},updateObj)
+		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookToRent["book_detail_id"].(string)}, updateObj)
 		c.JSON(http.StatusOK, gin.H{
-			"succeeded": insertRes,
-			"user_id":obj["user_id"].(string),
-			"book_detail_id":bookToRent["book_detail_id"].(string),
-			"reserve_date":now,
+			"succeeded":      insertRes,
+			"user_id":        obj["user_id"].(string),
+			"book_detail_id": bookToRent["book_detail_id"].(string),
+			"reserve_date":   now,
 		})
 	}
 }
 
-func GetBookDetail() gin.HandlerFunc{
+func GetBookDetail() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
@@ -498,14 +465,14 @@ func GetBookDetail() gin.HandlerFunc{
 		}
 		recordPerPage := 5
 		startIndex := (page - 1) * recordPerPage
-		opt := options.Find().SetSkip(int64(startIndex)).SetLimit(int64(recordPerPage))	
-		cursor,err := BookDetailCollection.Find(ctx,bson.M{"book_id":book_id},opt)
-		
+		opt := options.Find().SetSkip(int64(startIndex)).SetLimit(int64(recordPerPage))
+		cursor, err := BookDetailCollection.Find(ctx, bson.M{"book_id": book_id}, opt)
+
 		if err != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"error finding"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error finding"})
 			return
 		}
-		cursor.All(ctx,&bookDetail)
-		c.JSON(http.StatusOK,bookDetail)
+		cursor.All(ctx, &bookDetail)
+		c.JSON(http.StatusOK, bookDetail)
 	}
 }

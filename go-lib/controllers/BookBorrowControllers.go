@@ -101,3 +101,66 @@ func GetBorrowList() gin.HandlerFunc {
 		c.JSON(http.StatusOK,borrowList)
 	}
 }
+
+func GetBorrowListOfABook() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+		defer cancel()
+		borrowList := []bson.M{}
+		book_id := c.Param("book_id")
+		matchStage := bson.D{{Key: "$match",Value: bson.D{{Key: "book_id",Value: book_id}}}}
+		lookupStage := bson.D{
+			{Key: "$lookup",Value: bson.D{
+				{Key: "from",Value: "users"},
+				{Key: "localField",Value: "user_id"},
+				{Key: "foreignField",Value: "user_id"},
+				{Key: "as",Value: "user"},
+			}},
+		}
+		lookupStage2 := bson.D{
+			{Key: "$lookup",Value: bson.D{
+				{Key: "from",Value: "books"},
+				{Key: "localField",Value: "book_id"},
+				{Key: "foreignField",Value: "book_id"},
+				{Key: "as",Value: "book"},
+			}},
+		}
+		// projectStage := bson.D{
+		// 	{Key: "$project",Value: bson.D{
+		// 		{Key: "_id",Value: 0},
+		// 		{Key: "user._id",Value: 0},
+		// 		{Key: "book._id",Value: 0},
+		// 		{Key: "user.password",Value: 0},
+		// 		{Key: "user.email",Value: 0},
+		// 		{Key: "user.phone",Value: 0},
+		// 		{Key: "user.role",Value: 0},
+		// 		{Key: "user.created_at",Value: 0},
+		// 		{Key: "user.updated_at",Value: 0},
+		// 		{Key:"user_id",Value:0},
+		// 	}},
+		// }
+		unwindStage := bson.D{{"$unwind", bson.D{{"path", "$book"}, {"preserveNullAndEmptyArrays", false}}}}
+		unwindStage2 := bson.D{{"$unwind", bson.D{{"path", "$user"}, {"preserveNullAndEmptyArrays", false}}}}
+		projectStage := bson.D{
+			{Key: "$project",Value: bson.D{
+				{Key: "_id",Value: 0},
+				// {Key: "book.book_id",Value: 1},
+				// {Key: "book.book_img",Value: 1},
+				// {Key: "book.name",Value: 1},
+				// {Key: "book.book_detail_id",Value: 1},
+				// {Key: "book.book_hire_id",Value: 1},
+				// {Key: "book_id",Value: 1},
+				// {Key: "book_id",Value: 1},
+				// {Key: "date_borrowed",Value: 1},
+				// {Key: "date_end",Value: 1},
+				// {Key: "user.user_id",Value: 1},
+				// {Key: "user.name",Value: 1},
+			}},
+		}
+		cursor,_:=BookBorrowedCollection.Aggregate(ctx,mongo.Pipeline{
+			matchStage,lookupStage,lookupStage2,unwindStage,unwindStage2,projectStage,
+		})
+		cursor.All(ctx,&borrowList)
+		c.JSON(http.StatusOK,borrowList)
+	}
+}

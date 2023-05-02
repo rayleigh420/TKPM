@@ -39,3 +39,11 @@ func OpenCollection(client *mongo.Client,collectionName string) *mongo.Collectio
 	collection := client.Database("go-lib").Collection(collectionName)
 	return collection
 }
+
+func DisconnectDB(dbclient *mongo.Client){
+	ctx,cancel := context.WithTimeout(context.Background(),50*time.Second)
+	defer cancel()
+	if err := dbclient.Disconnect(ctx); err != nil {
+		log.Fatal(err.Error())
+	}
+}
