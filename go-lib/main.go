@@ -7,8 +7,10 @@ import (
 
 	"github.com/baguette/go-lib/middleware"
 	"github.com/baguette/go-lib/routes"
+	"github.com/baguette/go-lib/database"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	
 )
 
 func main() {
@@ -23,7 +25,8 @@ func main() {
 	routes.BookDetailRoute(router)	
 	routes.BookBorrowedRoute(router)
 	routes.BookRentRoutes(router)
-	// routes.HistoryRoute(router)
+	routes.HistoryRoute(router)
 
 	router.Run(":"+os.Getenv("PORT"))
+	defer database.DisconnectDB(database.Client)
 }

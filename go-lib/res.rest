@@ -18,13 +18,13 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjMiLCJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNjgyOTUwNjMyfQ.XFgELgFJ0inwtrQiDNuWh7WK1dSvVxCyHNyPqIGiyTg
+GET http://localhost:8080/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjMiLCJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwidXNlcl9pZCI6IjZjbG9tV2p5ck0xbiIsImF2YXRhciI6IiIsImV4cCI6MTY4Mjk1MjczNn0.lZfG41HGZw2mGqz_3w0kUgkRzp8FBGUJzkPjOk4hdBg
 
 ###
 GET http://localhost:8080/books?page=1
 
 ### 
-GET http://localhost:8080/books/search?search_text=Ob
+GET http://localhost:8080/books/search?search_text=bjec
 
 ###
 POST http://localhost:8080/books
@@ -50,7 +50,10 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:8080/RentList
+GET http://localhost:8080/rentlist
+
+###
+GET http://localhost:8080/rentlist/RbPuAnhCPQsw
 
 ###
 GET http://localhost:8080/books/type?book_type=Manga&page=1
@@ -69,3 +72,21 @@ GET http://localhost:8080/books/RbPuAnhCPQsw
 
 ###
 GET http://localhost:8080/borrowlist
+
+###
+GET http://localhost:8080/borrowlist/RbPuAnhCPQsw
+
+###
+GET http://localhost:8080/history?page=1
+
+###
+GET http://localhost:8080/history/6clomWjyrM1n
+
+###
+POST http://localhost:8080/rent
+Content-Type: application/json
+
+{
+    "book_id": "RbPuAnhCPQsw",
+    "user_id": "6clomWjyrM1n"
+}
