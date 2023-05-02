@@ -1,15 +1,27 @@
 import { useContext, useState } from "react"
 import AuthContext from "../../context/AuthProvider"
+import { useMutation } from "@tanstack/react-query"
+import { uploadAva } from "../../api/imgApi"
 
 const ProfileForm = () => {
     const { auth } = useContext(AuthContext)
 
-    const [img, setImg] = useState(auth.ava)
+    const [img, setImg] = useState(null)
+    const [imgURL, setImgURL] = useState(auth.ava)
     const [name, setName] = useState(auth.name)
     const [email, setEmail] = useState(auth.email)
 
+    const uploadAvaMutation = useMutation({
+        mutationFn: (imgURL) => uploadAva(imgURL),
+        onSuccess: (data) => {
+            console.log(data)
+        }
+    })
+
     const handleChangeImage = (e) => {
-        setImg(URL.createObjectURL(e.target.files[0]))
+        setImgURL(URL.createObjectURL(e.target.files[0]))
+        setImg(e.target.files[0])
+        console.log(e.target.files[0])
     }
 
     const handleChangeName = (e) => {
@@ -21,10 +33,14 @@ const ProfileForm = () => {
     }
 
     const handleSaveProfile = () => {
-        setImg(null)
+        const imgForm = new FormData();
+        imgForm.append('image', img);
+        uploadAvaMutation.mutate(imgForm)
+
+        console.log(name, email)
+        setImgURL(null)
         setName('')
         setEmail('')
-        console.log(name, email)
     }
 
     return (
@@ -37,7 +53,7 @@ const ProfileForm = () => {
                     <div className="avatar">
                         <div className="w-24 rounded-full hover:shadow-md ring ring-[#121314] hover:ring-[#eeeeee] ring-offset-base-100 ring-offset-2">
                             <label className="cursor-pointer" htmlFor="ava_input">
-                                <img src={img || "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/1200px-OOjs_UI_icon_userAvatar.svg.png"} className={!img && "bg-[#661AE6]"} />
+                                <img src={imgURL || "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/1200px-OOjs_UI_icon_userAvatar.svg.png"} className={!img && "bg-[#661AE6]"} />
                             </label>
                             <input className="hidden" id="ava_input" type="file" accept=".jpg,.jpeg,.png" onChange={handleChangeImage}></input>
                         </div>

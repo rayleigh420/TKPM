@@ -7,7 +7,7 @@ const Navigation = ({ setLog }) => {
 
     const [search, setSearch] = useState('')
     const { auth } = useContext(AuthContext)
-    console.log(auth)
+    // console.log(auth)
 
     const handleChangeSearch = (e) => {
         setSearch(e.target.value)

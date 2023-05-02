@@ -19,7 +19,7 @@ export const signUp = async ({ name, phone, email, password }) => {
     // catch (e) {
     //     console.log(e)
     // }
-    console.log(name, phone, email, password)
+    // console.log(name, phone, email, password)
     const result = await axios.post(`/signup`, {
         name: name,
         phone: phone,
@@ -31,6 +31,6 @@ export const signUp = async ({ name, phone, email, password }) => {
 
 export const checkToken = async (token) => {
     const result = await axios.get(`/token?token=${token}`)
-    console.log(result)
+    // console.log(result)
     return result.data
 }
