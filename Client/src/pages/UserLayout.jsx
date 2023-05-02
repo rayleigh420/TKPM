@@ -4,6 +4,7 @@ import AuthContext from "../context/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
 import { checkToken } from "../api/authApi";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { toast } from "react-toastify";
 
 export const avaURL = "https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg"
 
@@ -28,6 +29,10 @@ const UserLayout = () => {
                 user_id: data.user_id,
                 token: data.token
             })
+        },
+        onError: () => {
+            setAuth({})
+            // toast.error("Please Login again")
         }
     })
 
@@ -38,7 +43,7 @@ const UserLayout = () => {
         else {
             navigate(from, { replace: true })
         }
-    }, [])
+    }, [value])
 
     // useEffect(() => {
     //     if (!auth?.name) {

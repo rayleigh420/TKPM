@@ -6,6 +6,7 @@ import { checkToken } from "../api/authApi"
 import useLocalStorage from "../hooks/useLocalStorage"
 import { useContext, useEffect } from "react"
 import AuthContext from "../context/AuthProvider"
+import { toast } from "react-toastify"
 
 const Layout = () => {
     const { setAuth } = useContext(AuthContext)
@@ -23,6 +24,10 @@ const Layout = () => {
                 user_id: data.user_id,
                 token: data.token
             })
+        },
+        onError: () => {
+            setAuth({})
+            toast.error("Please login again!")
         }
     })
 
