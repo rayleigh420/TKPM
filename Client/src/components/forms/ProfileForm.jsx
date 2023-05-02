@@ -12,7 +12,7 @@ const ProfileForm = () => {
     const [email, setEmail] = useState(auth.email)
 
     const uploadAvaMutation = useMutation({
-        mutationFn: (imgURL) => uploadAva(imgURL),
+        mutationFn: (imgForm) => uploadAva(imgForm),
         onSuccess: (data) => {
             console.log(data)
         }
@@ -35,9 +35,9 @@ const ProfileForm = () => {
     const handleSaveProfile = () => {
         const imgForm = new FormData();
         imgForm.append('image', img);
+
         uploadAvaMutation.mutate(imgForm)
 
-        console.log(name, email)
         setImgURL(null)
         setName('')
         setEmail('')
