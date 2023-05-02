@@ -56,105 +56,68 @@ Not:
 Get Books
 GET http://localhost:8080/books?page=n
 
-Return: [
-    {
-        "bookItems: [
-            {book1},
-            {book2},
-            {book3},
-            type: [
-                {
-                "typeid":"",
-                "typename":"",
-            },
-            ]
-        ]
-    }
-]
+Return: 
 
 ### 
 Search books
 GET http://localhost:8080/books/search?search_text=abc&page=n
 
-Return: [
-    {
-        "bookItems: [
-            {book1},
-            {book2},
-            {book3},
-            type: [
-                {
-                "typeid":"",
-                "typename":"",
-            },
-            ]
-        ]
-    }
-]
+Return: 
 
 ###
 Get book by types
 GET http://localhost:8080/books/type?book_type=Manga&page=n
-Return: [
-    {
-        "bookItems: [
-            {book1},
-            {book2},
-            {book3},
-            type: [
-                {
-                "typeid":"",
-                "typename":"",
-            },
-            ]
-        ]
-    }
-]
+Return: 
 
 ###
 Get popular books
 GET http://localhost:8080/books/popular?page=n
-Return: [
-    {
-        "bookItems: [
-            {book1},
-            {book2},
-            {book3},
-            type: [
-                {
-                "typeid":"",
-                "typename":"",
-            },
-            ]
-        ]
-    }
-]
+Return: 
 
 ###
 Get lastest update books
 GET http://localhost:8080/books/latest?page
-Return: [
-    {
-        "bookItems: [
-            {book1},
-            {book2},
-            {book3},
-            type: [
-                {
-                "typeid":"",
-                "typename":"",
-            },
-            ]
-        ]
-    }
-]
+Return: 
 
-###
-Get RentList 
-GET http://localhost:8080/RentList
+### GET RENTLIST
+
+GET http://localhost:8080/rentlist
 return:
 {
     "_id": "",
     "book": {
     }
+}
+
+### Get Borrowlist
+
+GET http://localhost:8080/borrowlist
+
+
+### GET THAT BOOK
+GET http://localhost:8080/books/RbPuAnhCPQsw
+
+### GET ALL VERSIONS OF THAT BOOK
+GET http://localhost:8080/books/RbPuAnhCPQsw/detail
+Return a list of that book
+
+### GET HISTORY
+GET http://localhost:8080/history?page=1
+
+### RENT A BOOK
+POST http://localhost:8080/rent
+Content-Type: application/json
+
+{
+    "book_id": "RbPuAnhCPQsw",
+    "user_id": "6clomWjyrM1n"
+}
+
+### HIRE A BOOK
+POST http://localhost:8080/hire
+Content-Type: application/json
+
+{
+    "book_rent_id": "input",
+    "token": "input" onlyadmin can hỉre
 }

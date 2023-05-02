@@ -54,7 +54,7 @@ func GetHistory() gin.HandlerFunc{
 		}
 		limitStage := bson.D{{"$limit",recordPerPage}}
 		cursor,err := HistoryCollection.Aggregate(ctx,mongo.Pipeline{
-			skipStage,lookupStage,unwindStage,projectStage,limitStage,
+			skipStage,limitStage,lookupStage,unwindStage,projectStage,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError,gin.H{"error":"error aggregating"})

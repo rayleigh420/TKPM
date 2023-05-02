@@ -65,10 +65,10 @@ GET http://localhost:8080/books/latest
 GET http://localhost:8080/books/popular
 
 ###
-GET http://localhost:8080/books/RbPuAnhCPQsw/detail
+GET http://localhost:8080/books/RbPuAnhCPQsw
 
 ###
-GET http://localhost:8080/books/RbPuAnhCPQsw
+GET http://localhost:8080/books/RbPuAnhCPQsw/detail
 
 ###
 GET http://localhost:8080/borrowlist
