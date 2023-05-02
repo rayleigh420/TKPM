@@ -70,22 +70,39 @@ const Navigation = ({ setLog }) => {
                     <div className="dropdown dropdown-end">
                         <label tabIndex={auth?.name && 0} className="btn btn-ghost btn-circle avatar" onClick={handleOpen}>
                             <div className="w-10 rounded-full">
-                                <img src={auth?.ava ? auth.ava : "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"} />
+                                {
+                                    auth?.ava ? auth.ava :
+                                        (
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-full h-full overflow-hidden">
+                                                <path fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clipRule="evenodd" />
+                                            </svg>
+
+                                        )
+                                }
+                                {/* <img src={auth?.ava ? auth.ava : "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"} /> */}
                                 {/* <img src="https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg" /> */}
                             </div>
                         </label>
                         {auth?.name &&
                             <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 font-semibold">
                                 <li><a className="text-[15px] font-bold py-[16px] text-[#ffffff]">
-                                    {avaURL &&
-                                        <div className="avatar">
-                                            <div className="w-7 rounded-full ring ring-[#413ACB]">
-                                                <img src={auth.ava ? auth.ava : "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"} />
 
-                                                {/* <img src="https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg" /> */}
-                                            </div>
+                                    <div className="avatar">
+                                        <div className="w-7 rounded-full ring ring-[#413ACB]">
+                                            {
+                                                auth?.ava ? auth.ava :
+                                                    (
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-full h-full overflow-hidden">
+                                                            <path fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clipRule="evenodd" />
+                                                        </svg>
+
+                                                    )
+                                            }
+                                            {/* <img src={auth.ava ? auth.ava : "https://assets.stickpng.com/images/585e4bf3cb11b227491c339a.png"} /> */}
+
+                                            {/* <img src="https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg" /> */}
                                         </div>
-                                    }
+                                    </div>
                                     {auth.name}
                                 </a></li>
                                 <li>
