@@ -9,6 +9,7 @@ import (
 	// "strconv"
 	"time"
 
+	"github.com/baguette/go-lib/helper"
 	"github.com/baguette/go-lib/models"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -25,34 +26,41 @@ func HireABook() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		//rent_id
-		//user_id
-		//book_detail_id
+		//token
+		rec := bson.M{}
+		c.ShouldBindJSON(&rec)
+		book_rent_id := rec["book_rent_id"].(string)
+		token := rec["token"].(string)
+		claim,msg := helper.ValidateToken(token)
+		if msg != ""{
+			c.JSON(http.StatusBadRequest,gin.H{"error":msg})
+			return
+		}
+		if claim.Role != "admin"{
+			c.JSON(http.StatusBadRequest,gin.H{"error":"unauthorized"})
+			return
+		}
 		now,_ := time.Parse(time.RFC3339,time.Now().Format(time.RFC3339))
 		month1,_ := time.Parse(time.RFC3339,time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
-		obj := bson.M{}
-		book_rent_id := c.Param("book_rent_id")
-		BookRentCollection.FindOneAndDelete(ctx,bson.M{"book_rent_id":book_rent_id}).Decode(&obj)
-
+		obj := bson.M{}		
+		if err := BookRentCollection.FindOne(ctx,bson.M{"book_rent_id":book_rent_id}).Decode(&obj);err != nil {
+			c.JSON(http.StatusBadRequest,gin.H{"error":"what up"})
+			return
+		}
 		//create borrow model
 		bookBorrowModel := models.BookBorrowModel{}
 		bookBorrowModel.Id = primitive.NewObjectID()
 		bookBorrowModel.Book_id = obj["book_id"].(string)
 		bookBorrowModel.User_id = obj["user_id"].(string)
-		bookReady,err := FindBookToRentWithId(bookBorrowModel.Book_id)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"cannot find book"})
-			return
-		}
-		bookBorrowModel.Book_detail_id = bookReady["book_detail_id"].(string)
+		bookBorrowModel.Book_detail_id = obj["book_detail_id"].(string)
 		bookBorrowModel.Book_hire_id,_ = gonanoid.Generate(NanoidString,12)
 		bookBorrowModel.Date_borrowed = now
 		bookBorrowModel.Date_end = month1
 		
 		//update book detail status
 		updateObj := bson.D{
-			{Key:"$set",Value:bson.D{{Key:"status",Value:"borrowed"}}},
+			{Key:"$set",Value:bson.D{{Key:"status",Value:"borrowed"},{Key: "updated_at",Value: now}}},
 		}
-		
 		
 		//create history borrowing
 		historyModel := models.HistoryModel{}
@@ -61,10 +69,18 @@ func HireABook() gin.HandlerFunc {
 		historyModel.History_id,_ = gonanoid.Generate(NanoidString,12)
 		historyModel.Book_detail_id = bookBorrowModel.Book_detail_id
 		historyModel.Status = "borrowing"
-		
+		BookRentCollection.DeleteOne(ctx,bson.M{"book_rent_id":obj["book_rent_id"].(string)})
 		BookBorrowedCollection.InsertOne(ctx,bookBorrowModel)
 		BookDetailCollection.UpdateOne(ctx,bson.M{"book_detail_id":bookBorrowModel.Book_detail_id},updateObj)
 		HistoryCollection.InsertOne(ctx,historyModel)
+		c.JSON(http.StatusOK,gin.H{
+			"status":"success",
+			"history_id":historyModel.History_id,
+			"borrowed_id": bookBorrowModel.Book_hire_id,
+			"book_detail_id":bookBorrowModel.Book_detail_id,
+			"book_id":bookBorrowModel.Book_id,
+			"date_borrowed":historyModel.Date_borrowed,
+		})
 	}
 }
 

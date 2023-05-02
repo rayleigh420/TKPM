@@ -13,7 +13,7 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "email":"user3@gmail.com",
+    "email":"user1@gmail.com",
     "password":"123"
 }
 
@@ -89,4 +89,13 @@ Content-Type: application/json
 {
     "book_id": "RbPuAnhCPQsw",
     "user_id": "6clomWjyrM1n"
+}
+
+###
+POST http://localhost:8080/hire
+Content-Type: application/json
+
+{
+    "book_rent_id": "W5PIUgKAgrnA",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJkald6Qk5nRDdDdmMiLCJhdmF0YXIiOiIiLCJleHAiOjE2ODMwMzkyODl9.S1BuxYKfnONxyaEPXwS70QZFa2LEVZWrvD6IJY9s-xI"
 }
