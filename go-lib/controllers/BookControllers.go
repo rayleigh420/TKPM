@@ -435,7 +435,7 @@ func RentABook() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error renting"})
 			return
 		}
-		updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "booked"}}}}
+		updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "booked"},{Key: "updated_at",Value: now}}}}
 		//
 		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookToRent["book_detail_id"].(string)}, updateObj)
 		c.JSON(http.StatusOK, gin.H{
