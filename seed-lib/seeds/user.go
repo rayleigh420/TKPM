@@ -23,35 +23,35 @@ func SeedUser() {
 		Name:     "user1",
 		Email:    "user1@gmail.com",
 		Phone:    "1",
-		Password: "$2a$14$BqbUox4RQJ.CJkx3v8DFmuNFwtVWqoBB6ROkEMLVkJyfYMq5AayGG",
+		Password: "$2a$10$BlbYzo6uJGyLLowPnP3sKuZc6xO.vk2LxDvYmvt73/N5ummZrxiJS",
 		Role:     "admin",
 	}
 	User2 := models.UserModel{
 		Name:     "user2",
 		Email:    "user2@gmail.com",
 		Phone:    "2",
-		Password: "$2a$14$BqbUox4RQJ.CJkx3v8DFmuNFwtVWqoBB6ROkEMLVkJyfYMq5AayGG",
+		Password: "$2a$10$BlbYzo6uJGyLLowPnP3sKuZc6xO.vk2LxDvYmvt73/N5ummZrxiJS",
 		Role:     "user",
 	}
 	User3 := models.UserModel{
 		Name:     "user3",
 		Email:    "user3@gmail.com",
 		Phone:    "3",
-		Password: "$2a$14$BqbUox4RQJ.CJkx3v8DFmuNFwtVWqoBB6ROkEMLVkJyfYMq5AayGG",
+		Password: "$2a$10$BlbYzo6uJGyLLowPnP3sKuZc6xO.vk2LxDvYmvt73/N5ummZrxiJS",
 		Role:     "user",
 	}
 	User4 := models.UserModel{
 		Name:     "user4",
 		Email:    "user4@gmail.com",
 		Phone:    "4",
-		Password: "$2a$14$BqbUox4RQJ.CJkx3v8DFmuNFwtVWqoBB6ROkEMLVkJyfYMq5AayGG",
+		Password: "$2a$10$BlbYzo6uJGyLLowPnP3sKuZc6xO.vk2LxDvYmvt73/N5ummZrxiJS",
 		Role:     "user",
 	}
 	User5 := models.UserModel{
 		Name:     "user5",
 		Email:    "user5@gmail.com",
 		Phone:    "5",
-		Password: "$2a$14$BqbUox4RQJ.CJkx3v8DFmuNFwtVWqoBB6ROkEMLVkJyfYMq5AayGG",
+		Password: "$2a$10$BlbYzo6uJGyLLowPnP3sKuZc6xO.vk2LxDvYmvt73/N5ummZrxiJS",
 		Role:     "user",
 	}
 	now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))

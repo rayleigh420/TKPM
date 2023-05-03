@@ -20,6 +20,8 @@ func SeedBook(){
 		Author: "Thích Nhất Hạnh",
 		Borrowed_quantity: 12,
 		Amount: 50,
+		Page: 100,
+
 		Type_id: "2",
 	}
 	Book2 := models.BookModel{
@@ -112,16 +114,16 @@ func SeedBook(){
 		Amount: 50,
 		Type_id: "3",
 	}
-	Book1.Book_id = "8bNiueHjc9cU"
-	Book2.Book_id = "TXefnQqaL3C3"
-	Book3.Book_id = "faHvUfqdd87I"
-	Book4.Book_id = "xgroablsJhst"
-	Book5.Book_id = "uvWaWqqFrgn1"
-	Book6.Book_id = "5rgxmEyyuRVR"
-	Book7.Book_id = "8F4W93lFMJSh"
-	Book8.Book_id = "NvvnZH7xqLBi"
-	Book9.Book_id = "LgvTiRr6hDLN"
-	Book10.Book_id= "RbPuAnhCPQsw"
+	Book1.Book_id = "B1"
+	Book2.Book_id = "B2"
+	Book3.Book_id = "B3"
+	Book4.Book_id = "B4"
+	Book5.Book_id = "B5"
+	Book6.Book_id = "B6"
+	Book7.Book_id = "B7"
+	Book8.Book_id = "B8"
+	Book9.Book_id = "B9"
+	Book10.Book_id= "B10"
 	Book1.Id= primitive.NewObjectID()
 	Book2.Id= primitive.NewObjectID()
 	Book3.Id = primitive.NewObjectID()
@@ -132,27 +134,6 @@ func SeedBook(){
 	Book8.Id = primitive.NewObjectID()
 	Book9.Id = primitive.NewObjectID()
 	Book10.Id= primitive.NewObjectID()
-
-	Book1.Created_at = week1
-	Book1.Updated_at = week1
-	Book2.Created_at = week1
-	Book2.Updated_at = now
-	Book3.Created_at = week1
-	Book3.Updated_at = now
-	Book4.Created_at = week1
-	Book4.Updated_at = week1
-	Book5.Created_at = week1
-	Book5.Updated_at = now
-	Book6.Created_at = week1
-	Book6.Updated_at = now
-	Book7.Created_at = week1
-	Book7.Updated_at = week1
-	Book8.Created_at = week1
-	Book8.Updated_at = week1
-	Book9.Created_at = week1
-	Book9.Updated_at = week1
-	Book10.Created_at = week1
-	Book10.Updated_at = now
 
 
 	books := []interface{}{}
@@ -174,72 +155,72 @@ func SeedBookDetail(){
 	defer cancel()
 	
 	BookDetail1 := models.BookDetailModel{
-		Book_id: "TXefnQqaL3C3",
+		Book_id: "B1",
 		Location:"ABC123",
 		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail2 := models.BookDetailModel{
-		Book_id: "TXefnQqaL3C3",
+		Book_id: "B1",
 		Location:"ABC123",
 		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail3 := models.BookDetailModel{
-		Book_id: "uvWaWqqFrgn1",
+		Book_id: "B1",
 		Location:"ABC123",
 		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail4 := models.BookDetailModel{
-		Book_id: "uvWaWqqFrgn1",
+		Book_id: "B1",
 		Location:"ABC123",
 		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail5 := models.BookDetailModel{
-		Book_id: "uvWaWqqFrgn1",
+		Book_id: "B1",
 		Location:"ABC123",
 		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail6 := models.BookDetailModel{
-		Book_id: "uvWaWqqFrgn1",
+		Book_id: "B2",
 		Location:"ABC123",
 		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail7 := models.BookDetailModel{
-		Book_id: "RbPuAnhCPQsw",
+		Book_id: "B2",
 		Location:"ABC123",
 		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail8 := models.BookDetailModel{
-		Book_id: "RbPuAnhCPQsw",
+		Book_id: "B2",
 		Location:"ABC123",
-		Status:"borrowed",
+		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail9 := models.BookDetailModel{
-		Book_id: "RbPuAnhCPQsw",
+		Book_id: "B2",
 		Location:"ABC123",
-		Status:"borrowed",
+		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail10 := models.BookDetailModel{
-		Book_id: "RbPuAnhCPQsw",
+		Book_id: "B2",
 		Location:"ABC123",
-		Status:"borrowed",
+		Status:"ready",
 		Created_at: now,
 		Updated_at: now,
 	}

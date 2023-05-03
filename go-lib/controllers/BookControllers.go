@@ -73,7 +73,7 @@ func GetBooks2() gin.HandlerFunc {
 			}},
 		}
 		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
-			"type._id", "type_id", "_id", "amount", "author", "created_at", "updated_at",
+			"type._id", "type_id", "_id", "created_at",
 		}}}
 		limitStage := bson.D{{Key: "$limit", Value: recordPerPage}}
 		cursor, err := BookCollection.Aggregate(ctx, mongo.Pipeline{
@@ -139,7 +139,7 @@ func GetBooksByName() gin.HandlerFunc {
 			}},
 		}
 		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
-			"type._id", "type_id", "_id", "amount", "author", "created_at", "updated_at",
+			"type._id", "type_id", "_id", "created_at",
 		}}}
 		limitStage := bson.D{{Key: "$limit", Value: recordPerPage}}
 		cursor, err := BookCollection.Aggregate(ctx, mongo.Pipeline{
@@ -230,7 +230,7 @@ func UpdateBook() gin.HandlerFunc {
 //			c.JSON(http.StatusOK, latestBooks)
 //		}
 //	}
-func GetLatestBooks() gin.HandlerFunc {
+func GetNewestBooks() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
@@ -262,7 +262,7 @@ func GetLatestBooks() gin.HandlerFunc {
 			}},
 		}
 		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
-			"type._id", "type_id", "_id", "author", "created_at",
+			"type._id", "type_id", "_id", "created_at",
 		}}}
 		limitStage := bson.D{{Key: "$limit", Value: recordPerPage}}
 		sortStage := bson.D{

@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -20,4 +22,6 @@ type BookModel struct {
 	Details             string             `json:"details"`
 	Description         string             `json:"description"`
 	License             string             `json:"license"`
+	Created_at          time.Time          `json:"created_at"`
+	Updated_at          time.Time          `json:"updated_at"`
 }
