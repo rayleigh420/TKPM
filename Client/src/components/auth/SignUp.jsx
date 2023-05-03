@@ -121,6 +121,14 @@ const SignUp = ({ sign, setLog, setSign }) => {
                                 <span className="label-text text-[#ffffff]">Confirm Password</span>
                             </label>
                             <input value={repassword} onChange={handleChangeRePassword} type="password" placeholder="Re Enter your password" className="input input-bordered w-full max-w-xs" />
+                            {
+                                password != '' && repassword != '' && password != repassword &&
+                                (
+                                    <label className="label">
+                                        <span className="label-text-alt text-red-500">The password do not match.</span>
+                                    </label>
+                                )
+                            }
                         </div>
                     </div>
 
