@@ -16,7 +16,7 @@ func SeedBook(){
 		Name: "Không Diệt Không Sinh Đừng Sợ Hãi",
 		Publisher: "Saigon Books",
 		Yearpublished: 2000,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Thích Nhất Hạnh",
 		Borrowed_quantity: 12,
 		Amount: 50,
@@ -28,7 +28,7 @@ func SeedBook(){
 		Name: "Muôn Kiếp Nhân Sinh - Many Times, Many Lives",
 		Publisher: "NXB Tổng Hợp TPHCM",
 		Yearpublished: 2020,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Nguyên Phong",
 		Borrowed_quantity: 120,
 		Amount: 50,
@@ -38,7 +38,7 @@ func SeedBook(){
 		Name: "Muốn An Được An",
 		Publisher: "Thái Hà",
 		Yearpublished: 2021,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Thích Nhất Hạnh",
 		Borrowed_quantity: 20,
 		Amount: 50,
@@ -48,7 +48,7 @@ func SeedBook(){
 		Name: "Tĩnh Lặng - Sức Mạnh Tĩnh Lặng Trong Thế Giới Huyền Ảo",
 		Publisher: "Thái Hà",
 		Yearpublished: 2020,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Thích Nhất Hạnh",
 		Borrowed_quantity: 42,
 		Amount: 50,
@@ -58,7 +58,7 @@ func SeedBook(){
 		Name: "Chainsaw Man - Tập 11",
 		Publisher: "NXB Trẻ",
 		Yearpublished: 2020,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Tatsuki Fujimoto",
 		Borrowed_quantity: 512,
 		Amount: 50,
@@ -68,7 +68,7 @@ func SeedBook(){
 		Name: "Khu Rừng Đom Đóm",
 		Publisher: "NXB Trẻ",
 		Yearpublished: 2000,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Yuki Midorikawa",
 		Borrowed_quantity: 162,
 		Amount: 50,
@@ -78,7 +78,7 @@ func SeedBook(){
 		Name: "Cô Gái Nơi Xứ Ngoài",
 		Publisher: "IPM",
 		Yearpublished: 2000,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Nagabe",
 		Borrowed_quantity: 127,
 		Amount: 50,
@@ -88,7 +88,7 @@ func SeedBook(){
 		Name: "Cô Gái Nơi Xứ Ngoài - Tập 2",
 		Publisher: "IPM",
 		Yearpublished: 2000,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Nagabe",
 		Borrowed_quantity: 182,
 		Amount: 50,
@@ -98,7 +98,7 @@ func SeedBook(){
 		Name: "Blockchain - Bản Chất Của Blockchain",
 		Publisher: "1980 Books",
 		Yearpublished: 2000,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Mark Gates",
 		Borrowed_quantity: 192,
 		Amount: 50,
@@ -108,7 +108,7 @@ func SeedBook(){
 		Name: "Object Oriented Programming",
 		Publisher: "TKLong",
 		Yearpublished: 2000,
-		Book_img: "https://bit.ly/41PTfoj",
+		Book_img: "https://picsum.photos/200/300",
 		Author: "Nguyen Van A",
 		Borrowed_quantity: 1012,
 		Amount: 50,
@@ -213,14 +213,294 @@ func SeedBookDetail(){
 	BookDetail9 := models.BookDetailModel{
 		Book_id: "B2",
 		Location:"ABC123",
-		Status:"ready",
+		Status:"borrowed",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail10 := models.BookDetailModel{
 		Book_id: "B2",
 		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail11 := models.BookDetailModel{
+		Book_id: "B3",
+		Location:"ABC123",
 		Status:"ready",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail12 := models.BookDetailModel{
+		Book_id: "B3",
+		Location:"ABC123",
+		Status:"ready",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail13 := models.BookDetailModel{
+		Book_id: "B3",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail14 := models.BookDetailModel{
+		Book_id: "B3",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail15 := models.BookDetailModel{
+		Book_id: "B3",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail16 := models.BookDetailModel{
+		Book_id: "B4",
+		Location:"ABC123",
+		Status:"ready",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail17 := models.BookDetailModel{
+		Book_id: "B4",
+		Location:"ABC123",
+		Status:"ready",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail18 := models.BookDetailModel{
+		Book_id: "B4",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail19 := models.BookDetailModel{
+		Book_id: "B4",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail20 := models.BookDetailModel{
+		Book_id: "B4",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail21 := models.BookDetailModel{
+		Book_id: "B5",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail22 := models.BookDetailModel{
+		Book_id: "B5",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail23 := models.BookDetailModel{
+		Book_id: "B5",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail24 := models.BookDetailModel{
+		Book_id: "B5",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail25 := models.BookDetailModel{
+		Book_id: "B5",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail26 := models.BookDetailModel{
+		Book_id: "B6",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail27 := models.BookDetailModel{
+		Book_id: "B6",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail28 := models.BookDetailModel{
+		Book_id: "B6",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail29 := models.BookDetailModel{
+		Book_id: "B6",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail30 := models.BookDetailModel{
+		Book_id: "B6",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail31 := models.BookDetailModel{
+		Book_id: "B7",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail32 := models.BookDetailModel{
+		Book_id: "B7",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail33 := models.BookDetailModel{
+		Book_id: "B7",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail34 := models.BookDetailModel{
+		Book_id: "B7",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail35 := models.BookDetailModel{
+		Book_id: "B7",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail36 := models.BookDetailModel{
+		Book_id: "B8",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail37 := models.BookDetailModel{
+		Book_id: "B8",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail38 := models.BookDetailModel{
+		Book_id: "B8",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail39 := models.BookDetailModel{
+		Book_id: "B8",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail40 := models.BookDetailModel{
+		Book_id: "B8",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail41 := models.BookDetailModel{
+		Book_id: "B9",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail42 := models.BookDetailModel{
+		Book_id: "B9",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail43 := models.BookDetailModel{
+		Book_id: "B9",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail44 := models.BookDetailModel{
+		Book_id: "B9",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail45 := models.BookDetailModel{
+		Book_id: "B9",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail46 := models.BookDetailModel{
+		Book_id: "B10",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail47 := models.BookDetailModel{
+		Book_id: "B10",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail48 := models.BookDetailModel{
+		Book_id: "B10",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail49 := models.BookDetailModel{
+		Book_id: "B10",
+		Location:"ABC123",
+		Status:"borrowed",
+		Created_at: now,
+		Updated_at: now,
+	}
+	BookDetail50 := models.BookDetailModel{
+		Book_id: "B10",
+		Location:"ABC123",
+		Status:"borrowed",
 		Created_at: now,
 		Updated_at: now,
 	}

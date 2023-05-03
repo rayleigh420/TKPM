@@ -3,8 +3,8 @@ Content-Type: application/json
 
 {
     "name":"Long",
-    "phone":"097",
-    "email":"klong3112@gmail.com",
+    "phone":"0978",
+    "email":"klong31122001@gmail.com",
     "password":"123"
 }
 
@@ -13,7 +13,7 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "email":"user1@gmail.com",
+    "email":"klong31122001@gmail.com",
     "password":"123"
 }
 
@@ -78,6 +78,9 @@ GET http://localhost:8080/borrowlist/RbPuAnhCPQsw
 
 ###
 GET http://localhost:8080/history?page=1
+
+###
+GET http://localhost:8080/types
 
 ###
 GET http://localhost:8080/history/6clomWjyrM1n
