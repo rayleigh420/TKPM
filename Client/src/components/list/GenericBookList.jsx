@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom"
 import { getGenericBook } from "../../api/bookApi"
@@ -9,10 +9,29 @@ const GenericBookList = () => {
     const { generic } = useParams();
     const [page, setPage] = useState(1)
 
+    const queryClient = useQueryClient()
+
     const { data: books, isLoading, isFetching, isError } = useQuery({
         queryKey: ['books', generic, page],
-        queryFn: () => getGenericBook(generic, page)
+        queryFn: () => getGenericBook(generic, page),
+        keepPreviousData: true
     })
+
+    const prefetchPrevPage = (page) => {
+        queryClient.prefetchQuery(['books', generic, page], {
+            queryFn: () => getGenericBook(generic, page),
+            staleTime: 10 * 1000,
+            cacheTime: 10 * 1000,
+        })
+    }
+
+    const prefetchNextPage = (page) => {
+        queryClient.prefetchQuery(['books', generic, page], {
+            queryFn: () => getGenericBook(generic, page),
+            staleTime: 10 * 1000,
+            cacheTime: 10 * 1000,
+        })
+    }
 
     console.log(books)
 
@@ -82,12 +101,10 @@ const GenericBookList = () => {
                     ))
                 } */}
             </div>
-            <div className="flex flex-row justify-center mt-[30px] w-full">
-                <div className="btn-group">
-                    <button className="btn">1</button>
-                    <button className="btn btn-active">2</button>
-                    <button className="btn">3</button>
-                    <button className="btn">4</button>
+            <div className="flex flex-row justify-center mt-[100px] w-full">
+                <div className="btn-group grid grid-cols-2">
+                    <button className="btn btn-outline hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev - 1)} disabled={page == 1} onMouseEnter={() => prefetchPrevPage(page - 1)}>Previous page</button>
+                    <button className="btn btn-outline hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev + 1)} disabled={page == 3} onMouseEnter={() => prefetchNextPage(page + 1)}>Next</button>
                 </div>
             </div>
         </div>
