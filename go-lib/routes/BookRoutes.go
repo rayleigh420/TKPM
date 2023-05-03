@@ -8,7 +8,7 @@ import (
 func BookRoutes(router *gin.Engine){
 	router.GET("/books",controllers.GetBooks2())
 	router.GET("/books/type",controllers.GetBooksByType())
-	router.GET("/books/latest",controllers.GetLatestBooks())
+	router.GET("/books/newest",controllers.GetNewestBooks())
 	router.GET("/books/popular",controllers.GetPopularBooks())
 	router.GET("/books/:book_id",controllers.GetBookByID())
 	router.GET("/books/:book_id/detail",controllers.GetBookDetail())
