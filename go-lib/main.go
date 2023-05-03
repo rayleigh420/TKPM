@@ -26,7 +26,7 @@ func main() {
 	routes.BookBorrowedRoute(router)
 	routes.BookRentRoutes(router)
 	routes.HistoryRoute(router)
-
+	routes.TypeRoute(router)
 	router.Run(":"+os.Getenv("PORT"))
 	defer database.DisconnectDB(database.Client)
 }
