@@ -13,7 +13,7 @@ POST http://localhost:8080/login
 Content-Type: application/json
 
 {
-    "email":"klong31122001@gmail.com",
+    "email":"user2@gmail.com",
     "password":"123"
 }
 
@@ -65,7 +65,7 @@ GET http://localhost:8080/books/latest
 GET http://localhost:8080/books/popular
 
 ###
-GET http://localhost:8080/books/RbPuAnhCPQsw
+GET http://localhost:8080/books/B5
 
 ###
 GET http://localhost:8080/books/RbPuAnhCPQsw/detail
@@ -77,7 +77,7 @@ GET http://localhost:8080/borrowlist
 GET http://localhost:8080/borrowlist/RbPuAnhCPQsw
 
 ###
-GET http://localhost:8080/history?page=1
+GET http://localhost:8080/history?page=2
 
 ###
 GET http://localhost:8080/types

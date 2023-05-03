@@ -95,10 +95,32 @@ func GetBookByID() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		id := c.Param("book_id")
-		bookModel := models.BookModel{}
+		bookModel := bson.M{}
 		if err := BookCollection.FindOne(ctx, bson.D{{Key: "book_id", Value: id}}).Decode(&bookModel); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
+		}
+		booksRelated := []bson.M{}
+		matchStage := bson.D{
+			{Key: "$match",Value: bson.D{
+				{Key: "$or",Value: bson.A{
+					bson.D{{Key: "type_id",Value: bookModel["type_id"].(string)}},
+					bson.D{{Key: "author", Value: bson.D{{Key: "$regex", Value: bookModel["author"].(string)}, {Key: "$options", Value: "i"}}}},
+				}},
+			}},
+		}
+		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
+			"type._id", "type_id", "_id", "created_at","description","details","license","page",
+		}}}
+		limitStage := bson.D{{Key: "$limit", Value: 10}}
+		cursor, _ := BookCollection.Aggregate(ctx, mongo.Pipeline{
+			limitStage,matchStage,unsetStage,
+		})
+		cursor.All(ctx, &booksRelated)
+		if len(booksRelated) != 0 {
+			bookModel["related_books"] = booksRelated
+		} else {
+			bookModel["related_books"] = "none"
 		}
 		c.JSON(http.StatusOK, bookModel)
 	}
@@ -206,30 +228,6 @@ func UpdateBook() gin.HandlerFunc {
 	}
 }
 
-//	func GetLatestBooks() gin.HandlerFunc {
-//		return func(c *gin.Context) {
-//			ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
-//			defer cancel()
-//			latestBooks := []bson.M{}
-//			page, _ := strconv.Atoi(c.Query("page"))
-//			if page <= 0 {
-//				page = 1
-//			}
-//			recordPerPage := 30
-//			skip := (page - 1) * recordPerPage
-//			opts := options.Find().SetSort(bson.M{"updated_at": -1}).SetLimit(int64(recordPerPage)).SetSkip(int64(skip))
-//			cursor, err := BookCollection.Find(ctx, bson.M{}, opts)
-//			if err != nil {
-//				c.JSON(http.StatusInternalServerError, gin.H{"error": "error somewhere"})
-//				return
-//			}
-//			if err := cursor.All(ctx, &latestBooks); err != nil {
-//				c.JSON(http.StatusInternalServerError, gin.H{"error": "error somewhere 2"})
-//				return
-//			}
-//			c.JSON(http.StatusOK, latestBooks)
-//		}
-//	}
 func GetNewestBooks() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
@@ -397,9 +395,9 @@ func FindBookToRentWithId(book_id string) (bson.M, error) {
 	bookDetail := models.BookDetailModel{}
 	// BookCollection.FindOne(ctx, bson.M{"book_id": book_id}).Decode(&bookModel)
 	if err := BookDetailCollection.FindOne(ctx, bson.D{
-		{Key: "$and",Value: bson.A{
-			bson.D{{Key: "book_id",Value: book_id}},
-			bson.D{{Key: "status",Value: "ready"}},
+		{Key: "$and", Value: bson.A{
+			bson.D{{Key: "book_id", Value: book_id}},
+			bson.D{{Key: "status", Value: "ready"}},
 		}},
 	}).Decode(&bookDetail); err != nil {
 		return bookToRent, err
@@ -427,6 +425,9 @@ func RentABook() gin.HandlerFunc {
 			return
 		}
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		amount := bson.M{}
+		opts := options.FindOne().SetProjection(bson.M{"amount":1})
+		BookCollection.FindOne(ctx,bson.M{"book_id":book_id},opts).Decode(&amount)
 		// nextMonth, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
 		// rent request
 		bookRentModel := models.BookRentModel{}
@@ -441,8 +442,10 @@ func RentABook() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error renting"})
 			return
 		}
-		updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "booked"},{Key: "updated_at",Value: now}}}}
+		updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "booked"}, {Key: "updated_at", Value: now}}}}
+		updateObj2 := bson.D{{Key:"$set",Value:bson.D{{Key:"amount",Value:amount["amount"].(int64)-1}}}}
 		//
+		BookCollection.UpdateOne(ctx,bson.M{"book_id":book_id},updateObj2)
 		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookToRent["book_detail_id"].(string)}, updateObj)
 		c.JSON(http.StatusOK, gin.H{
 			"succeeded":      insertRes,

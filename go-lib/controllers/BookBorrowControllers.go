@@ -65,9 +65,8 @@ func HireABook() gin.HandlerFunc {
 		//create history borrowing
 		historyModel := models.HistoryModel{}
 		historyModel.Id = primitive.NewObjectID()
-		historyModel.Date_borrowed = now
 		historyModel.History_id, _ = gonanoid.Generate(NanoidString, 12)
-		historyModel.Book_detail_id = bookBorrowModel.Book_detail_id
+		historyModel.Book_hire_id = bookBorrowModel.Book_hire_id
 		historyModel.Status = "borrowing"
 		BookRentCollection.DeleteOne(ctx, bson.M{"book_rent_id": obj["book_rent_id"].(string)})
 		BookBorrowedCollection.InsertOne(ctx, bookBorrowModel)
@@ -79,10 +78,12 @@ func HireABook() gin.HandlerFunc {
 			"borrowed_id":    bookBorrowModel.Book_hire_id,
 			"book_detail_id": bookBorrowModel.Book_detail_id,
 			"book_id":        bookBorrowModel.Book_id,
-			"date_borrowed":  historyModel.Date_borrowed,
+			"date_borrowed":  bookBorrowModel.Date_borrowed,
 		})
 	}
 }
+
+
 
 func GetBorrowList() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -158,8 +159,8 @@ func GetBorrowListOfABook() gin.HandlerFunc {
 		// 		{Key:"user_id",Value:0},
 		// 	}},
 		// }
-		unwindStage := bson.D{{"$unwind", bson.D{{"path", "$book"}, {"preserveNullAndEmptyArrays", false}}}}
-		unwindStage2 := bson.D{{"$unwind", bson.D{{"path", "$user"}, {"preserveNullAndEmptyArrays", false}}}}
+		unwindStage := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}, {Key: "preserveNullAndEmptyArrays", Value: false}}}}
+		unwindStage2 := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"}, {Key: "preserveNullAndEmptyArrays", Value: false}}}}
 		projectStage := bson.D{
 			{Key: "$project", Value: bson.D{
 				{Key: "_id", Value: 0},
@@ -181,5 +182,49 @@ func GetBorrowListOfABook() gin.HandlerFunc {
 		})
 		cursor.All(ctx, &borrowList)
 		c.JSON(http.StatusOK, borrowList)
+	}
+}
+
+func ReturnABook() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx,cancel := context.WithTimeout(context.Background(),50*time.Second)
+		defer cancel()
+		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		rec := bson.M{}
+		c.ShouldBindJSON(&rec)
+		token := rec["token"].(string)
+		claim,msg := helper.ValidateToken(token)
+		if msg != "" {
+			c.JSON(http.StatusBadRequest,gin.H{"error":msg})
+			return
+		}
+		if claim.Role != "admin"{
+			c.JSON(http.StatusBadRequest,gin.H{"error":"unauthorized"})
+			return
+		}
+		book_hire_id := c.Param("book_hire_id")
+		bookBorrowModel := bson.M{}
+		BookBorrowedCollection.FindOneAndDelete(ctx,bson.M{"book_hire_id":book_hire_id}).Decode(&bookBorrowModel)
+		updateObj := bson.M{"$set": bson.M{"status": "ready", "updated_at": now}}
+		updateHis := bson.M{"$set": bson.M{"status": "returned", "date_return": now,"book_hire_id":""}}
+		updateObj2 := bson.M{"$inc": bson.M{"amount": 1}}
+		_,err1 := BookDetailCollection.UpdateOne(ctx,bson.M{"book_detail_id":bookBorrowModel["book_detail_id"].(string)},updateObj)
+		_,err2 := HistoryCollection.UpdateOne(ctx,bson.M{"book_hire_id":bookBorrowModel["book_hire_id"].(string)},updateHis)
+		_,err3 := BookCollection.UpdateOne(ctx,bson.M{"book_id":bookBorrowModel["book_id"].(string)},updateObj2)
+		if err1 != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error 1"})
+			return
+		}
+		if err2 != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error 2"})
+			return
+		}
+		if err3 != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error 3"})
+			return
+		}
+		c.JSON(http.StatusOK,gin.H{
+			"status":"returned",
+		})
 	}
 }

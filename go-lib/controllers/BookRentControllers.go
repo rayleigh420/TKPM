@@ -9,43 +9,148 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	// "go.mongodb.org/mongo-driver/mongo/options"
+	// "go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetRentList() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
-		defer cancel()
-		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		yest, _ := time.Parse(time.RFC3339, time.Now().Add(-24*time.Hour).Format(time.RFC3339))
-		//delete rent request and update status to ready if over 24 hrs
-		updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "ready"}, {Key: "updated_at", Value: now}}}}
-		BookDetailCollection.UpdateMany(ctx, bson.D{
+func UpdateRentRequest() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+	defer cancel()
+	now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+	yest, _ := time.Parse(time.RFC3339, time.Now().Add(-24*time.Hour).Format(time.RFC3339))
+	//delete rent request and update status to ready if over 24 hrs
+	updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "ready"}, {Key: "updated_at", Value: now}}}}
+
+	//update book set amount to normal
+	matchStage := bson.D{
+		{Key: "$match", Value: bson.D{
 			{Key: "$and", Value: bson.A{
 				bson.D{
 					{Key: "updated_at", Value: bson.D{
 						{Key: "$lte", Value: yest},
 					}},
-					{Key:"status",Value:"booked"},
-				}}}}, updateObj)
-		BookRentCollection.DeleteMany(ctx, bson.D{
-			{Key: "reserve_date", Value: bson.D{
-				{Key: "$lte", Value: yest},
-			}},
-		})
+					{Key: "status", Value: "booked"},
+				}},
+			},
+		}},
+	}
+	groupStage := bson.D{
+		{Key: "$group", Value: bson.D{
+			{Key: "_id", Value: "$book_id"},
+			{Key: "count", Value: bson.M{"$sum": 1}},
+		}},
+	}
+	bookCursor, _ := BookDetailCollection.Aggregate(ctx, mongo.Pipeline{
+		matchStage, groupStage,
+	})
+	res := []bson.M{}
+	bookCursor.All(ctx, &res)
+	updateModels := []mongo.WriteModel{}
+	for _, amount := range res {
+		filter := bson.M{"book_id": amount["_id"].(string)}
+		update := bson.M{"$inc": bson.M{"amount": amount["count"].(int64)}}
+		model := mongo.NewUpdateManyModel().SetFilter(filter).SetUpdate(update)
+		updateModels = append(updateModels, model)
+	}
+	//done step update
+	if len(updateModels) != 0 {
+		if _, bulkErr := BookCollection.BulkWrite(ctx, updateModels); bulkErr != nil {
+			return bulkErr
+		}
+	}
+	//step update bookdetail
+	BookDetailCollection.UpdateMany(ctx, bson.D{
+		{Key: "$and", Value: bson.A{
+			bson.D{
+				{Key: "updated_at", Value: bson.D{
+					{Key: "$lte", Value: yest},
+				}},
+				{Key: "status", Value: "booked"},
+			}}}}, updateObj)
+	//step delete rent request
+	BookRentCollection.DeleteMany(ctx, bson.D{
+		{Key: "reserve_date", Value: bson.D{
+			{Key: "$lte", Value: yest},
+		}},
+	})
+	return nil
+}
+func GetRentList() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+		defer cancel()
+		// now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		// yest, _ := time.Parse(time.RFC3339, time.Now().Add(-24*time.Hour).Format(time.RFC3339))
+		// //delete rent request and update status to ready if over 24 hrs
+		// updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "ready"}, {Key: "updated_at", Value: now}}}}
+
+		// //update book set amount to normal
+		// matchStage := bson.D{
+		// 	{Key: "$match", Value: bson.D{
+		// 		{Key: "$and", Value: bson.A{
+		// 			bson.D{
+		// 				{Key: "updated_at", Value: bson.D{
+		// 					{Key: "$lte", Value: yest},
+		// 				}},
+		// 				{Key: "status", Value: "booked"},
+		// 			}},
+		// 		},
+		// 	}},
+		// }
+		// groupStage := bson.D{
+		// 	{Key: "$group", Value: bson.D{
+		// 		{Key: "_id", Value: "$book_id"},
+		// 		{Key: "count", Value: bson.M{"$sum": 1}},
+		// 	}},
+		// }
+		// bookCursor, _ := BookDetailCollection.Aggregate(ctx, mongo.Pipeline{
+		// 	matchStage, groupStage,
+		// })
+		// res := []bson.M{}
+		// bookCursor.All(ctx, &res)
+		// updateModels := []mongo.WriteModel{}
+		// for _, amount := range res {
+		// 	filter := bson.M{"book_id": amount["_id"].(string)}
+		// 	update := bson.M{"$inc": bson.M{"amount": amount["count"].(string)}}
+		// 	model := mongo.NewUpdateManyModel().SetFilter(filter).SetUpdate(update)
+		// 	updateModels = append(updateModels, model)
+		// }
+		// //done step update
+		// BookCollection.BulkWrite(ctx, updateModels)
+		// //step update bookdetail
+		// BookDetailCollection.UpdateMany(ctx, bson.D{
+		// 	{Key: "$and", Value: bson.A{
+		// 		bson.D{
+		// 			{Key: "updated_at", Value: bson.D{
+		// 				{Key: "$lte", Value: yest},
+		// 			}},
+		// 			{Key: "status", Value: "booked"},
+		// 		}}}}, updateObj)
+		// //step delete rent request
+		// BookRentCollection.DeleteMany(ctx, bson.D{
+		// 	{Key: "reserve_date", Value: bson.D{
+		// 		{Key: "$lte", Value: yest},
+		// 	}},
+		// })
+		t1 := time.Now()
+		if err := UpdateRentRequest(); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			return
+		}
+		t2 := time.Now()
 		result := []bson.M{}
 		lookupStage := bson.D{
-			{"$lookup", bson.D{
-				{"from", "books"},
-				{"localField", "book_id"},
-				{"foreignField", "book_id"},
-				{"as", "book"},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "books"},
+				{Key: "localField", Value: "book_id"},
+				{Key: "foreignField", Value: "book_id"},
+				{Key: "as", Value: "book"},
 			}},
 		}
-		unwindStage := bson.D{{"$unwind", bson.D{{"path", "$book"}, {"preserveNullAndEmptyArrays", false}}}}
+		unwindStage := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}, {Key: "preserveNullAndEmptyArrays", Value: false}}}}
 		projectStage := bson.D{
-			{"$project", bson.D{
-				{"_id", 0},
-				{"book._id", 0},
+			{Key: "$project", Value: bson.D{
+				{Key: "_id", Value: 0},
+				{Key: "book._id", Value: 0},
 			}},
 		}
 		rentListCursor, rentListErr := BookRentCollection.Aggregate(ctx, mongo.Pipeline{
@@ -56,7 +161,11 @@ func GetRentList() gin.HandlerFunc {
 			return
 		}
 		rentListCursor.All(ctx, &result)
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, gin.H{
+			"res":         result,
+			"time update": t2.Sub(t1),
+		})
+		// c.JSON(http.StatusOK, result)
 	}
 }
 
@@ -110,5 +219,29 @@ func GetRentListById() gin.HandlerFunc {
 			})
 		}
 		c.JSON(http.StatusOK, result)
+	}
+}
+func AbortRentRequest() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+		defer cancel()
+		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		book_rent_id := c.Param("book_rent_id")
+		bookRentModel := bson.M{}
+		BookRentCollection.FindOneAndDelete(ctx, bson.M{"book_rent_id": book_rent_id}).Decode(&bookRentModel)
+		book_detail_id := bookRentModel["book_detail_id"].(string)
+		book_id := bookRentModel["book_id"].(string)
+		updateObj := bson.M{"$set": bson.M{"status": "ready", "updated_at": now}}
+		updateObj2 := bson.M{"$inc": bson.M{"amount": 1}}
+		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": book_detail_id}, updateObj)
+		if _, err := BookCollection.UpdateOne(ctx, bson.M{"book_id": book_id}, updateObj2); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"status":         "abort succeeded",
+			"book_detail_id": book_detail_id,
+			"book_id":        book_id,
+		})
 	}
 }

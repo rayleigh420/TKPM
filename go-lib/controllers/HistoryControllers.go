@@ -35,6 +35,14 @@ func GetHistory() gin.HandlerFunc{
 				{"as","book"},
 			}},
 		}
+		lookupStage2 := bson.D{
+			{"$lookup",bson.D{
+				{"from","users"},
+				{"localField","user_id"},
+				{"foreignField","user_id"},
+				{"as","user"},
+			}},
+		}
 		// unsetStage := bson.D{{"$unset",bson.A{"_id"}}}
 		unwindStage := bson.D{
 			{"$unwind",bson.D{
@@ -42,10 +50,18 @@ func GetHistory() gin.HandlerFunc{
 				{"preserveNullAndEmptyArrays",false},
 			}},
 		}
+		unwindStage2 := bson.D{
+			{"$unwind",bson.D{
+				{"path","$user"},
+				{"preserveNullAndEmptyArrays",false},
+			}},
+		}
 		projectStage := bson.D{
 			{"$project",bson.D{
 				{"book.book_id",1},
 				{"book.book_img",1},
+				{"user.name",1},
+				{"user.avatar",1},
 				{"date_borrowed",1},
 				{"date_return",1},
 				{"user_id",1},
@@ -54,7 +70,7 @@ func GetHistory() gin.HandlerFunc{
 		}
 		limitStage := bson.D{{"$limit",recordPerPage}}
 		cursor,err := HistoryCollection.Aggregate(ctx,mongo.Pipeline{
-			skipStage,limitStage,lookupStage,unwindStage,projectStage,
+			skipStage,limitStage,lookupStage,lookupStage2,unwindStage,unwindStage2,projectStage,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError,gin.H{"error":"error aggregating"})
@@ -88,6 +104,7 @@ func GetHistoryByUserId() gin.HandlerFunc{
 		}
 		projectStage := bson.D{
 			{"$project",bson.D{
+				{"_id",0},
 				{"book.book_id",1},
 				{"book.book_img",1},
 				{"date_borrowed",1},
