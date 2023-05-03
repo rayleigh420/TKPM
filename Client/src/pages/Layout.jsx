@@ -27,6 +27,7 @@ const Layout = () => {
         },
         onError: () => {
             setAuth({})
+            setValue('')
             toast.error("Please login again!")
         }
     })
