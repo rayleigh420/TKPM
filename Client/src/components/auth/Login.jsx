@@ -19,7 +19,6 @@ const Login = ({ log, setSign, setLog }) => {
             setPassword("")
             setLog(false)
             setValue(data.token)
-            console.log(data)
             setAuth({
                 ava: data.avatar,
                 name: data.name,

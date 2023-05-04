@@ -2,12 +2,19 @@ import { useContext, useState } from "react"
 import { Link } from "react-router-dom"
 import { avaURL } from "../../pages/UserLayout"
 import AuthContext from "../../context/AuthProvider"
+import { useQuery } from "@tanstack/react-query"
+import { getListType } from "../../api/typeApi"
 
 const Navigation = ({ setLog }) => {
 
     const [search, setSearch] = useState('')
     const { auth } = useContext(AuthContext)
     // console.log(auth)
+
+    const { data: types, isLoading, iseError } = useQuery({
+        queryKey: ['types'],
+        queryFn: () => getListType(),
+    })
 
     const handleChangeSearch = (e) => {
         setSearch(e.target.value)
@@ -43,7 +50,17 @@ const Navigation = ({ setLog }) => {
                             <div className="">Generics</div>
                         </label>
                         <ul tabIndex={0} className="bg-[#202020] mt-3 p-2 shadow menu menu-compact dropdown-content rounded-box w-52 font-semibold">
-                            <li>
+                            {
+                                types && types.map(item =>
+                                (
+                                    <li key={item.typeid}>
+                                        <Link to={item.typename} className="capitalize">
+                                            {item.typename}
+                                        </Link>
+                                    </li>
+                                ))
+                            }
+                            {/* <li>
                                 <Link to="novel">
                                     Novel
                                 </Link>
@@ -57,7 +74,7 @@ const Navigation = ({ setLog }) => {
                                 <Link to='IT'>
                                     Information Technology
                                 </Link>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                     {/* <div>
