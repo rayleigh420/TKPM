@@ -25,7 +25,7 @@ const SignUp = ({ sign, setLog, setSign }) => {
             setSign(false)
             setValue(data.token)
             setAuth({
-                ava: data.ava,
+                ava: data.avatar,
                 name: data.name,
                 email: data.email,
                 role: data.role,

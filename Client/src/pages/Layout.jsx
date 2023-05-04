@@ -17,7 +17,7 @@ const Layout = () => {
         mutationFn: (token) => checkToken(token),
         onSuccess: (data) => {
             setAuth({
-                ava: data.ava,
+                ava: data.avatar,
                 name: data.name,
                 email: data.email,
                 role: data.role,
