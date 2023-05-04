@@ -7,5 +7,6 @@ import (
 
 func HistoryRoute(router *gin.Engine){
 	router.GET("/history",controllers.GetHistory())
+	router.GET("/returnlist",controllers.GetReturnedBooks())
 	router.GET("/history/:user_id",controllers.GetHistoryByUserId())
 }

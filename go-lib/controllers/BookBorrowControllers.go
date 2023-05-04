@@ -65,6 +65,10 @@ func HireABook() gin.HandlerFunc {
 		//create history borrowing
 		historyModel := models.HistoryModel{}
 		historyModel.Id = primitive.NewObjectID()
+		historyModel.Book_id = obj["book_id"].(string)
+		historyModel.User_id = obj["user_id"].(string)
+		historyModel.Book_detail_id = obj["book_detail_id"].(string)
+		historyModel.Date_borrowed = now
 		historyModel.History_id, _ = gonanoid.Generate(NanoidString, 12)
 		historyModel.Book_hire_id = bookBorrowModel.Book_hire_id
 		historyModel.Status = "borrowing"
