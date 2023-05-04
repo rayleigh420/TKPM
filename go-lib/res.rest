@@ -59,7 +59,7 @@ GET http://localhost:8080/rentlist/RbPuAnhCPQsw
 GET http://localhost:8080/books/type?book_type=Manga&page=1
 
 ###
-GET http://localhost:8080/books/latest
+GET http://localhost:8080/books/newest
 
 ###
 GET http://localhost:8080/books/popular

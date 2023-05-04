@@ -55,6 +55,23 @@ func GetBooks2() gin.HandlerFunc {
 		// }
 		recordPerPage := 10
 		startIndex := (page - 1) * recordPerPage
+
+		// group := bson.D{
+		// 	{Key: "$group",Value: bson.D{
+		// 		{Key: "_id",Value: "null"},
+		// 		{Key: "count",Value: bson.D{{Key: "$sum",Value: 1}}},
+		// 	}},
+		// }
+		// project := bson.D{
+		// 	{Key: "$project",Value: bson.D{{Key: "_id",Value: 0}}},
+		// }
+		// cursor,_ := BookCollection.Aggregate(ctx,mongo.Pipeline{
+		// 	group,project,
+		// })
+
+		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
+		totalCount := strconv.Itoa(int(count))
+		c.Writer.Header().Add("Total", totalCount)
 		books := []bson.M{}
 		matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}}
 		skipStage := bson.D{{Key: "$skip", Value: startIndex}}
@@ -102,19 +119,19 @@ func GetBookByID() gin.HandlerFunc {
 		}
 		booksRelated := []bson.M{}
 		matchStage := bson.D{
-			{Key: "$match",Value: bson.D{
-				{Key: "$or",Value: bson.A{
-					bson.D{{Key: "type_id",Value: bookModel["type_id"].(string)}},
+			{Key: "$match", Value: bson.D{
+				{Key: "$or", Value: bson.A{
+					bson.D{{Key: "type_id", Value: bookModel["type_id"].(string)}},
 					bson.D{{Key: "author", Value: bson.D{{Key: "$regex", Value: bookModel["author"].(string)}, {Key: "$options", Value: "i"}}}},
 				}},
 			}},
 		}
 		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
-			"type._id", "type_id", "_id", "created_at","description","details","license","page",
+			"type._id", "type_id", "_id", "created_at", "description", "details", "license", "page",
 		}}}
 		limitStage := bson.D{{Key: "$limit", Value: 10}}
 		cursor, _ := BookCollection.Aggregate(ctx, mongo.Pipeline{
-			limitStage,matchStage,unsetStage,
+			limitStage, matchStage, unsetStage,
 		})
 		cursor.All(ctx, &booksRelated)
 		if len(booksRelated) != 0 {
@@ -140,6 +157,11 @@ func GetBooksByName() gin.HandlerFunc {
 		startIndex := (page - 1) * recordPerPage
 		name := c.Query("search_text")
 		// query := fmt.Sprintf("%s", name)
+		count, _ := BookCollection.CountDocuments(ctx, bson.D{
+			{Key: "name", Value: bson.D{{Key: "$regex", Value: name}, {Key: "$options", Value: "i"}}},
+		})
+		totalCount := strconv.Itoa(int(count))
+		c.Writer.Header().Add("Total", totalCount)
 		matchStage := bson.D{
 			{Key: "$match", Value: bson.D{
 				{Key: "name", Value: bson.D{{Key: "$regex", Value: name}, {Key: "$options", Value: "i"}}},
@@ -239,6 +261,11 @@ func GetNewestBooks() gin.HandlerFunc {
 		}
 		recordPerPage := 30
 		startIndex := (page - 1) * recordPerPage
+
+		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
+		totalCount := strconv.Itoa(int(count))
+		c.Writer.Header().Add("Total", totalCount)
+
 		matchStage := bson.D{
 			{Key: "$match", Value: bson.D{
 				{},
@@ -296,6 +323,10 @@ func GetPopularBooks() gin.HandlerFunc {
 		// 		{},
 		// 	}},
 		// }
+		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
+		totalCount := strconv.Itoa(int(count))
+		c.Writer.Header().Add("Total", totalCount)
+
 		skipStage := bson.D{{Key: "$skip", Value: startIndex}}
 		lookupStage := bson.D{
 			{Key: "$lookup", Value: bson.D{
@@ -343,6 +374,11 @@ func GetBooksByType() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "type not found"})
 			return
 		}
+		count,_ := BookCollection.CountDocuments(ctx,bson.D{{Key: "type_id", Value: typeModel.TypeId}})
+		totalCount := strconv.Itoa(int(count))
+		c.Writer.Header().Add("Total",totalCount)
+
+
 		page, _ := strconv.Atoi(c.Query("page"))
 		if page <= 0 {
 			page = 1
@@ -426,8 +462,8 @@ func RentABook() gin.HandlerFunc {
 		}
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		amount := bson.M{}
-		opts := options.FindOne().SetProjection(bson.M{"amount":1})
-		BookCollection.FindOne(ctx,bson.M{"book_id":book_id},opts).Decode(&amount)
+		opts := options.FindOne().SetProjection(bson.M{"amount": 1})
+		BookCollection.FindOne(ctx, bson.M{"book_id": book_id}, opts).Decode(&amount)
 		// nextMonth, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
 		// rent request
 		bookRentModel := models.BookRentModel{}
@@ -443,9 +479,9 @@ func RentABook() gin.HandlerFunc {
 			return
 		}
 		updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "booked"}, {Key: "updated_at", Value: now}}}}
-		updateObj2 := bson.D{{Key:"$set",Value:bson.D{{Key:"amount",Value:amount["amount"].(int64)-1}}}}
+		updateObj2 := bson.D{{Key: "$set", Value: bson.D{{Key: "amount", Value: amount["amount"].(int64) - 1}}}}
 		//
-		BookCollection.UpdateOne(ctx,bson.M{"book_id":book_id},updateObj2)
+		BookCollection.UpdateOne(ctx, bson.M{"book_id": book_id}, updateObj2)
 		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookToRent["book_detail_id"].(string)}, updateObj)
 		c.JSON(http.StatusOK, gin.H{
 			"succeeded":      insertRes,
@@ -468,6 +504,10 @@ func GetBookDetail() gin.HandlerFunc {
 		}
 		recordPerPage := 5
 		startIndex := (page - 1) * recordPerPage
+		count,_ := BookDetailCollection.CountDocuments(ctx,bson.D{{Key: "book_id",Value: book_id}})
+		totalCount := strconv.Itoa(int(count))
+		c.Writer.Header().Add("Total",totalCount)
+		
 		opt := options.Find().SetSkip(int64(startIndex)).SetLimit(int64(recordPerPage))
 		cursor, err := BookDetailCollection.Find(ctx, bson.M{"book_id": book_id}, opt)
 

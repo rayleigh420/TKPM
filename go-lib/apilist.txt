@@ -76,7 +76,7 @@ Return:
 
 ###
 Get lastest update books
-GET http://localhost:8080/books/latest?page
+GET http://localhost:8080/books/newest?page
 Return: 
 
 ### GET RENTLIST
