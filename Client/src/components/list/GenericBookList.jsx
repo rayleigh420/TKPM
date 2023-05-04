@@ -112,9 +112,10 @@ const GenericBookList = () => {
                 } */}
             </div>
             <div className="flex flex-row justify-center mt-[100px] w-full">
-                <div className="btn-group grid grid-cols-2">
-                    <button className="btn btn-outline hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev - 1)} disabled={page == 1} onMouseEnter={() => prefetchPrevPage(page - 1)}>Previous page</button>
-                    <button className="btn btn-outline hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev + 1)} disabled={page == 3} onMouseEnter={() => prefetchNextPage(page + 1)}>Next</button>
+                <div className="btn-group grid grid-cols-3">
+                    <button className="btn hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev - 1)} disabled={page == 1} onMouseEnter={() => prefetchPrevPage(page - 1)}>Previous page</button>
+                    <button className="btn bg-[#242933] text-[#ffffff] font-bold hover:bg-[#242933]">Page {page}</button>
+                    <button className="btn hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev + 1)} disabled={page == 3} onMouseEnter={() => prefetchNextPage(page + 1)}>Next</button>
                 </div>
             </div>
         </div>
