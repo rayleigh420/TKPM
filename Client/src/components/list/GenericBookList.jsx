@@ -11,7 +11,7 @@ const GenericBookList = () => {
 
     const queryClient = useQueryClient()
 
-    const { data: books, isLoading, isFetching, isError } = useQuery({
+    const { data, isLoading, isFetching, isError } = useQuery({
         queryKey: ['books', generic, page],
         queryFn: () => {
             if (generic == 'popular' || generic == 'newest') {
@@ -40,8 +40,6 @@ const GenericBookList = () => {
         })
     }
 
-    console.log(books)
-
     return (
         <div className="flex flex-col items-start mt-[50px]">
             <p className='text-[28px] font-bold leading-[32.2px] tracking-[-0.56px] text-[#ffffff] capitalize'>{generic}</p>
@@ -68,7 +66,7 @@ const GenericBookList = () => {
                         )
                         :
                         (
-                            books && books.map(item => (
+                            data.books && data.books.map(item => (
                                 <div className="flex flex-row gap-[12px]" key={item.book_id}>
                                     <Link to="/book">
                                         <div className=" cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px] overflow-hidden">
@@ -115,7 +113,7 @@ const GenericBookList = () => {
                 <div className="btn-group grid grid-cols-3">
                     <button className="btn hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev - 1)} disabled={page == 1} onMouseEnter={() => prefetchPrevPage(page - 1)}>Previous page</button>
                     <button className="btn bg-[#242933] text-[#ffffff] font-bold hover:bg-[#242933]">Page {page}</button>
-                    <button className="btn hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev + 1)} disabled={page == 3} onMouseEnter={() => prefetchNextPage(page + 1)}>Next</button>
+                    <button className="btn hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev + 1)} disabled={page == data?.maxPage} onMouseEnter={() => prefetchNextPage(page + 1)}>Next</button>
                 </div>
             </div>
         </div>
