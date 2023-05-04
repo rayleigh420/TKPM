@@ -125,51 +125,6 @@ func GetHistoryByUserId() gin.HandlerFunc{
 	}
 }
 
-func GetBorrowingBook() gin.HandlerFunc{
-	return func (c *gin.Context)  {
-		ctx,cancel := context.WithTimeout(context.Background(),50*time.Second)
-		defer cancel()
-		res := []bson.M{}
-		// cursor,_ := HistoryCollection.Find(ctx,bson.M{"status":"borrowing"})
-		// cursor.All(ctx,&res)
-		matchStage := bson.D{
-			{Key: "$match",Value: bson.D{
-				{Key: "status",Value: "borrowing"},
-			}},
-		}
-		sortStage := bson.D{
-			{Key: "$sort",Value: bson.D{
-				{Key: "date_borrowed",Value: -1},
-			}},
-		}
-		lookupStage := bson.D{
-			{Key: "$lookup",Value: bson.D{
-				{Key: "from",Value: "users"},
-				{Key: "localField",Value: "user_id"},
-				{Key: "foreignField",Value: "user_id"},
-				{Key: "as",Value: "user"},
-			}},
-		}
-		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "user"},{Key: "preserveNullAndEmptyArrays",Value: false}}},
-		}
-		unsetStage := bson.D{
-			{Key: "$unset",Value: bson.A{
-				"user._id",
-			}},
-		}
-		cursor,err := HistoryCollection.Aggregate(ctx,mongo.Pipeline{
-			matchStage,lookupStage,unwindStage,unsetStage,sortStage,
-		})
-		if err != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"error aggregating"})
-			return
-		}
-		cursor.All(ctx,&res)
-		c.JSON(http.StatusOK,res)
-	}
-}
-
 func GetReturnedBooks() gin.HandlerFunc{
 	return func (c *gin.Context)  {
 		ctx,cancel := context.WithTimeout(context.Background(),50*time.Second)
@@ -195,16 +150,33 @@ func GetReturnedBooks() gin.HandlerFunc{
 				{Key: "as",Value: "user"},
 			}},
 		}
-		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "user"},{Key: "preserveNullAndEmptyArrays",Value: false}}},
+		lookupStage2 := bson.D{
+			{Key: "$lookup",Value: bson.D{
+				{Key: "from",Value: "books"},
+				{Key: "localField",Value: "book_id"},
+				{Key: "foreignField",Value: "book_id"},
+				{Key: "as",Value: "book"},
+			}},
 		}
-		unsetStage := bson.D{
-			{Key: "$unset",Value: bson.A{
-				"user._id",
+		unwindStage := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"},{Key: "preserveNullAndEmptyArrays",Value: false}}},
+		}
+		unwindStage2 := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"},{Key: "preserveNullAndEmptyArrays",Value: false}}},
+		}
+		projectStage := bson.D{
+			{Key: "$project",Value: bson.D{
+				{Key: "history_id",Value: 1},
+				{Key: "user.avatar",Value: 1},
+				{Key: "user.name",Value: 1},
+				{Key: "book.book_id",Value: 1},
+				{Key: "book.name",Value: 1},
+				{Key: "date_borrowed",Value: 1},
+				{Key: "date_return",Value: 1},
 			}},
 		}
 		cursor,err := HistoryCollection.Aggregate(ctx,mongo.Pipeline{
-			matchStage,lookupStage,unwindStage,unsetStage,sortStage,
+			sortStage,matchStage,lookupStage,lookupStage2,unwindStage,unwindStage2,projectStage,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError,gin.H{"error":"error aggregating"})

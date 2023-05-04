@@ -210,19 +210,29 @@ func CreateBook() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
+		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		bookModel := models.BookModel{}
 		if err := c.ShouldBindJSON(&bookModel); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "bad book model"})
 			return
 		}
+		count,_ := BookCollection.CountDocuments(ctx,bson.M{})
+		count++
+		counts := strconv.Itoa(int(count))
+		id := "B" + counts
 		bookModel.Id = primitive.NewObjectID()
-		bookModel.Book_id, _ = gonanoid.Generate(NanoidString, 12)
-		insertRes, insertErr := BookCollection.InsertOne(ctx, bookModel)
+		bookModel.Book_id= id
+		bookModel.Created_at = now
+		bookModel.Updated_at = now
+		_, insertErr := BookCollection.InsertOne(ctx, bookModel)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error inserting book"})
 			return
 		}
-		c.JSON(http.StatusOK, insertRes)
+		c.JSON(http.StatusOK, gin.H{
+			"book_id":id,
+			"book_name":bookModel.Name,
+		})
 	}
 }
 
@@ -498,6 +508,7 @@ func RentABook() gin.HandlerFunc {
 			"succeeded":      insertRes,
 			"user_id":        obj["user_id"].(string),
 			"book_detail_id": bookToRent["book_detail_id"].(string),
+			"book_rent_id": bookRentModel.Book_rent_id,
 			"reserve_date":   now,
 		})
 	}

@@ -47,7 +47,7 @@ func UpdateRentRequest() error {
 	updateModels := []mongo.WriteModel{}
 	for _, amount := range res {
 		filter := bson.M{"book_id": amount["_id"].(string)}
-		update := bson.M{"$inc": bson.M{"amount": amount["count"].(int64)}}
+		update := bson.M{"$inc": bson.M{"amount": amount["count"].(int32)}}
 		model := mongo.NewUpdateManyModel().SetFilter(filter).SetUpdate(update)
 		updateModels = append(updateModels, model)
 	}

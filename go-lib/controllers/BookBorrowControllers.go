@@ -83,6 +83,7 @@ func HireABook() gin.HandlerFunc {
 			"book_detail_id": bookBorrowModel.Book_detail_id,
 			"book_id":        bookBorrowModel.Book_id,
 			"date_borrowed":  bookBorrowModel.Date_borrowed,
+			"book_hire_id": bookBorrowModel.Book_hire_id,
 		})
 	}
 }
@@ -102,24 +103,34 @@ func GetBorrowList() gin.HandlerFunc {
 				{Key: "as", Value: "user"},
 			}},
 		}
+		lookupStage2 := bson.D{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "books"},
+				{Key: "localField", Value: "book_id"},
+				{Key: "foreignField", Value: "book_id"},
+				{Key: "as", Value: "book"},
+			}},
+		}
 		unwindStage := bson.D{
 			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"},{Key: "preserveNullAndEmptyArrays", Value: false}}},
 		}
+		unwindStage2 := bson.D{
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"},{Key: "preserveNullAndEmptyArrays", Value: false}}},
+		}
 		projectStage := bson.D{
 			{Key: "$project", Value: bson.D{
-				{Key: "_id", Value: 0},
-				{Key: "user._id", Value: 0},
-				{Key: "user.password", Value: 0},
-				{Key: "user.email", Value: 0},
-				{Key: "user.phone", Value: 0},
-				{Key: "user.role", Value: 0},
-				{Key: "user.created_at", Value: 0},
-				{Key: "user.updated_at", Value: 0},
-				{Key: "user_id", Value: 0},
+				{Key: "book_hire_id",Value: 1},
+				{Key: "book_detail_id",Value: 1},
+				{Key: "user.avatar",Value: 1},
+				{Key: "user.name",Value: 1},
+				{Key: "book.book_id",Value: 1},
+				{Key: "book.name",Value: 1},
+				{Key: "date_borrowed",Value: 1},
+				{Key: "date_end",Value: 1},
 			}},
 		}
 		cursor, _ := BookBorrowedCollection.Aggregate(ctx, mongo.Pipeline{
-			lookupStage, projectStage, unwindStage,
+			lookupStage,lookupStage2,unwindStage,unwindStage2, projectStage,
 		})
 		cursor.All(ctx, &borrowList)
 		c.JSON(http.StatusOK, borrowList)
@@ -211,7 +222,7 @@ func ReturnABook() gin.HandlerFunc {
 		BookBorrowedCollection.FindOneAndDelete(ctx,bson.M{"book_hire_id":book_hire_id}).Decode(&bookBorrowModel)
 		updateObj := bson.M{"$set": bson.M{"status": "ready", "updated_at": now}}
 		updateHis := bson.M{"$set": bson.M{"status": "returned", "date_return": now,"book_hire_id":""}}
-		updateObj2 := bson.M{"$inc": bson.M{"amount": 1}}
+		updateObj2 := bson.M{"$inc": bson.M{"amount": 1,"borrowed_quantity":1}}
 		_,err1 := BookDetailCollection.UpdateOne(ctx,bson.M{"book_detail_id":bookBorrowModel["book_detail_id"].(string)},updateObj)
 		_,err2 := HistoryCollection.UpdateOne(ctx,bson.M{"book_hire_id":bookBorrowModel["book_hire_id"].(string)},updateHis)
 		_,err3 := BookCollection.UpdateOne(ctx,bson.M{"book_id":bookBorrowModel["book_id"].(string)},updateObj2)
