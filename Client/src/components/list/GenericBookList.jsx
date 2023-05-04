@@ -68,7 +68,7 @@ const GenericBookList = () => {
                         (
                             data.books && data.books.map(item => (
                                 <div className="flex flex-row gap-[12px]" key={item.book_id}>
-                                    <Link to="/book">
+                                    <Link to={"/book/" + item.book_id}>
                                         <div className=" cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px] overflow-hidden">
                                             <img src={item.book_img} className="w-full h-full" />
                                         </div>
@@ -76,7 +76,7 @@ const GenericBookList = () => {
                                     </Link>
                                     <div className="max-h-[180px] text-ellipsis overflow-hidden">
                                         <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
-                                        <Link to="/book">
+                                        <Link to={"/book" + item.book_id}>
                                             <h1 className="mt-[5px] text-[#ffffff] font-bold leading-[20px] cursor-pointer">{item.name}</h1>
                                         </Link>
                                         <p className="mt-[15px] text-[#bdbdbd] text-[14px] font-medium">Author: {item.author}</p>

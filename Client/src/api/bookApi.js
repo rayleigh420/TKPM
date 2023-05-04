@@ -17,3 +17,8 @@ export const getBookType = async (generic, page) => {
         maxPage: result.headers.total
     }
 }
+
+export const getDetailBook = async (id) => {
+    const result = await axios.get(`/books/${id}`)
+    return result.data
+}

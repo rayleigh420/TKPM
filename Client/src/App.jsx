@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />} >
           <Route path='/' element={<Home />} />
-          <Route path='book' element={<Book />} />
+          <Route path='book/:id' element={<Book />} />
           <Route path='user' element={<UserLayout />} >
 
             <Route element={<RequireAuth allowedRoles={["user", "admin"]} />}>

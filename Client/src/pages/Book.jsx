@@ -2,6 +2,9 @@ import { useState } from "react"
 import HistoryBook from "../components/admin/HistoryBook"
 import AddVersionBook from "../components/modals/AddVersionBook"
 import RelatedBook from "../components/list/RelatedBook"
+import { useParams } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
+import { getDetailBook } from "../api/bookApi"
 
 //status:
 
@@ -11,6 +14,14 @@ import RelatedBook from "../components/list/RelatedBook"
 
 const Book = () => {
     const [tab, setTab] = useState(false)
+    const { id } = useParams()
+    console.log(id)
+
+    const { data: book, isLoading, isError } = useQuery({
+        queryKey: ["book", id],
+        queryFn: () => getDetailBook(id)
+    })
+
 
     const handleTabAbout = () => {
         setTab(false)
@@ -24,17 +35,18 @@ const Book = () => {
         <>
             <div className="flex flex-col items-center">
                 <div className=" w-[62%] py-[60px] flex flex-row">
-                    <div className="w-[240px] h-[350px] bg-cover hover:border-[1.75px] bg-[url('https://cdn.wuxiaworld.com/images/covers/bfbt.jpg?ver=fbc27beb0a7017f23af5a9560099d3aeaa2b8d2b')] rounded-[7px]">
-                    </div>
+                    <div className={"w-[240px] h-[350px] bg-cover hover:border-[1.75px] rounded-[7px] " + `bg-[url('${book?.book_img}')]`}></div>
+                    {/* <div className="w-[240px] h-[350px] bg-cover hover:border-[1.75px] bg-[url('https://fastly.picsum.photos/id/200/200/300.jpg?hmac=XVCLpc2Ddr652IrKMt3L7jISDD4au5O9ZIr3fwBtxo8')] rounded-[7px]">
+                    </div> */}
                     <div className="ml-[30px]">
                         <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
-                        <h1 className="mt-[10px] text-[#ffffff] text-[32px] font-bold leading-[36.8px] tracking-[-0.64]">I Became the 1st Floor Boss of the Tower</h1>
-                        <p className="mt-[20px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Author: Si Reubereu</p>
+                        <h1 className="mt-[10px] text-[#ffffff] text-[32px] font-bold leading-[36.8px] tracking-[-0.64]">{book?.name}</h1>
+                        <p className="mt-[20px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Author: {book?.author}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Type: Light Novel</p>
-                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Pages: 100</p>
-                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Year: 2023</p>
-                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Producer: Wuxiaworld</p>
-                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Publishing Location: Korean</p>
+                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Pages: {book?.page}</p>
+                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Year: {book?.yearpublished}</p>
+                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Producer: {book?.publisher}</p>
+                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Publishing Location: {book?.publishing_location}</p>
                         <button className="btn w-[150px] mt-[55px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">Rent Book</button>
                     </div>
                 </div>
@@ -59,9 +71,9 @@ const Book = () => {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>83 Chapters</td>
-                                            <td>Si Reubereu / TITAN</td>
-                                            <td>100</td>
+                                            <td>{book?.page}</td>
+                                            <td>{book?.license}</td>
+                                            <td>{book?.borrowed_quantity}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -69,21 +81,23 @@ const Book = () => {
                             <div className="divider bordered border-[#ffffff]"></div>
                             <div className="text-[#e0e0e0] leading-[24px] tracking-[-0.32px]">
                                 <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px] mb-[25px]">Details</h4>
-                                Status in Korean: Completed @ 254 chapters <br />
+                                {book?.details}
+                                {/* Status in Korean: Completed @ 254 chapters <br />
                                 <br />
                                 Translator: Yeniverse <br />
                                 <br />
                                 Editor: Dot, SoSam <br />
                                 <br />
-                                Release rate: 5 chapters a week with an occasional bonus 6th chapter
+                                Release rate: 5 chapters a week with an occasional bonus 6th chapter */}
                             </div>
                             <div className="divider bordered border-[#ffffff]"></div>
                             <div className="text-[#e0e0e0] leading-[24px] tracking-[-0.32px]">
                                 <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px] mb-[25px]">Description</h4>
-                                For decades, he had lived as a puppet of the tower.
+                                {book?.description}
+                                {/* For decades, he had lived as a puppet of the tower.
                                 Throughout that time, who knew how many deaths he had encountered?
                                 One day, however, his memories returned to him.
-                                The First Floor Boss finally awakened
+                                The First Floor Boss finally awakened */}
                             </div>
                             <div className="divider bordered border-[#ffffff]"></div>
                         </div>) :
