@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"math"
 	// "fmt"
 	"net/http"
 	"strconv"
@@ -70,7 +71,9 @@ func GetBooks2() gin.HandlerFunc {
 		// })
 
 		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
-		totalCount := strconv.Itoa(int(count))
+		count2 := float64(count)
+		count2 = math.Ceil(count2/10)
+		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total", totalCount)
 		books := []bson.M{}
 		matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}}
@@ -160,7 +163,9 @@ func GetBooksByName() gin.HandlerFunc {
 		count, _ := BookCollection.CountDocuments(ctx, bson.D{
 			{Key: "name", Value: bson.D{{Key: "$regex", Value: name}, {Key: "$options", Value: "i"}}},
 		})
-		totalCount := strconv.Itoa(int(count))
+		count2 := float64(count)
+		count2 = math.Ceil(count2/10)
+		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total", totalCount)
 		matchStage := bson.D{
 			{Key: "$match", Value: bson.D{
@@ -263,7 +268,9 @@ func GetNewestBooks() gin.HandlerFunc {
 		startIndex := (page - 1) * recordPerPage
 
 		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
-		totalCount := strconv.Itoa(int(count))
+		count2 := float64(count)
+		count2 = math.Ceil(count2/10)
+		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total", totalCount)
 
 		matchStage := bson.D{
@@ -324,7 +331,9 @@ func GetPopularBooks() gin.HandlerFunc {
 		// 	}},
 		// }
 		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
-		totalCount := strconv.Itoa(int(count))
+		count2 := float64(count)
+		count2 = math.Ceil(count2/10)
+		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total", totalCount)
 
 		skipStage := bson.D{{Key: "$skip", Value: startIndex}}
@@ -375,7 +384,9 @@ func GetBooksByType() gin.HandlerFunc {
 			return
 		}
 		count,_ := BookCollection.CountDocuments(ctx,bson.D{{Key: "type_id", Value: typeModel.TypeId}})
-		totalCount := strconv.Itoa(int(count))
+		count2 := float64(count)
+		count2 = math.Ceil(count2/10)
+		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total",totalCount)
 
 
@@ -505,9 +516,11 @@ func GetBookDetail() gin.HandlerFunc {
 		recordPerPage := 5
 		startIndex := (page - 1) * recordPerPage
 		count,_ := BookDetailCollection.CountDocuments(ctx,bson.D{{Key: "book_id",Value: book_id}})
-		totalCount := strconv.Itoa(int(count))
+		count2 := float64(count)
+		count2 = math.Ceil(count2/10)
+		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total",totalCount)
-		
+
 		opt := options.Find().SetSkip(int64(startIndex)).SetLimit(int64(recordPerPage))
 		cursor, err := BookDetailCollection.Find(ctx, bson.M{"book_id": book_id}, opt)
 
