@@ -64,7 +64,10 @@ const GenericBookList = () => {
                             books && books.map(item => (
                                 <div className="flex flex-row gap-[12px]" key={item.book_id}>
                                     <Link to="/book">
-                                        <div className={`bg-[url('${item.book_img}')]` + " cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px]"}></div>
+                                        <div className=" cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px] overflow-hidden">
+                                            <img src={item.book_img} className="w-full h-full" />
+                                        </div>
+                                        {/* <div className={`bg-[url('${item.book_img}')]` + " cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px]"}></div> */}
                                     </Link>
                                     <div className="">
                                         <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
