@@ -9,11 +9,10 @@ const PopularBook = () => {
         queryFn: () => getGenericBook("popular", 1)
     })
 
-    // console.log(data)
     return (
         <div className="flex flex-col items-start mt-[50px]">
             <p className='text-[28px] font-bold leading-[32.2px] tracking-[-0.56px] text-[#ffffff]'>Populars</p>
-            <BookList data={data.slice(0, 7)} />
+            <BookList data={data && data.slice(0, 7)} isLoading={isLoading} />
         </div>
     )
 }
