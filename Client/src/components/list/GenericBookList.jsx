@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom"
-import { getGenericBook } from "../../api/bookApi"
+import { getBookType, getGenericBook } from "../../api/bookApi"
 
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
@@ -13,7 +13,14 @@ const GenericBookList = () => {
 
     const { data: books, isLoading, isFetching, isError } = useQuery({
         queryKey: ['books', generic, page],
-        queryFn: () => getGenericBook(generic, page),
+        queryFn: () => {
+            if (generic == 'popular' || generic == 'newest') {
+                return getGenericBook(generic, page)
+            }
+            else {
+                return getBookType(generic, page)
+            }
+        },
         keepPreviousData: true
     })
 
