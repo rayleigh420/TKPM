@@ -1,7 +1,17 @@
+import { useQuery } from "@tanstack/react-query"
 import AddVersionBook from "../modals/AddVersionBook"
 import HistoryBook from "./HistoryBook"
+import { getVersionBook } from "../../api/bookApi"
 
-const LocationVersion = () => {
+const LocationVersion = ({ id }) => {
+
+    const { data: version, isLoading, isError } = useQuery({
+        queryKey: ['version', id],
+        queryFn: () => getVersionBook(id)
+    })
+
+    console.log(version)
+
     return (
         <div className="w-[62%] mt-[30px] mb-[150px]">
             <div className="">
@@ -32,7 +42,20 @@ const LocationVersion = () => {
                         </tr>
                     </thead>
                     <tbody className="font-semibold text-[13px]">
-                        <tr>
+                        {
+                            version && version.map(item => (
+                                <tr key={item._id}>
+                                    <td>{item.book_detail_id}</td>
+                                    <td>{item.location}</td>
+                                    <td>
+                                        <div className={"badge gap-2 w-[80px] text-[#ffffff] capitalize " + (item.status == 'ready' ? "bg-green-500" : (item.status == 'booked' ? 'bg-yellow-500' : 'bg-red-500'))}>
+                                            {item.status}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                        {/* <tr>
                             <td>ABCD6969</td>
                             <td>123456</td>
                             <td ><div className="badge bg-green-500 gap-2 w-[80px] text-[#ffffff]">Available</div></td>
@@ -51,7 +74,7 @@ const LocationVersion = () => {
                             <td>ABCD6972</td>
                             <td>123459</td>
                             <td><div className="badge bg-red-500 gap-2 w-[80px] text-[#ffffff]">Borrowed</div></td>
-                        </tr>
+                        </tr> */}
                     </tbody>
                 </table>
                 <div className="divider bordered border-[#ffffff]"></div>

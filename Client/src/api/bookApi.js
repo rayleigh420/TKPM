@@ -22,3 +22,8 @@ export const getDetailBook = async (id) => {
     const result = await axios.get(`/books/${id}`)
     return result.data
 }
+
+export const getVersionBook = async (id) => {
+    const result = await axios.get(`/books/${id}/detail`)
+    return result.data
+}
