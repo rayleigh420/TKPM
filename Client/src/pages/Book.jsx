@@ -2,7 +2,7 @@ import { useState } from "react"
 import HistoryBook from "../components/admin/HistoryBook"
 import AddVersionBook from "../components/modals/AddVersionBook"
 import RelatedBook from "../components/list/RelatedBook"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { getDetailBook } from "../api/bookApi"
 
@@ -15,7 +15,6 @@ import { getDetailBook } from "../api/bookApi"
 const Book = () => {
     const [tab, setTab] = useState(false)
     const { id } = useParams()
-    console.log(id)
 
     const { data: book, isLoading, isError } = useQuery({
         queryKey: ["book", id],
@@ -31,6 +30,8 @@ const Book = () => {
         setTab(true)
     }
 
+    console.log(book)
+
     return (
         <>
             <div className="flex flex-col items-center">
@@ -42,7 +43,11 @@ const Book = () => {
                         <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
                         <h1 className="mt-[10px] text-[#ffffff] text-[32px] font-bold leading-[36.8px] tracking-[-0.64]">{book?.name}</h1>
                         <p className="mt-[20px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Author: {book?.author}</p>
-                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Type: Light Novel</p>
+                        <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Type:
+                            <Link to="">
+                                {book?.type?.typename}
+                            </Link>
+                        </p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Pages: {book?.page}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Year: {book?.yearpublished}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Producer: {book?.publisher}</p>
@@ -159,7 +164,7 @@ const Book = () => {
                         )
                 }
                 <div className="w-[62%]">
-                    <RelatedBook />
+                    <RelatedBook related={book?.related_books} isLoading={isLoading} />
                 </div>
             </div >
             <div className="divider bordered border-[#ffffff]"></div>
