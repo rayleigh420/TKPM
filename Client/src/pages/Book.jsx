@@ -44,8 +44,8 @@ const Book = () => {
                         <h1 className="mt-[10px] text-[#ffffff] text-[32px] font-bold leading-[36.8px] tracking-[-0.64]">{book?.name}</h1>
                         <p className="mt-[20px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Author: {book?.author}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Type:
-                            <Link to="">
-                                {book?.type?.typename}
+                            <Link to={`/${book?.type_name}`}>
+                                {" " + book?.type_name}
                             </Link>
                         </p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Pages: {book?.page}</p>
