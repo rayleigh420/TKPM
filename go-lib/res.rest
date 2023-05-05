@@ -31,18 +31,18 @@ POST http://localhost:8080/books
 Content-Type: application/json
 
 {
-   "name":"How The Body Works - Hiểu Hết Về Cơ Thể",
-   "publisher":"Nhã Nam",
-   "yearpublished": 2019,
-   "author":"Phạm Hằng Nguyên",
-   "book_image":"https://salt.tikicdn.com/cache/750x750/ts/product/b8/db/b7/7827a39c17b68337b093de7850fc3337.jpg.webp",
+   "name":"Thần Số Học Ứng Dụng",
+   "publisher":"Booklife",
+   "yearpublished": 2020,
+   "author":"Joy Woodward",
+   "book_image":"https://salt.tikicdn.com/cache/750x750/ts/product/c8/6f/36/17e0dd709f50c7c7530755e9b21c3865.jpg.webp",
    "amount":0,
-   "type_id":"1",
-   "page":200,
-   "publishing_location":"VietNam",
+   "type_name":"Numerology",
+   "page":280,
+   "publishing_location":"USA",
    "borrowed_quantity":0,
-   "license":"Phạm Hằng Nguyên",
-   "description": "Truyền thông ngập tràn những khám phá và những lời khuyên mới mẻ về những thứ chúng ta nạp vào cơ thể nhưng có cơ sở khoa học nào cho bất kỳ tuyên bố đó không?",
+   "license":"Joy Woodward",
+   "description": "Cuốn sách sẽ cung cấp mọi thứ bạn cần để mài giũa trực giác của mình, hiểu rõ hơn những người xung quanh và thậm chí có thêm tự tin khi đưa ra các quyết định lớn.",
     "details":"Truyền thông ngập tràn những khám phá và những lời khuyên mới mẻ về những thứ chúng ta nạp vào cơ thể nhưng có cơ sở khoa học nào cho bất kỳ tuyên bố đó không\nVới những hình minh họa rõ ràng, dễ hiểu, cuốn sách Hiểu hết về thức ăn sẽ mang lại những thông tin lý thú liên quan đến thức ăn, từ công đoạn sản xuất đến ích lợi/tác hại của chúng với sức khỏe."
 }
 
@@ -51,7 +51,7 @@ POST http://localhost:8080/books/B10
 Content-Type: application/json
 
 {
-   "location":"ABC 10"
+   "location":"ABC 11"
 }
 
 

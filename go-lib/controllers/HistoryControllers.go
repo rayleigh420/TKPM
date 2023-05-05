@@ -171,6 +171,7 @@ func GetReturnedBooks() gin.HandlerFunc {
 				{Key: "user.name", Value: 1},
 				{Key: "book.book_id", Value: 1},
 				{Key: "book.name", Value: 1},
+				{Key: "book.book_img", Value: 1},
 				{Key: "date_borrowed", Value: 1},
 				{Key: "date_return", Value: 1},
 			}},

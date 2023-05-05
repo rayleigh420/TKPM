@@ -231,8 +231,9 @@ func CreateBook() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		bookModel := models.BookModel{}
-		if err := c.ShouldBindJSON(&bookModel); err != nil {
+		// bookModel := models.BookModel{}
+		rec := bson.M{}
+		if err := c.ShouldBindJSON(&rec); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "bad book model"})
 			return
 		}
@@ -240,18 +241,45 @@ func CreateBook() gin.HandlerFunc {
 		count++
 		counts := strconv.Itoa(int(count))
 		id := "B" + counts
-		bookModel.Id = primitive.NewObjectID()
-		bookModel.Book_id = id
-		bookModel.Created_at = now
-		bookModel.Updated_at = now
-		_, insertErr := BookCollection.InsertOne(ctx, bookModel)
+		// bookModel.Id = primitive.NewObjectID()
+		// bookModel.Book_id = id
+		// bookModel.Created_at = now
+		// bookModel.Updated_at = now
+		typeid,err := InsertTypeByName(rec["type_name"].(string))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error type"})
+			return
+		}
+		delete(rec,"type_name")
+		rec["_id"] = primitive.NewObjectID()
+		rec["book_id"] = id
+		rec["created_at"] = now
+		rec["updated_at"] = now
+		rec["type_id"] = typeid
+		
+		// bookModel.Name = rec["name"].(string)
+		// bookModel.Publisher = rec["publisher"].(string)
+		// bookModel.Yearpublished = rec["yearpublished"].(int64)
+		// bookModel.
+		// bookModel.Type_id = typeid
+		// bookModel.Amount = rec["amount"].(int64)
+		// bookModel.Author = rec["author"].(string)
+		// bookModel.Book_img = rec["book_image"].(string)
+		// bookModel.Borrowed_quantity = rec["borrowed_quantity"].(int64)
+		// bookModel.Description = rec["description"].(string)
+		// bookModel.Details = rec["details"].(string)
+		// bookModel.License = rec["license"].(string)
+		// bookModel.Page = rec["page"].(int64)
+		// bookModel.Publishing_location = rec["publishing_location"].(string)
+
+		_, insertErr := BookCollection.InsertOne(ctx, rec)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error inserting book"})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"book_id":   id,
-			"book_name": bookModel.Name,
+			"book_name": rec["name"].(string),
 		})
 	}
 }
@@ -267,9 +295,6 @@ func UpdateBook() gin.HandlerFunc {
 			return
 		}
 		updateObj := bson.D{}
-		if bookModel.Book_img != "" {
-			updateObj = append(updateObj, bson.E{Key: "book_img", Value: bookModel.Book_img})
-		}
 		if bookModel.Name != "" {
 			updateObj = append(updateObj, bson.E{Key: "name", Value: bookModel.Name})
 		}
