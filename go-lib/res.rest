@@ -71,7 +71,7 @@ GET http://localhost:8080/books/newest
 GET http://localhost:8080/books/popular
 
 ###
-GET http://localhost:8080/books/B5
+GET http://localhost:8080/books/B10
 
 ###
 GET http://localhost:8080/books/B5/detail

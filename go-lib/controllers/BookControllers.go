@@ -72,7 +72,7 @@ func GetBooks2() gin.HandlerFunc {
 
 		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
 		count2 := float64(count)
-		count2 = math.Ceil(count2/10)
+		count2 = math.Ceil(count2 / 10)
 		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total", totalCount)
 		books := []bson.M{}
@@ -120,23 +120,43 @@ func GetBookByID() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+		typeModel := bson.M{}
+		TypeCollections.FindOne(ctx,bson.M{"typeid":bookModel["type_id"].(string)}).Decode(&typeModel)
 		booksRelated := []bson.M{}
 		matchStage := bson.D{
 			{Key: "$match", Value: bson.D{
+				{Key: "book_id",Value: bson.D{{Key: "$ne",Value: id}}},
 				{Key: "$or", Value: bson.A{
 					bson.D{{Key: "type_id", Value: bookModel["type_id"].(string)}},
 					bson.D{{Key: "author", Value: bson.D{{Key: "$regex", Value: bookModel["author"].(string)}, {Key: "$options", Value: "i"}}}},
 				}},
 			}},
 		}
+		// matchStage2 := bson.D{
+		// 	{"$match",bson.D{
+		// 		{"book_id",bson.D{{"$not",id}}},
+		// 	}},
+		// }
+		// matchStage := bson.D{
+		// 	{Key: "$match", Value: bson.D{
+		// 		{Key: "$and", Value: bson.A{
+		// 			bson.D{{Key: "book_id", Value: bson.D{{Key: "$not", Value: id}}}},
+		// 			bson.D{{Key: "$or", Value: bson.A{
+		// 				bson.D{{Key: "type_id", Value: bookModel["type_id"].(string)}},
+		// 				bson.D{{Key: "author", Value: bson.D{{Key: "$regex", Value: bookModel["author"].(string)}, {Key: "$options", Value: "i"}}}},
+		// 			}}},
+		// 		}},
+		// 	}},
+		// }
 		unsetStage := bson.D{{Key: "$unset", Value: bson.A{
 			"type._id", "type_id", "_id", "created_at", "description", "details", "license", "page",
 		}}}
 		limitStage := bson.D{{Key: "$limit", Value: 10}}
 		cursor, _ := BookCollection.Aggregate(ctx, mongo.Pipeline{
-			limitStage, matchStage, unsetStage,
+			limitStage,matchStage, unsetStage,
 		})
 		cursor.All(ctx, &booksRelated)
+		bookModel["type_name"] = typeModel["typename"].(string)
 		if len(booksRelated) != 0 {
 			bookModel["related_books"] = booksRelated
 		} else {
@@ -164,7 +184,7 @@ func GetBooksByName() gin.HandlerFunc {
 			{Key: "name", Value: bson.D{{Key: "$regex", Value: name}, {Key: "$options", Value: "i"}}},
 		})
 		count2 := float64(count)
-		count2 = math.Ceil(count2/10)
+		count2 = math.Ceil(count2 / 10)
 		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total", totalCount)
 		matchStage := bson.D{
@@ -216,12 +236,12 @@ func CreateBook() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "bad book model"})
 			return
 		}
-		count,_ := BookCollection.CountDocuments(ctx,bson.M{})
+		count, _ := BookCollection.CountDocuments(ctx, bson.M{})
 		count++
 		counts := strconv.Itoa(int(count))
 		id := "B" + counts
 		bookModel.Id = primitive.NewObjectID()
-		bookModel.Book_id= id
+		bookModel.Book_id = id
 		bookModel.Created_at = now
 		bookModel.Updated_at = now
 		_, insertErr := BookCollection.InsertOne(ctx, bookModel)
@@ -230,8 +250,8 @@ func CreateBook() gin.HandlerFunc {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"book_id":id,
-			"book_name":bookModel.Name,
+			"book_id":   id,
+			"book_name": bookModel.Name,
 		})
 	}
 }
@@ -279,7 +299,7 @@ func GetNewestBooks() gin.HandlerFunc {
 
 		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
 		count2 := float64(count)
-		count2 = math.Ceil(count2/10)
+		count2 = math.Ceil(count2 / 10)
 		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total", totalCount)
 
@@ -342,7 +362,7 @@ func GetPopularBooks() gin.HandlerFunc {
 		// }
 		count, _ := BookCollection.CountDocuments(ctx, bson.D{{}})
 		count2 := float64(count)
-		count2 = math.Ceil(count2/10)
+		count2 = math.Ceil(count2 / 10)
 		totalCount := strconv.Itoa(int(count2))
 		c.Writer.Header().Add("Total", totalCount)
 
@@ -393,12 +413,11 @@ func GetBooksByType() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "type not found"})
 			return
 		}
-		count,_ := BookCollection.CountDocuments(ctx,bson.D{{Key: "type_id", Value: typeModel.TypeId}})
+		count, _ := BookCollection.CountDocuments(ctx, bson.D{{Key: "type_id", Value: typeModel.TypeId}})
 		count2 := float64(count)
-		count2 = math.Ceil(count2/10)
+		count2 = math.Ceil(count2 / 10)
 		totalCount := strconv.Itoa(int(count2))
-		c.Writer.Header().Add("Total",totalCount)
-
+		c.Writer.Header().Add("Total", totalCount)
 
 		page, _ := strconv.Atoi(c.Query("page"))
 		if page <= 0 {
@@ -508,7 +527,7 @@ func RentABook() gin.HandlerFunc {
 			"succeeded":      insertRes,
 			"user_id":        obj["user_id"].(string),
 			"book_detail_id": bookToRent["book_detail_id"].(string),
-			"book_rent_id": bookRentModel.Book_rent_id,
+			"book_rent_id":   bookRentModel.Book_rent_id,
 			"reserve_date":   now,
 		})
 	}
@@ -526,11 +545,11 @@ func GetBookDetail() gin.HandlerFunc {
 		}
 		recordPerPage := 5
 		startIndex := (page - 1) * recordPerPage
-		count,_ := BookDetailCollection.CountDocuments(ctx,bson.D{{Key: "book_id",Value: book_id}})
+		count, _ := BookDetailCollection.CountDocuments(ctx, bson.D{{Key: "book_id", Value: book_id}})
 		count2 := float64(count)
-		count2 = math.Ceil(count2/10)
+		count2 = math.Ceil(count2 / 10)
 		totalCount := strconv.Itoa(int(count2))
-		c.Writer.Header().Add("Total",totalCount)
+		c.Writer.Header().Add("Total", totalCount)
 
 		opt := options.Find().SetSkip(int64(startIndex)).SetLimit(int64(recordPerPage))
 		cursor, err := BookDetailCollection.Find(ctx, bson.M{"book_id": book_id}, opt)
