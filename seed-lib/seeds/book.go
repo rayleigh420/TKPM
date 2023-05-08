@@ -929,17 +929,17 @@ func SeedHistory() {
 	History11.Id = primitive.NewObjectID()
 	History12.Id = primitive.NewObjectID()
 	History1.History_id = "H01"
-	History1.History_id = "H02"
-	History1.History_id = "H03"
-	History1.History_id = "H04"
-	History1.History_id = "H05"
-	History1.History_id = "H06"
-	History1.History_id = "H07"
-	History1.History_id = "H08"
-	History1.History_id = "H09"
-	History1.History_id = "H10"
-	History1.History_id = "H11"
-	History1.History_id = "H12"
+	History2.History_id = "H02"
+	History3.History_id = "H03"
+	History4.History_id = "H04"
+	History5.History_id = "H05"
+	History6.History_id = "H06"
+	History7.History_id = "H07"
+	History8.History_id = "H08"
+	History9.History_id = "H09"
+	History10.History_id = "H10"
+	History11.History_id = "H11"
+	History12.History_id = "H12"
 	Histories := []interface{}{
 		History1,
 		History2,

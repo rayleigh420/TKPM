@@ -243,3 +243,91 @@ func ReturnABook() gin.HandlerFunc {
 		})
 	}
 }
+
+func GetBookBorrowById() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+		defer cancel()
+		book_hire_id := c.Param("book_hire_id")
+		// history := bson.M{}
+		// HistoryCollection.FindOne(ctx, bson.M{"history_id": history_id}).Decode(&history)
+		matchStage := bson.D{
+			{"$match", bson.D{
+				{"book_hire_id", book_hire_id},
+			}},
+		}
+		// lookupStage := bson.D{
+		// 	{"$lookup",bson.D{
+		// 		{"from","books"},
+		// 		{"localField","book_id"},
+		// 		{"foreignField","book_id"},
+		// 		{"as","book"},
+		// 	}},
+		// }
+		// lookupStage2 := bson.D{
+		// 	{"$lookup",bson.D{
+		// 		{"from","users"},
+		// 		{"localField","user_id"},
+		// 		{"foreignField","user_id"},
+		// 		{"as","user"},
+		// 	}},
+		// }
+		// unwindStage := bson.D{
+		// 	{"$unwind",bson.D{{"path","$book"},{"preserveNullAndEmptyArrays",false}}},
+		// }
+		// unwindStage2 := bson.D{
+		// 	{"$unwind",bson.D{{"path","$user"},{"preserveNullAndEmptyArrays",false}}},
+		// }
+		lookupStage := bson.D{
+			{"$lookup", bson.D{
+				{"from", "books"},
+				{"let", bson.D{{"book_id", "$book_id"}}},
+				{"pipeline", bson.A{
+					bson.D{{"$match", bson.D{{"$expr", bson.D{{"$eq", bson.A{"$book_id", "$$book_id"}}}}}}},
+					bson.D{{"$project", bson.D{{"_id", 0}, {"book_id", 1}, {"name", 1}, {"book_img", 1}}}},
+				}},
+				{"as", "book"},
+			}},
+		}
+		lookupStage2 := bson.D{
+			{"$lookup", bson.D{
+				{"from", "users"},
+				{"let", bson.D{{"user_id", "$user_id"}}},
+				{"pipeline", bson.A{
+					bson.D{{"$match", bson.D{{"$expr", bson.D{{"$eq", bson.A{"$user_id", "$$user_id"}}}}}}},
+					bson.D{{"$project", bson.D{{"_id", 0}, {"user_id", 1}, {"name", 1}}}},
+				}},
+				{"as", "user"},
+			}},
+		}
+		unwindStage := bson.D{
+			{"$unwind",bson.D{{"path","$book"}}},
+		}
+		unwindStage2 := bson.D{
+			{"$unwind",bson.D{{"path","$user"}}},
+		}
+		// setStage := bson.D{
+		// 	{"$set", bson.D{
+		// 		{"book", "$book.0"},
+		// 		{"user", "$user.0"},
+		// 	}},
+		// }
+		// projectStage := bson.D{
+		// 	{"$project", bson.D{
+		// 		{"_id", 0},
+		// 		{"user",0},
+		// 		{"book",0},
+		// 	}},
+		// }
+		cursor, err := BookBorrowedCollection.Aggregate(ctx, mongo.Pipeline{
+			matchStage, lookupStage, lookupStage2,unwindStage,unwindStage2,
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})
+			return
+		}
+		result := []bson.M{}
+		cursor.All(ctx, &result)
+		c.JSON(http.StatusOK, result[0])
+	}
+}

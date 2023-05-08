@@ -137,3 +137,31 @@ func CheckToken() gin.HandlerFunc{
 		c.JSON(http.StatusOK,res)
 	}
 }
+
+func Updateuser() gin.HandlerFunc{
+	return func (c *gin.Context)  {
+		ctx,cancel := context.WithTimeout(context.Background(),50*time.Second)
+		defer cancel()
+		user_id := c.Param("user_id")
+		now,_ := time.Parse(time.RFC3339,time.Now().Format(time.RFC3339))
+		userModel := models.UserModel{}
+		if err := c.Bind(&userModel);err != nil {
+			c.JSON(http.StatusBadRequest,gin.H{"error":err})
+			return
+		}
+		updateObj := bson.D{}
+		if userModel.Email != ""{
+			updateObj = append(updateObj, bson.E{"email",userModel.Email})
+		}
+		if userModel.Name != ""{
+			updateObj = append(updateObj, bson.E{"name",userModel.Name})
+		}
+		updateObj = append(updateObj, bson.E{"updated_at",now})
+		UserCollection.UpdateOne(ctx,bson.M{"user_id":user_id},bson.D{
+			{Key: "$set",Value: updateObj},
+		})
+		c.JSON(http.StatusOK,gin.H{
+			"status":"success",
+		})
+	}
+}

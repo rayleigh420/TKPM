@@ -1,50 +1,11 @@
-1NgWa6jeMLRh
-a5LhsipBOjTB
-KDRUEcpJXqSE
-vEsFidcJEJtg
-9saZudArq39m
-r9AtCBUarkzN
-UCiUJm6fbddp
-fOQnzqLyZqUN
-CamIsiEqURyT
-44iCJC2smIBj
-KrIqjRCiYVZj
-eiR9H9lT1evw
-NIyB9f7wbg9v
-sfq4g4CuWOVq
-YMTN97MtAqlA
-Ox1UbmZ7X4WH
-dbNLdI8iWFSw
-mrTVMAW7i9dY
-NJS3AZmxDK63
-lqMB2mdcTOmz
-Yqm4Z1FtMGst
-5rsWAuqT6qAY
-mbYrKF3xXxDp
-f2nCWjrReE34
-kuRbNdmS6RSp
-SkHLFDp8HWrF
-PEfVLmXtz222
-GRyVGQerZ6nX
-FbW8SvZLDDf7
-AAsJIVqjxJxR
-VSVlrQ9TvbtC
-cc7ybTv39s6Q
-BxSiKakJZIzG
-jje2RGYMBOU6
-EBnforirO8N2
-s3KoECsIGphw
-X7cIQo4UTvX4
-nGnTWMPTtDMV
-hRl5kZNfYqxY
-7GwJxV87lg7s
-LNcg2WRaoLtR
-AIXx2Wn9ZktJ
-ZByYQ8okbHST
-ggNTE5qyBATV
-G9r6iwoJwx1g
-AFdOjfOmKy5R
-1zEn3CTzswa1
-JsSKSnqn1AaT
-NqpMvzjARPp4
-Zn1ziKDpoxXb
+Book1.Updated_at = week1
+	Book2.Updated_at = week1
+	Book3.Updated_at = week1
+	Book4.Updated_at = week1
+	Book5.Updated_at = week1
+	Book6.Updated_at = week1
+	Book7.Updated_at = week1
+	Book8.Updated_at = week1
+	Book9.Updated_at = week1
+	Book10.Updated_at = week1
+    

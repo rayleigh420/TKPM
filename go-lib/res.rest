@@ -37,7 +37,7 @@ Content-Type: application/json
    "author":"Joy Woodward",
    "book_image":"https://salt.tikicdn.com/cache/750x750/ts/product/c8/6f/36/17e0dd709f50c7c7530755e9b21c3865.jpg.webp",
    "amount":0,
-   "type_name":"Numerology",
+   "type_name":"Manga",
    "page":280,
    "publishing_location":"USA",
    "borrowed_quantity":0,
@@ -59,10 +59,10 @@ Content-Type: application/json
 GET http://localhost:8080/rentlist
 
 ###
-GET http://localhost:8080/rentlist/RbPuAnhCPQsw
+GET http://localhost:8080/rentlist/R1
 
 ###
-GET http://localhost:8080/books/type?book_type=Manga&page=1
+GET http://localhost:8080/books/type?book_type=Numerology&page=1
 
 ###
 GET http://localhost:8080/books/newest
@@ -71,7 +71,7 @@ GET http://localhost:8080/books/newest
 GET http://localhost:8080/books/popular
 
 ###
-GET http://localhost:8080/books/B10
+GET http://localhost:8080/books/B13
 
 ###
 GET http://localhost:8080/books/B5/detail
@@ -80,7 +80,7 @@ GET http://localhost:8080/books/B5/detail
 GET http://localhost:8080/borrowlist
 
 ###
-GET http://localhost:8080/borrowlist/RbPuAnhCPQsw
+GET http://localhost:8080/borrowlist/BR01
 
 ###
 GET http://localhost:8080/history?page=2
@@ -92,7 +92,7 @@ GET http://localhost:8080/returnlist
 GET http://localhost:8080/types
 
 ###
-GET http://localhost:8080/history/U02
+GET http://localhost:8080/history/H12
 
 ###
 POST http://localhost:8080/rent
