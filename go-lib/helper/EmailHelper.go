@@ -10,10 +10,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func CheckEmail(email string) (bson.M,error){
+func CheckEmail(email string) (error){
 	result := bson.M{}
 	if err := godotenv.Load(".env");err != nil {
-		return result,err
+		return err
 	}
 	reqUrl := "https://api.emailable.com/v1/verify?"
 	url := bytes.Buffer{}
@@ -24,9 +24,9 @@ func CheckEmail(email string) (bson.M,error){
 	url.WriteString(os.Getenv("EMAIL_API"))
 	resp,err := http.Get(url.String())
 	if err != nil{
-		return result,err
+		return err
 	}
 	defer resp.Body.Close()
 	json.NewDecoder(resp.Body).Decode(&result)
-	return result,nil
+	return nil
 }

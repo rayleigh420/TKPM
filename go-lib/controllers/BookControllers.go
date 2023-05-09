@@ -30,11 +30,32 @@ func GetBooks() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
-		books := []models.BookModel{}
-		cursor, cursorErr := BookCollection.Find(ctx, bson.D{{
-			Key:   "",
-			Value: nil,
-		}})
+		books := []bson.M{}
+		// lookupStage := bson.D{
+		// 	{Key: "$lookup", Value: bson.D{
+		// 		{Key: "from", Value: "book_detail"},
+		// 		{Key: "let", Value: bson.D{{Key: "book_id", Value: "$book_id"}}},
+		// 		{Key: "pipeline", Value: bson.A{
+		// 			bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_id", "$$book_id"}}}}}}},
+		// 			bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+		// 		}},
+		// 		{Key: "as", Value: "book_detail"},
+		// 	}},
+		// }
+		lookupStage := bson.D{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_detail"},
+				{Key: "localField", Value: "book_id"},
+				{Key: "foreignField", Value: "book_id"},
+				{Key: "as", Value: "book_detail"},
+			}},
+		}
+		// unwindStage := bson.D{
+		// 	{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+		// }
+		cursor,cursorErr := BookCollection.Aggregate(ctx,mongo.Pipeline{
+			lookupStage,
+		})
 		if cursorErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": cursorErr.Error()})
 			return

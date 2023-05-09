@@ -45,6 +45,9 @@ func SignUp() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "bad user model"})
 			return
 		}
+		// if emailErr := helper.CheckEmail(userModel.Email);emailErr != nil {
+
+		// }
 		count, _ := UserCollection.CountDocuments(ctx, bson.D{
 			{Key:"$or",Value: []bson.D{
 				{{Key: "email", Value: userModel.Email}},
@@ -151,17 +154,25 @@ func Updateuser() gin.HandlerFunc{
 		}
 		updateObj := bson.D{}
 		if userModel.Email != ""{
-			updateObj = append(updateObj, bson.E{"email",userModel.Email})
+			updateObj = append(updateObj, bson.E{Key: "email",Value: userModel.Email})
 		}
 		if userModel.Name != ""{
-			updateObj = append(updateObj, bson.E{"name",userModel.Name})
+			updateObj = append(updateObj, bson.E{Key: "name",Value: userModel.Name})
 		}
-		updateObj = append(updateObj, bson.E{"updated_at",now})
+		updateObj = append(updateObj, bson.E{Key: "updated_at",Value: now})
 		UserCollection.UpdateOne(ctx,bson.M{"user_id":user_id},bson.D{
 			{Key: "$set",Value: updateObj},
 		})
+		user := models.UserModel{}
+		UserCollection.FindOne(ctx,bson.M{"user_id":user_id}).Decode(&user)
+		token,err := helper.GenerateToken(user.Name,user.Email,user.Role,user.User_id,user.Avatar)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error token"})
+			return
+		}
 		c.JSON(http.StatusOK,gin.H{
 			"status":"success",
+			"token":token,
 		})
 	}
 }

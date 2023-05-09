@@ -56,6 +56,9 @@ Content-Type: application/json
 
 
 ###
+GET http://localhost:8080/admin/books
+
+###
 GET http://localhost:8080/rentlist
 
 ###

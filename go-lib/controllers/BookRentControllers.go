@@ -131,40 +131,100 @@ func GetRentList() gin.HandlerFunc {
 		// 		{Key: "$lte", Value: yest},
 		// 	}},
 		// })
-		t1 := time.Now()
+		// t1 := time.Now()
 		if err := UpdateRentRequest(); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 			return
 		}
-		t2 := time.Now()
+		// t2 := time.Now()
 		result := []bson.M{}
+		// lookupStage := bson.D{
+		// 	{Key: "$lookup", Value: bson.D{
+		// 		{Key: "from", Value: "books"},
+		// 		{Key: "localField", Value: "book_id"},
+		// 		{Key: "foreignField", Value: "book_id"},
+		// 		{Key: "as", Value: "book"},
+		// 	}},
+		// }
+		// lookupStage2 := bson.D{
+		// 	{Key: "$lookup", Value: bson.D{
+		// 		{Key: "from", Value: "users"},
+		// 		{Key: "localField", Value: "user_id"},
+		// 		{Key: "foreignField", Value: "user_id"},
+		// 		{Key: "as", Value: "user"},
+		// 	}},
+		// }
+		// lookupStage3 := bson.D{
+		// 	{Key: "$lookup", Value: bson.D{
+		// 		{Key: "from", Value: "book_detail"},
+		// 		{Key: "localField", Value: "book_detail_id"},
+		// 		{Key: "foreignField", Value: "book_detail_id"},
+		// 		{Key: "as", Value: "book_detail"},
+		// 	}},
+		// }
+		// unwindStage := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}}}}
+		// unwindStage2 := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"}}}}
+		// unwindStage3 := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book_detail"}}}}
+		
+		// projectStage := bson.D{
+		// 	{Key: "$project", Value: bson.D{
+		// 		{Key: "_id", Value: 0},
+		// 		{Key: "book._id", Value: 0},
+		// 		{Key: "user._id", Value: 0},
+		// 		{Key: "book_detail._id", Value: 0},
+		// 	}},
+		// }
 		lookupStage := bson.D{
 			{Key: "$lookup", Value: bson.D{
 				{Key: "from", Value: "books"},
-				{Key: "localField", Value: "book_id"},
-				{Key: "foreignField", Value: "book_id"},
+				{Key: "let", Value: bson.D{{Key: "book_id", Value: "$book_id"}}},
+				{Key: "pipeline", Value: bson.A{
+					bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_id", "$$book_id"}}}}}}},
+					bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+				}},
 				{Key: "as", Value: "book"},
 			}},
 		}
-		unwindStage := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}, {Key: "preserveNullAndEmptyArrays", Value: false}}}}
-		projectStage := bson.D{
-			{Key: "$project", Value: bson.D{
-				{Key: "_id", Value: 0},
-				{Key: "book._id", Value: 0},
+		lookupStage2 := bson.D{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "users"},
+				{Key: "let", Value: bson.D{{Key: "user_id", Value: "$user_id"}}},
+				{Key: "pipeline", Value: bson.A{
+					bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$user_id", "$$user_id"}}}}}}},
+					bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+				}},
+				{Key: "as", Value: "user"},
 			}},
 		}
+		lookupStage3 := bson.D{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_detail"},
+				{Key: "let", Value: bson.D{{Key: "book_detail_id", Value: "$book_detail_id"}}},
+				{Key: "pipeline", Value: bson.A{
+					bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_detail_id", "$$book_detail_id"}}}}}}},
+					bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+				}},
+				{Key: "as", Value: "book_detail"},
+			}},
+		}
+		unwindStage := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"}}},
+		}
+		unwindStage2 := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"}}},
+		}
+		unwindStage3 := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+		}
 		rentListCursor, rentListErr := BookRentCollection.Aggregate(ctx, mongo.Pipeline{
-			lookupStage, unwindStage, projectStage,
+			lookupStage,lookupStage2,lookupStage3, unwindStage,unwindStage2,unwindStage3,
 		})
 		if rentListErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error getting list"})
 			return
 		}
 		rentListCursor.All(ctx, &result)
-		c.JSON(http.StatusOK, gin.H{
-			"res":         result,
-			"time update": t2.Sub(t1),
-		})
+		c.JSON(http.StatusOK, result)
 		// c.JSON(http.StatusOK, result)
 	}
 }
@@ -191,7 +251,7 @@ func GetRentListOfBook(book_id string) ([]bson.M, error) {
 			{Key: "as", Value: "book"},
 		}},
 	}
-	unwindStage := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}, {Key: "preserveNullAndEmptyArrays", Value: false}}}}
+	unwindStage := bson.D{{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}}}}
 	projectStage := bson.D{
 		{Key: "$project", Value: bson.D{
 			{Key: "_id", Value: 0},
@@ -217,8 +277,8 @@ func GetRentListById() gin.HandlerFunc {
 		// history := bson.M{}
 		// HistoryCollection.FindOne(ctx, bson.M{"history_id": history_id}).Decode(&history)
 		matchStage := bson.D{
-			{"$match", bson.D{
-				{"book_rent_id", rent_id},
+			{Key: "$match", Value: bson.D{
+				{Key: "book_rent_id", Value: rent_id},
 			}},
 		}
 		// lookupStage := bson.D{
@@ -244,32 +304,46 @@ func GetRentListById() gin.HandlerFunc {
 		// 	{"$unwind",bson.D{{"path","$user"},{"preserveNullAndEmptyArrays",false}}},
 		// }
 		lookupStage := bson.D{
-			{"$lookup", bson.D{
-				{"from", "books"},
-				{"let", bson.D{{"book_id", "$book_id"}}},
-				{"pipeline", bson.A{
-					bson.D{{"$match", bson.D{{"$expr", bson.D{{"$eq", bson.A{"$book_id", "$$book_id"}}}}}}},
-					bson.D{{"$project", bson.D{{"_id", 0}, {"book_id", 1}, {"name", 1}, {"book_img", 1}}}},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "books"},
+				{Key: "let", Value: bson.D{{Key: "book_id", Value: "$book_id"}}},
+				{Key: "pipeline", Value: bson.A{
+					bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_id", "$$book_id"}}}}}}},
+					bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
 				}},
-				{"as", "book"},
+				{Key: "as", Value: "book"},
 			}},
 		}
 		lookupStage2 := bson.D{
-			{"$lookup", bson.D{
-				{"from", "users"},
-				{"let", bson.D{{"user_id", "$user_id"}}},
-				{"pipeline", bson.A{
-					bson.D{{"$match", bson.D{{"$expr", bson.D{{"$eq", bson.A{"$user_id", "$$user_id"}}}}}}},
-					bson.D{{"$project", bson.D{{"_id", 0}, {"user_id", 1}, {"name", 1}}}},
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "users"},
+				{Key: "let", Value: bson.D{{Key: "user_id", Value: "$user_id"}}},
+				{Key: "pipeline", Value: bson.A{
+					bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$user_id", "$$user_id"}}}}}}},
+					bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
 				}},
-				{"as", "user"},
+				{Key: "as", Value: "user"},
+			}},
+		}
+		lookupStage3 := bson.D{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_detail"},
+				{Key: "let", Value: bson.D{{Key: "book_detail_id", Value: "$book_detail_id"}}},
+				{Key: "pipeline", Value: bson.A{
+					bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_detail_id", "$$book_detail_id"}}}}}}},
+					bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+				}},
+				{Key: "as", Value: "book_detail"},
 			}},
 		}
 		unwindStage := bson.D{
-			{"$unwind",bson.D{{"path","$book"}}},
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"}}},
 		}
 		unwindStage2 := bson.D{
-			{"$unwind",bson.D{{"path","$user"}}},
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"}}},
+		}
+		unwindStage3 := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
 		}
 		// setStage := bson.D{
 		// 	{"$set", bson.D{
@@ -285,7 +359,7 @@ func GetRentListById() gin.HandlerFunc {
 		// 	}},
 		// }
 		cursor, err := BookRentCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage, lookupStage, lookupStage2,unwindStage,unwindStage2,
+			matchStage, lookupStage, lookupStage2,lookupStage3,unwindStage,unwindStage2,unwindStage3,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})

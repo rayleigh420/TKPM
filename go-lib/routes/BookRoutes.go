@@ -6,6 +6,7 @@ import (
 )
 
 func BookRoutes(router *gin.Engine){
+	router.GET("/admin/books",controllers.GetBooks())
 	router.GET("/books",controllers.GetBooks2())
 	router.GET("/books/type",controllers.GetBooksByType())
 	router.GET("/books/newest",controllers.GetNewestBooks())
