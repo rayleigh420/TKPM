@@ -40,7 +40,10 @@ const Book = () => {
         <>
             <div className="flex flex-col items-center">
                 <div className=" w-[62%] py-[60px] flex flex-row">
-                    <div className={"w-[240px] h-[350px] bg-cover hover:border-[1.75px] rounded-[7px] " + `bg-[url('${book?.book_img}')]`}></div>
+                    <div className="w-[240px] h-[350px] bg-cover hover:border-[1.75px] rounded-[7px] overflow-hidden">
+                        <img src={book?.book_img} className="w-full h-full" />
+                    </div>
+                    {/* <div className={"w-[240px] h-[350px] bg-cover hover:border-[1.75px] rounded-[7px] " + `bg-[url('${book?.book_img}')]`}></div> */}
                     {/* <div className="w-[240px] h-[350px] bg-cover hover:border-[1.75px] bg-[url('https://fastly.picsum.photos/id/200/200/300.jpg?hmac=XVCLpc2Ddr652IrKMt3L7jISDD4au5O9ZIr3fwBtxo8')] rounded-[7px]">
                     </div> */}
                     <div className="ml-[30px]">
