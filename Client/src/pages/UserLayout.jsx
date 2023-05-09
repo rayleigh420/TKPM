@@ -1,10 +1,11 @@
 import { useContext, useEffect, useLayoutEffect } from "react";
-import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom"
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom"
 import AuthContext from "../context/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
 import { checkToken } from "../api/authApi";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { toast } from "react-toastify";
+import useLogout from "../hooks/useLogout";
 
 export const avaURL = "https://i1.sndcdn.com/avatars-0QCRofC3yRV0mkpa-6XQLMA-t500x500.jpg"
 
@@ -16,6 +17,12 @@ const UserLayout = () => {
     const { auth, setAuth } = useContext(AuthContext)
 
     const [value, setValue] = useLocalStorage("token", '')
+    const setLogout = useLogout(false)
+
+    const handleLogout = () => {
+        console.log("logout")
+        setLogout(true)
+    }
 
     // console.log("Token in Layout: ", value)
     const checkTokenMutate = useMutation({
@@ -152,13 +159,13 @@ const UserLayout = () => {
                                     <li></li>
                                 </>
                             )}
-                            <li>
-                                <NavLink to='/'>
+                            <li onClick={() => handleLogout}>
+                                <Link to='/'>
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                         <path fillRule="evenodd" d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm5.03 4.72a.75.75 0 010 1.06l-1.72 1.72h10.94a.75.75 0 010 1.5H10.81l1.72 1.72a.75.75 0 11-1.06 1.06l-3-3a.75.75 0 010-1.06l3-3a.75.75 0 011.06 0z" clipRule="evenodd" />
                                     </svg>
                                     Logout
-                                </NavLink>
+                                </Link>
                             </li>
                         </ul>
                     </div>
