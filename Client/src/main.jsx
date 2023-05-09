@@ -25,7 +25,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <BrowserRouter>
         <AuthProvider>
           <App />
-          <ToastContainer />
+          <ToastContainer
+            pauseOnHover={false}
+            autoClose={1500}
+            pauseOnFocusLoss={false}
+          />
         </AuthProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
