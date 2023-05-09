@@ -7,8 +7,7 @@ const useLogout = (log = false) => {
     const { setAuth } = useContext(AuthContext);
     const [value, setValue] = useLocalStorage('token', '')
 
-
-    const [logout, setLogout] = useState(log);
+    const [logout, setLogout] = useState(false);
     console.log("logout", logout)
 
     useEffect(() => {
@@ -16,6 +15,7 @@ const useLogout = (log = false) => {
             setAuth({})
             setValue("")
             toast.info("Logout success!")
+            setLogout(false)
         }
     }, [logout])
 
