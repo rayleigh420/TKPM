@@ -3,9 +3,16 @@ import { data } from "../../pages/home"
 import AddBook from "../modals/AddBook"
 import EditBook from "../modals/EditBook"
 import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { getPaidBook } from "../../api/manageApi"
 
 const PaidBook = () => {
     const [search, setSearch] = useState('')
+
+    const { data: books, isLoading, isError } = useQuery({
+        queryKey: ['admin', 'paidbook'],
+        queryFn: () => getPaidBook()
+    })
 
     const handleChangeSeach = (e) => {
         setSearch(e.target.value)
@@ -41,18 +48,19 @@ const PaidBook = () => {
                         <tbody>
                             {/* row 1 */}
                             {
-                                data.map((item, index) => (
-                                    <tr key={index}>
+                                books.length > 0 && books?.map((item, index) =>
+                                (
+                                    <tr key={item?.id}>
                                         <td>
                                             <div className="flex items-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.src} alt="Avatar Tailwind CSS Component" />
+                                                        <img src={item?.user.avatar} alt="Avatar Tailwind CSS Component" />
                                                     </div>
                                                 </div>
                                                 <div>
                                                     {/* <Link to="/book"> */}
-                                                    <div className="font-bold">{item.name}</div>
+                                                    <div className="font-bold">{item?.user.name}</div>
                                                     {/* </Link> */}
                                                 </div>
                                             </div>
@@ -61,71 +69,35 @@ const PaidBook = () => {
                                             <div className="flex items-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.src} alt="Avatar Tailwind CSS Component" />
+                                                        <img src={item?.book.book_img} alt="Avatar Tailwind CSS Component" />
                                                     </div>
                                                 </div>
                                                 <div>
                                                     <Link to="/book">
-                                                        <div className="font-bold">{item.name}</div>
+                                                        <div className="font-bold">{item?.book.book_id}</div>
                                                         <div className="text-sm opacity-50">69696969</div>
                                                     </Link>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>27/03/2023</td>
-                                        <td>27/04/2023</td>
+                                        <td>{item?.date_borrowed}</td>
+                                        <td>{item?.date_return}</td>
                                     </tr>
                                 ))
                             }
-                            {
-                                data.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <div className="flex items-center space-x-3">
-                                                <div className="avatar">
-                                                    <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.src} alt="Avatar Tailwind CSS Component" />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    {/* <Link to="/book"> */}
-                                                    <div className="font-bold">{item.name}</div>
-                                                    {/* </Link> */}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="flex items-center space-x-3">
-                                                <div className="avatar">
-                                                    <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.src} alt="Avatar Tailwind CSS Component" />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <Link to="/book">
-                                                        <div className="font-bold">{item.name}</div>
-                                                        <div className="text-sm opacity-50">69696969</div>
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>27/03/2023</td>
-                                        <td>27/04/2023</td>
-                                    </tr>
-                                ))
-                            }
-                        </tbody>
+
+                        </tbody >
                         {/* foot */}
-                        <tfoot className="sticky bottom-0">
+                        <tfoot tfoot className="sticky bottom-0" >
                             <tr>
                                 <th>User</th>
                                 <th>Book</th>
                                 <th>From</th>
                                 <th>To</th>
                             </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                        </tfoot >
+                    </table >
+                </div >
             </div >
         </>
     )
