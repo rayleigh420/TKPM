@@ -13,7 +13,7 @@ const LocationVersion = ({ id }) => {
     console.log(version)
 
     return (
-        <div className="w-[62%] mt-[30px] mb-[150px]">
+        <div className="w-[62%] mt-[30px] mb-[50px]">
             <div className="">
                 <div className="flex flex-row justify-between mb-[20px]">
                     <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px]">Status of all versions</h4>
