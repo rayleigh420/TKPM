@@ -1,5 +1,10 @@
 import axios from "../utils/axios"
 
+export const getBookedBook = async () => {
+    const result = await axios.get('/rentlist')
+    return result.data
+}
+
 export const getBorrowedBook = async () => {
     const result = await axios.get('/borrowlist')
     return result.data

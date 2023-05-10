@@ -3,9 +3,16 @@ import { data } from "../../pages/home"
 import AddBook from "../modals/AddBook"
 import EditBook from "../modals/EditBook"
 import { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { getBookedBook } from "../../api/manageApi"
 
 const BookedBook = () => {
     const [search, setSearch] = useState('')
+
+    const { data: books, isLoading, isError } = useQuery({
+        queryKey: ['admin', 'booked'],
+        queryFn: () => getBookedBook()
+    })
 
     const handleChangeSeach = (e) => {
         setSearch(e.target.value)
@@ -39,30 +46,29 @@ const BookedBook = () => {
                                 <th>Borrowed</th>
                                 <th>User</th>
                                 <th>Book</th>
-                                <th>From</th>
-                                <th>To</th>
+                                <th>Reverse</th>
                             </tr>
                         </thead>
                         <tbody>
                             {/* row 1 */}
                             {
-                                data.map((item, index) => (
-                                    <tr key={index}>
+                                books?.map((item, index) => (
+                                    <tr key={item?._id}>
                                         <td>
                                             <label>
-                                                <input type="checkbox" className="checkbox" onChange={() => handleChangeBorrowed(index)} />
+                                                <input type="checkbox" className="checkbox" onChange={() => handleChangeBorrowed(item?.book_rent_id)} />
                                             </label>
                                         </td>
                                         <td>
                                             <div className="flex items-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.src} alt="Avatar Tailwind CSS Component" />
+                                                        <img src={item?.user.avatar} alt="Avatar Tailwind CSS Component" />
                                                     </div>
                                                 </div>
                                                 <div>
                                                     {/* <Link to="/book"> */}
-                                                    <div className="font-bold">{item.name}</div>
+                                                    <div className="font-bold">{item?.user.name}</div>
                                                     {/* </Link> */}
                                                 </div>
                                             </div>
@@ -71,61 +77,18 @@ const BookedBook = () => {
                                             <div className="flex items-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.src} alt="Avatar Tailwind CSS Component" />
+                                                        <img src={item?.book.book_img} alt="Avatar Tailwind CSS Component" />
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <Link to="/book">
-                                                        <div className="font-bold">{item.name}</div>
-                                                        <div className="text-sm opacity-50">69696969</div>
+                                                    <Link to={`/book/${item?.book.book_id}`}>
+                                                        <div className="font-bold">{item?.book.name}</div>
+                                                        <div className="text-sm opacity-50">{item?.book_detail.book_detail_id}</div>
                                                     </Link>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>27/03/2023</td>
-                                        <td>27/04/2023</td>
-                                    </tr>
-                                ))
-                            }
-                            {
-                                data.map((item, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            <label>
-                                                <input type="checkbox" className="checkbox" onChange={() => handleChangeBorrowed(index)} />
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <div className="flex items-center space-x-3">
-                                                <div className="avatar">
-                                                    <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.src} alt="Avatar Tailwind CSS Component" />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    {/* <Link to="/book"> */}
-                                                    <div className="font-bold">{item.name}</div>
-                                                    {/* </Link> */}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className="flex items-center space-x-3">
-                                                <div className="avatar">
-                                                    <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.src} alt="Avatar Tailwind CSS Component" />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <Link to="/book">
-                                                        <div className="font-bold">{item.name}</div>
-                                                        <div className="text-sm opacity-50">69696969</div>
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>27/03/2023</td>
-                                        <td>27/04/2023</td>
+                                        <td>{item?.reserve_date}</td>
                                     </tr>
                                 ))
                             }
@@ -136,8 +99,7 @@ const BookedBook = () => {
                                 <th>Borrowed</th>
                                 <th>User</th>
                                 <th>Book</th>
-                                <th>From</th>
-                                <th>To</th>
+                                <th>Reverse</th>
                             </tr>
                         </tfoot>
                     </table>
