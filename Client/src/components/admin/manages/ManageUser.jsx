@@ -1,11 +1,21 @@
 import { Link } from "react-router-dom"
 import { data } from "../../../pages/home"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import useDebounce from "../../../hooks/useDebounce"
+import { useQuery } from "@tanstack/react-query"
+import { getAllUser } from "../../../api/userApi"
+import AuthContext from "../../../context/AuthProvider"
 
 const ManageUser = () => {
     const [search, setSearch] = useState('')
     const debounced = useDebounce(search, 1000)
+
+    const { auth, setAuth } = useContext(AuthContext)
+
+    const { data: users, isLoading, isError } = useQuery({
+        queryKey: ['admin', 'users'],
+        queryFn: () => getAllUser(auth.token)
+    })
 
     const handleChangeSeach = (e) => {
         setSearch(e.target.value)

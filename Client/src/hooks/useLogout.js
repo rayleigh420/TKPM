@@ -8,7 +8,7 @@ const useLogout = (log = false) => {
     const [value, setValue] = useLocalStorage('token', '')
 
     const [logout, setLogout] = useState(false);
-    console.log("logout hook", logout)
+    // console.log("logout hook", logout)
 
     useEffect(() => {
         if (logout) {

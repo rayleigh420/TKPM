@@ -23,6 +23,8 @@ const PaidBook = () => {
         console.log(search, typeSearch)
     }
 
+    console.log(books)
+
     return (
         <>
             <div className="ml-[180px] w-[880px]">
@@ -75,7 +77,7 @@ const PaidBook = () => {
                                                 <div>
                                                     <Link to="/book">
                                                         <div className="font-bold">{item?.book.book_id}</div>
-                                                        <div className="text-sm opacity-50">69696969</div>
+                                                        <div className="text-sm opacity-50">{item?.book_detail.book_detail_id}</div>
                                                     </Link>
                                                 </div>
                                             </div>
