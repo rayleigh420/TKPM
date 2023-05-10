@@ -8,3 +8,8 @@ export const getAllUser = async (token) => {
     console.log(result.data)
     return result.data
 }
+
+export const deleteUser = async (idUser) => {
+    const result = await axios.delete(`/user/${idUser}`)
+    return result.data
+}
