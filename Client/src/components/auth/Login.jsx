@@ -45,7 +45,7 @@ const Login = ({ log, setSign, setLog }) => {
 
     const handleSignIn = () => {
         loginMutate.mutate({
-            email: email,
+            email: !email.includes('@gmail.com') ? (email + "@gmail.com") : email,
             password: password
         })
     }
