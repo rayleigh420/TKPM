@@ -50,11 +50,20 @@ func GetBooks() gin.HandlerFunc {
 				{Key: "as", Value: "book_detail"},
 			}},
 		}
-		// unwindStage := bson.D{
-		// 	{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
-		// }
+		lookupStage2 := bson.D{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_types"},
+				{Key: "localField", Value: "type_id"},
+				{Key: "foreignField", Value: "typeid"},
+				{Key: "as", Value: "type"},
+			}},
+		}
+		
+		unwindStage := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$type"}}},
+		}
 		cursor,cursorErr := BookCollection.Aggregate(ctx,mongo.Pipeline{
-			lookupStage,
+			lookupStage,lookupStage2,unwindStage,
 		})
 		if cursorErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": cursorErr.Error()})

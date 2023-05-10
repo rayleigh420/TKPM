@@ -128,17 +128,32 @@ func GetBorrowList() gin.HandlerFunc {
 				{Key: "as", Value: "book_detail"},
 			}},
 		}
+		lookupStage4 := bson.D{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_types"},
+				{Key: "let", Value: bson.D{{Key: "book", Value: "$book"}}},
+				{Key: "pipeline", Value: bson.A{
+					// bson.D{{Key: "$unwind",Value: "$$book"}},
+					bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$typeid", "$$book.type_id"}}}}}}},
+					bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+				}},
+				{Key: "as", Value: "type"},
+			}},
+		}
 		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"}}},
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
 		}
 		unwindStage2 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"}}},
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
 		}
 		unwindStage3 := bson.D{
 			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
 		}
+		unwindStage4 := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$type"}}},
+		}
 		cursor, _ := BookBorrowedCollection.Aggregate(ctx, mongo.Pipeline{
-			lookupStage,lookupStage2,lookupStage3,unwindStage,unwindStage2, unwindStage3,
+			lookupStage,lookupStage2,lookupStage3,unwindStage,lookupStage4,unwindStage2, unwindStage3,unwindStage4,
 		})
 		cursor.All(ctx, &borrowList)
 		c.JSON(http.StatusOK, borrowList)
@@ -286,6 +301,40 @@ func GetBookBorrowById() gin.HandlerFunc {
 		// unwindStage2 := bson.D{
 		// 	{"$unwind",bson.D{{"path","$user"},{"preserveNullAndEmptyArrays",false}}},
 		// }
+		// lookupStage := bson.D{
+		// 	{Key: "$lookup", Value: bson.D{
+		// 		{Key: "from", Value: "books"},
+		// 		{Key: "let", Value: bson.D{{Key: "book_id", Value: "$book_id"}}},
+		// 		{Key: "pipeline", Value: bson.A{
+		// 			bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_id", "$$book_id"}}}}}}},
+		// 			bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+		// 		}},
+		// 		{Key: "as", Value: "book"},
+		// 	}},
+		// }
+		// lookupStage2 := bson.D{
+		// 	{Key: "$lookup", Value: bson.D{
+		// 		{Key: "from", Value: "users"},
+		// 		{Key: "let", Value: bson.D{{Key: "user_id", Value: "$user_id"}}},
+		// 		{Key: "pipeline", Value: bson.A{
+		// 			bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$user_id", "$$user_id"}}}}}}},
+		// 			bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+		// 		}},
+		// 		{Key: "as", Value: "user"},
+		// 	}},
+		// }
+		// lookupStage3 := bson.D{
+		// 	{Key: "$lookup", Value: bson.D{
+		// 		{Key: "from", Value: "book_detail"},
+		// 		{Key: "let", Value: bson.D{{Key: "book_detail_id", Value: "$book_detail_id"}}},
+		// 		{Key: "pipeline", Value: bson.A{
+		// 			bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_detail_id", "$$book_detail_id"}}}}}}},
+		// 			bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+		// 		}},
+		// 		{Key: "as", Value: "book_detail"},
+		// 	}},
+		// }
+		
 		lookupStage := bson.D{
 			{Key: "$lookup", Value: bson.D{
 				{Key: "from", Value: "books"},
@@ -319,14 +368,30 @@ func GetBookBorrowById() gin.HandlerFunc {
 				{Key: "as", Value: "book_detail"},
 			}},
 		}
+		lookupStage4 := bson.D{
+			{Key: "$lookup", Value: bson.D{
+				{Key: "from", Value: "book_types"},
+				{Key: "let", Value: bson.D{{Key: "book", Value: "$book"}}},
+				{Key: "pipeline", Value: bson.A{
+					// bson.D{{Key: "$unwind",Value: "$$book"}},
+					bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$typeid", "$$book.type_id"}}}}}}},
+					bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+				}},
+				{Key: "as", Value: "type"},
+			}},
+		}
+
 		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"}}},
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
 		}
 		unwindStage2 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"}}},
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
 		}
 		unwindStage3 := bson.D{
 			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+		}
+		unwindStage4 := bson.D{
+			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$type"}}},
 		}
 		// setStage := bson.D{
 		// 	{"$set", bson.D{
@@ -342,7 +407,7 @@ func GetBookBorrowById() gin.HandlerFunc {
 		// 	}},
 		// }
 		cursor, err := BookBorrowedCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage, lookupStage, lookupStage2,lookupStage3,unwindStage,unwindStage2,unwindStage3,
+			matchStage, lookupStage,lookupStage2,lookupStage3,unwindStage,lookupStage4,unwindStage2,unwindStage3,unwindStage4,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})
@@ -350,6 +415,10 @@ func GetBookBorrowById() gin.HandlerFunc {
 		}
 		result := []bson.M{}
 		cursor.All(ctx, &result)
+		if len(result) == 0 {
+			c.JSON(http.StatusOK, gin.H{"error": "not exist"})
+			return
+		}
 		c.JSON(http.StatusOK, result[0])
 	}
 }

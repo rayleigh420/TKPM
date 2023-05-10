@@ -190,18 +190,18 @@ func GetUsers() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
-		rec := bson.M{}
-		c.ShouldBindJSON(&rec)
-		token := rec["token"].(string)
-		claim, msg := helper.ValidateToken(token)
-		if msg != "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": msg})
-			return
-		}
-		if claim.Role != "admin" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "unauthorized"})
-			return
-		}
+		// rec := bson.M{}
+		// c.ShouldBindJSON(&rec)
+		// token := rec["token"].(string)
+		// claim, msg := helper.ValidateToken(token)
+		// if msg != "" {
+		// 	c.JSON(http.StatusBadRequest, gin.H{"error": msg})
+		// 	return
+		// }
+		// if claim.Role != "admin" {
+		// 	c.JSON(http.StatusBadRequest, gin.H{"error": "unauthorized"})
+		// 	return
+		// }
 		users := []bson.M{}
 		cursor, cursorErr := UserCollection.Find(ctx, bson.M{})
 		if cursorErr != nil {

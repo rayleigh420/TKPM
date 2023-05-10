@@ -62,7 +62,7 @@ GET http://localhost:8080/admin/books
 GET http://localhost:8080/rentlist
 
 ###
-GET http://localhost:8080/rentlist/R1
+GET http://localhost:8080/rentlist/search?search_id=R1
 
 ###
 GET http://localhost:8080/books/type?book_type=Numerology&page=1
@@ -95,7 +95,7 @@ GET http://localhost:8080/returnlist
 GET http://localhost:8080/types
 
 ###
-GET http://localhost:8080/history/search?search_id=H01
+GET http://localhost:8080/returnlist/search?search_id=H01
 
 ###
 POST http://localhost:8080/rent
@@ -135,16 +135,15 @@ GET http://localhost:8080/admin/books
 
 ###
 GET http://localhost:8080/admin/users
+
+
+###
+PUT http://localhost:8080/user/U02
 Content-Type: application/json
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODM2OTYyNzV9.wTP28rhrEOUvTCf5ep8FEYSKXPD3SbtCIPnjuq_FPtg"
+    "name":"User 020"
 }
 
 ###
-PUT http://localhost:8080/user/U01
-Content-Type: application/json
-
-{
-    "name":"User 010"
-}
+DELETE http://localhost:8080/user/U02
