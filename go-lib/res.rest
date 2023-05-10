@@ -83,10 +83,10 @@ GET http://localhost:8080/books/B5/detail
 GET http://localhost:8080/borrowlist
 
 ###
-GET http://localhost:8080/borrowlist/BR01
+GET http://localhost:8080/borrowlist/search?search_id=BR01
 
 ###
-GET http://localhost:8080/history?page=2
+GET http://localhost:8080/history
 
 ###
 GET http://localhost:8080/returnlist
@@ -95,7 +95,7 @@ GET http://localhost:8080/returnlist
 GET http://localhost:8080/types
 
 ###
-GET http://localhost:8080/history/H12
+GET http://localhost:8080/history/search?search_id=H01
 
 ###
 POST http://localhost:8080/rent
@@ -107,7 +107,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/rentlist/B10
+GET http://localhost:8080/rentlist/search?search_id=R1
 
 
 ###
@@ -125,4 +125,26 @@ Content-Type: application/json
 
 {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODMyMDUwOTN9.FmmRTlHnCGm6p8xv4xvoyuApw9Smdw1JkUfipTk4k2E"
+}
+
+###
+POST http://localhost:8080/abort/R1
+
+###
+GET http://localhost:8080/admin/books
+
+###
+GET http://localhost:8080/admin/users
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODM2OTYyNzV9.wTP28rhrEOUvTCf5ep8FEYSKXPD3SbtCIPnjuq_FPtg"
+}
+
+###
+PUT http://localhost:8080/user/U01
+Content-Type: application/json
+
+{
+    "name":"User 010"
 }

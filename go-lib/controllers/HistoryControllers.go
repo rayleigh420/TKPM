@@ -95,16 +95,16 @@ func GetHistory() gin.HandlerFunc {
 			}},
 		}
 		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}}},
 		}
 		unwindStage2 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"}}},
 		}
 		unwindStage3 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book_detail"}}},
 		}
 		cursor, err := HistoryCollection.Aggregate(ctx, mongo.Pipeline{
-			lookupStage, lookupStage2,lookupStage3, unwindStage, unwindStage2, unwindStage3,
+			lookupStage, lookupStage2, lookupStage3, unwindStage, unwindStage2, unwindStage3,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})
@@ -166,16 +166,19 @@ func GetReturnedBooks() gin.HandlerFunc {
 		res := []bson.M{}
 		// cursor,_ := HistoryCollection.Find(ctx,bson.M{"status":"borrowing"})
 		// cursor.All(ctx,&res)
+		// matchStage := bson.D{
+		// 	{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"status", "returned"}}}}}},
+		// }
 		matchStage := bson.D{
 			{Key: "$match", Value: bson.D{
-				{Key: "status", Value: "returned"},
+				{Key: "status",Value: "returned"},
 			}},
 		}
-		sortStage := bson.D{
-			{Key: "$sort", Value: bson.D{
-				{Key: "date_borrowed", Value: -1},
-			}},
-		}
+		// sortStage := bson.D{
+		// 	{Key: "$sort", Value: bson.D{
+		// 		{Key: "date_borrowed", Value: -1},
+		// 	}},
+		// }
 		lookupStage := bson.D{
 			{Key: "$lookup", Value: bson.D{
 				{Key: "from", Value: "books"},
@@ -210,13 +213,13 @@ func GetReturnedBooks() gin.HandlerFunc {
 			}},
 		}
 		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}}},
 		}
 		unwindStage2 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"}}},
 		}
 		unwindStage3 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book_detail"}}},
 		}
 		// projectStage := bson.D{
 		// 	{Key: "$project", Value: bson.D{
@@ -231,7 +234,7 @@ func GetReturnedBooks() gin.HandlerFunc {
 		// 	}},
 		// }
 		cursor, err := HistoryCollection.Aggregate(ctx, mongo.Pipeline{
-			sortStage, matchStage, lookupStage, lookupStage2,lookupStage3,unwindStage, unwindStage2, unwindStage3,
+			matchStage, lookupStage, lookupStage2, lookupStage3,unwindStage,unwindStage2,unwindStage3,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})
@@ -246,7 +249,7 @@ func GetHistoryById() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
-		history_id := c.Param("history_id")
+		history_id := c.Query("search_id")
 		// history := bson.M{}
 		// HistoryCollection.FindOne(ctx, bson.M{"history_id": history_id}).Decode(&history)
 		matchStage := bson.D{
@@ -310,13 +313,13 @@ func GetHistoryById() gin.HandlerFunc {
 			}},
 		}
 		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}}},
 		}
 		unwindStage2 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"}}},
 		}
 		unwindStage3 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book_detail"}}},
 		}
 		// setStage := bson.D{
 		// 	{"$set", bson.D{
@@ -332,7 +335,7 @@ func GetHistoryById() gin.HandlerFunc {
 		// 	}},
 		// }
 		cursor, err := HistoryCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage, lookupStage, lookupStage2,lookupStage3,unwindStage,unwindStage2,unwindStage3,
+			matchStage, lookupStage, lookupStage2, lookupStage3, unwindStage, unwindStage2, unwindStage3,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})

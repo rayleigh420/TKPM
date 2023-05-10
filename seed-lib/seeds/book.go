@@ -782,12 +782,12 @@ func SeedBookBorrow() {
 	BookBorrow1 := models.BookBorrowModel{
 		User_id:        "U02",
 		Book_id:        "B6",
-		Book_detail_id: "B61",
+		Book_detail_id: "D61",
 	}
 	BookBorrow2 := models.BookBorrowModel{
 		User_id:        "U03",
 		Book_id:        "B6",
-		Book_detail_id: "B62",
+		Book_detail_id: "D62",
 	}
 	BookBorrow3 := models.BookBorrowModel{
 		User_id:        "U04",
@@ -823,7 +823,7 @@ func SeedHistory() {
 	History1 := models.HistoryModel{
 		User_id:        "U02",
 		Book_id:        "B3",
-		Book_detail_id: "B31",
+		Book_detail_id: "D31",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -831,7 +831,7 @@ func SeedHistory() {
 	History2 := models.HistoryModel{
 		User_id:        "U03",
 		Book_id:        "B5",
-		Book_detail_id: "B51",
+		Book_detail_id: "D51",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -839,7 +839,7 @@ func SeedHistory() {
 	History3 := models.HistoryModel{
 		User_id:        "U04",
 		Book_id:        "B10",
-		Book_detail_id: "B101",
+		Book_detail_id: "D101",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -847,7 +847,7 @@ func SeedHistory() {
 	History4 := models.HistoryModel{
 		User_id:        "U05",
 		Book_id:        "B10",
-		Book_detail_id: "B101",
+		Book_detail_id: "D101",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -855,7 +855,7 @@ func SeedHistory() {
 	History5 := models.HistoryModel{
 		User_id:        "U02",
 		Book_id:        "B10",
-		Book_detail_id: "B102",
+		Book_detail_id: "D102",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -863,7 +863,7 @@ func SeedHistory() {
 	History6 := models.HistoryModel{
 		User_id:        "U03",
 		Book_id:        "B10",
-		Book_detail_id: "B103",
+		Book_detail_id: "D103",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -871,7 +871,7 @@ func SeedHistory() {
 	History7 := models.HistoryModel{
 		User_id:        "U04",
 		Book_id:        "B10",
-		Book_detail_id: "B104",
+		Book_detail_id: "D104",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -879,7 +879,7 @@ func SeedHistory() {
 	History8 := models.HistoryModel{
 		User_id:        "U02",
 		Book_id:        "B4",
-		Book_detail_id: "B41",
+		Book_detail_id: "D41",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -887,7 +887,7 @@ func SeedHistory() {
 	History9 := models.HistoryModel{
 		User_id:        "U03",
 		Book_id:        "B5",
-		Book_detail_id: "B53",
+		Book_detail_id: "D53",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -895,7 +895,7 @@ func SeedHistory() {
 	History10 := models.HistoryModel{
 		User_id:        "U04",
 		Book_id:        "B6",
-		Book_detail_id: "B64",
+		Book_detail_id: "D64",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -903,7 +903,7 @@ func SeedHistory() {
 	History11 := models.HistoryModel{
 		User_id:        "U05",
 		Book_id:        "B7",
-		Book_detail_id: "B71",
+		Book_detail_id: "D71",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,
@@ -911,7 +911,7 @@ func SeedHistory() {
 	History12 := models.HistoryModel{
 		User_id:        "U03",
 		Book_id:        "B9",
-		Book_detail_id: "B93",
+		Book_detail_id: "D93",
 		Status:         "returned",
 		Date_borrowed:  week1,
 		Date_return:    now,

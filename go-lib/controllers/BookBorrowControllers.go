@@ -256,7 +256,7 @@ func GetBookBorrowById() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
-		book_hire_id := c.Param("book_hire_id")
+		book_hire_id := c.Query("search_id")
 		// history := bson.M{}
 		// HistoryCollection.FindOne(ctx, bson.M{"history_id": history_id}).Decode(&history)
 		matchStage := bson.D{

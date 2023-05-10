@@ -80,7 +80,6 @@ GET http://localhost:8080/books/newest?page
 Return: 
 
 ### GET RENTLIST
-
 GET http://localhost:8080/rentlist
 return:
 {
@@ -89,10 +88,14 @@ return:
     }
 }
 
-### Get Borrowlist
+### SEARCH RENTLIST
+GET http://localhost:8080/rentlist/search?search_id=R1
 
+### Get Borrowlist
 GET http://localhost:8080/borrowlist
 
+### Get Borrowlist by id
+GET http://localhost:8080/borrowlistsearch?search_id=BR01
 
 ### GET THAT BOOK
 GET http://localhost:8080/books/RbPuAnhCPQsw
@@ -102,7 +105,7 @@ GET http://localhost:8080/books/RbPuAnhCPQsw/detail
 Return a list of that book
 
 ### GET HISTORY
-GET http://localhost:8080/history?page=1
+GET http://localhost:8080/history
 
 ### RENT A BOOK
 POST http://localhost:8080/rent
@@ -121,3 +124,38 @@ Content-Type: application/json
     "book_rent_id": "input",
     "token": "input" onlyadmin can hỉre
 }
+
+### GET RETURNLIST
+GET http://localhost:8080/returnlist
+
+
+### RETURN A BOOK 
+POST http://localhost:8080/return/book_hire_id
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODMyMDUwOTN9.FmmRTlHnCGm6p8xv4xvoyuApw9Smdw1JkUfipTk4k2E"
+}
+
+### ABORT RENT REQUEST
+POST http://localhost:8080/abort/rent_id
+
+### GET BOOK ADMIN
+GET http://localhost:8080/admin/books
+
+### GET USERS ADMIN
+GET http://localhost:8080/admin/users
+
+### UPDATE USERS
+PUT http://localhost:8080/user/U02
+Content-Type: application/json
+
+{
+    "name":"User 020",
+    "avatar"
+    "email"
+    can muc nao nua noi nha m
+}
+
+### DELETE USERS
+DELETE http://localhost:8080/user/U02

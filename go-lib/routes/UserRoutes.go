@@ -9,5 +9,7 @@ func UserRoute(router *gin.Engine){
 	router.POST("/login",controllers.Login())
 	router.POST("/signup",controllers.SignUp())
 	router.PUT("/user/:user_id",controllers.Updateuser())
+	router.DELETE("/user/:user_id",controllers.DeleteUser())
 	router.GET("/token",controllers.CheckToken())
+	router.GET("/admin/users",controllers.GetUsers())
 }

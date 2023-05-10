@@ -273,7 +273,7 @@ func GetRentListById() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
-		rent_id := c.Param("book_rent_id")
+		rent_id := c.Query("search_id")
 		// history := bson.M{}
 		// HistoryCollection.FindOne(ctx, bson.M{"history_id": history_id}).Decode(&history)
 		matchStage := bson.D{
