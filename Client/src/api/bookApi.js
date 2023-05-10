@@ -1,7 +1,8 @@
 import axios from "../utils/axios"
 
 export const getAllBook = async () => {
-    // const result = await axios.get()
+    const result = await axios.get("/admin/books")
+    return result.data
 }
 
 export const getGenericBook = async (generic, page) => {
