@@ -13,6 +13,7 @@ import BorrowedBook from './components/status/BorrowedBook'
 import PaidBook from './components/status/PaidBook'
 import GenericBook from './pages/GenericBook'
 import RequireAuth from './components/auth/RequireAuth'
+import ScrollToTop from './HOC/ScrollToTop'
 
 function App() {
 

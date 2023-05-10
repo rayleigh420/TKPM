@@ -48,7 +48,7 @@ const PaidBook = () => {
                         <tbody>
                             {/* row 1 */}
                             {
-                                books.length > 0 && books?.map((item, index) =>
+                                books?.map((item, index) =>
                                 (
                                     <tr key={item?.id}>
                                         <td>

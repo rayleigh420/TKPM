@@ -9,6 +9,7 @@ import { AuthProvider } from './context/AuthProvider.jsx'
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ScrollToTop from './HOC/ScrollToTop.jsx'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,14 +24,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AuthProvider>
-          <App />
-          <ToastContainer
-            pauseOnHover={false}
-            autoClose={1500}
-            pauseOnFocusLoss={false}
-          />
-        </AuthProvider>
+        <ScrollToTop>
+          <AuthProvider>
+            <App />
+            <ToastContainer
+              pauseOnHover={false}
+              autoClose={1500}
+              pauseOnFocusLoss={false}
+            />
+          </AuthProvider>
+        </ScrollToTop>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

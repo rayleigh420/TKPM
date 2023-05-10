@@ -6,6 +6,6 @@ export const getBorrowedBook = async () => {
 }
 
 export const getPaidBook = async () => {
-    const result = await axios.get('/history')
+    const result = await axios.get('/returnlist')
     return result.data
 }
