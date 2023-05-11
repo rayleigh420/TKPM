@@ -82,7 +82,7 @@ const ManageBook = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{item?.type_id}</td>
+                                        <td>{item?.type.typename}</td>
                                         <td>{item?.publishing_location}</td>
                                         <td>
                                             <div className="flex flex-row">
