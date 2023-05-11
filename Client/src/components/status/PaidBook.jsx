@@ -75,8 +75,8 @@ const PaidBook = () => {
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <Link to="/book">
-                                                        <div className="font-bold">{item?.book.book_id}</div>
+                                                    <Link to={`/book/${item?.book.book_id}`}>
+                                                        <div className="font-bold">{item?.book.name}</div>
                                                         <div className="text-sm opacity-50">{item?.book_detail.book_detail_id}</div>
                                                     </Link>
                                                 </div>
