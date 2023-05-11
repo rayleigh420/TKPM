@@ -40,7 +40,7 @@ const Navigation = ({ setLog }) => {
                     <div>
                     </div>
                     <Link to="/" className="pr-[30px]">
-                        <p className="normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Library</p>
+                        <p className="normal-case text-[#ffffff] text-[18px] font-semibold leading-[21.6px]">Rayleight-BaguetteEnjoyer</p>
                     </Link>
                     <Link to="newest" className="pr-[12px]">
                         <p className="normal-case text-[#ffffff] text-[16px] font-bold leading-[19.2px] tracking-[-0.32px]">Newest</p>
