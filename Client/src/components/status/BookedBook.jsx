@@ -19,7 +19,13 @@ const BookedBook = () => {
     const searchBookedBookMutate = useMutation({
         mutationFn: (search) => searchBookedBook(search),
         onSuccess: (data) => {
-            setSearchResult(data)
+            if (data?.error) {
+                toast.error("Booked ID is not exist")
+                setSearch('')
+                setSearchResult()
+            } else {
+                setSearchResult(data)
+            }
         },
         onError: () => {
             toast.error("Booked ID is not exist")
@@ -30,11 +36,16 @@ const BookedBook = () => {
 
     const handleChangeSeach = (e) => {
         setSearch(e.target.value)
+        if (e.target.value == '') {
+            setSearchResult()
+        }
     }
 
     const handleSubmitSearch = (e) => {
         e.preventDefault()
-        searchBookedBookMutate.mutate(search)
+        if (search != '') {
+            searchBookedBookMutate.mutate(search)
+        }
     }
 
     const handleChangeBorrowed = (index) => {
@@ -79,12 +90,12 @@ const BookedBook = () => {
                                             <div className="flex items-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item?.user.avatar} alt="Avatar Tailwind CSS Component" />
+                                                        <img src={item?.user?.avatar} alt="Avatar Tailwind CSS Component" />
                                                     </div>
                                                 </div>
                                                 <div>
                                                     {/* <Link to="/book"> */}
-                                                    <div className="font-bold">{item?.user.name}</div>
+                                                    <div className="font-bold">{item?.user?.name}</div>
                                                     {/* </Link> */}
                                                 </div>
                                             </div>

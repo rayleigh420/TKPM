@@ -1,24 +1,49 @@
 import { Link } from "react-router-dom"
 import { data } from "../../pages/home"
 import { useState } from "react"
-import { useQuery } from "@tanstack/react-query"
-import { getBorrowedBook } from "../../api/manageApi"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { getBorrowedBook, searchBorrowedBook } from "../../api/manageApi"
+import { toast } from "react-toastify"
 
 const BorrowedBook = () => {
     const [search, setSearch] = useState('')
+    const [searchResult, setSearchResult] = useState()
 
     const { data: books, isLoading, isError } = useQuery({
         queryKey: ['admin', 'borrowed'],
         queryFn: () => getBorrowedBook()
     })
 
+    const searchBorrowedBookMutate = useMutation({
+        mutationFn: (search) => searchBorrowedBook(search),
+        onSuccess: (data) => {
+            if (data?.error) {
+                toast.error("Borrowed ID is not exist")
+                setSearch('')
+                setSearchResult()
+            } else {
+                setSearchResult(data)
+            }
+        },
+        onError: () => {
+            toast.error("Booked ID is not exist")
+            setSearch('')
+            setSearchResult()
+        }
+    })
+
     const handleChangeSeach = (e) => {
         setSearch(e.target.value)
+        if (e.target.value == '') {
+            setSearchResult()
+        }
     }
 
     const handleSubmitSearch = (e) => {
         e.preventDefault()
-        console.log(search, typeSearch)
+        if (search != '') {
+            searchBorrowedBookMutate.mutate(search)
+        }
     }
 
     const handleChangePaid = (index) => {
@@ -52,7 +77,7 @@ const BorrowedBook = () => {
                         <tbody>
                             {/* row 1 */}
                             {
-                                books?.map((item, index) => (
+                                !searchResult ? books?.map((item, index) => (
                                     <tr key={item?._id}>
                                         <td>
                                             <label>
@@ -95,6 +120,50 @@ const BorrowedBook = () => {
                                         </td>
                                     </tr>
                                 ))
+                                    :
+                                    (
+                                        <tr >
+                                            <td>
+                                                <label>
+                                                    <input type="checkbox" className="checkbox" onChange={() => handleChangePaid(searchResult?.book_hire_id)} />
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <div className="flex items-center space-x-3">
+                                                    <div className="avatar">
+                                                        <div className="mask mask-squircle w-12 h-12">
+                                                            <img src={searchResult?.user.avatar} alt="Avatar Tailwind CSS Component" />
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        {/* <Link to="/book"> */}
+                                                        <div className="font-bold">{searchResult?.user.name}</div>
+                                                        {/* </Link> */}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className="flex items-center space-x-3">
+                                                    <div className="avatar">
+                                                        <div className="mask mask-squircle w-12 h-12">
+                                                            <img src={searchResult?.book.book_img} alt="Avatar Tailwind CSS Component" />
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <Link to={`/book/${searchResult?.book.book_id}`}>
+                                                            <div className="font-bold">{searchResult?.book.name}</div>
+                                                            <div className="text-sm opacity-50">{searchResult?.book_detail.book_detail_id}</div>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{searchResult?.date_borrowed}</td>
+                                            <td>{searchResult?.date_end}</td>
+                                            <td>
+                                                <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">{searchResult?.book_detail.status}</div>
+                                            </td>
+                                        </tr>
+                                    )
                             }
 
                         </tbody>
