@@ -1,17 +1,18 @@
 import { useState } from "react"
 
-const EditBook = () => {
-    const [img, setImg] = useState(null)
-    const [name, setName] = useState('Overgeard')
-    const [author, setAuthor] = useState('Han Soo Young')
-    const [type, setType] = useState('ln')
-    const [year, setYear] = useState(2023)
-    const [page, setPage] = useState(100)
-    const [licensed, setLicensed] = useState('MIT')
-    const [producer, setProducer] = useState('NXB')
-    const [publishing, setPublishing] = useState('Korean Tower')
-    const [detail, setDetail] = useState('')
-    const [description, setDescription] = useState('')
+const EditBook = ({ book }) => {
+    console.log(book)
+    const [img, setImg] = useState(book?.book_img)
+    const [name, setName] = useState(book?.name)
+    const [author, setAuthor] = useState(book?.author)
+    const [type, setType] = useState(book?.type.typename)
+    const [year, setYear] = useState(book?.yearpublished)
+    const [page, setPage] = useState(book?.page)
+    const [licensed, setLicensed] = useState(book?.license)
+    const [producer, setProducer] = useState(book?.publisher)
+    const [publishing, setPublishing] = useState(book?.publishing_location)
+    const [detail, setDetail] = useState(book?.details)
+    const [description, setDescription] = useState(book?.description)
 
     const handleChangeImage = (e) => {
         setImg(URL.createObjectURL(e.target.files[0]))
