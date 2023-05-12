@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const EditBook = ({ book }) => {
-    console.log(book)
+    console.log(book?.name)
     const [img, setImg] = useState(book?.book_img)
     const [name, setName] = useState(book?.name)
     const [author, setAuthor] = useState(book?.author)
@@ -13,6 +13,20 @@ const EditBook = ({ book }) => {
     const [publishing, setPublishing] = useState(book?.publishing_location)
     const [detail, setDetail] = useState(book?.details)
     const [description, setDescription] = useState(book?.description)
+
+    useEffect(() => {
+        setImg(book?.book_img)
+        setName(book?.name)
+        setAuthor(book?.author)
+        setType(book?.type.typename)
+        setYear(book?.yearpublished)
+        setPage(book?.page)
+        setLicensed(book?.license)
+        setProducer(book?.publisher)
+        setPublishing(book?.publishing_location)
+        setDetail(book?.details)
+        setDescription(book?.description)
+    }, [book])
 
     const handleChangeImage = (e) => {
         setImg(URL.createObjectURL(e.target.files[0]))
