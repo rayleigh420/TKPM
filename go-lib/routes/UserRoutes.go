@@ -13,5 +13,6 @@ func UserRoute(router *gin.Engine){
 	router.GET("/token",controllers.CheckToken())
 	router.GET("/admin/users",controllers.GetUsers())
 	router.GET("/inphieu/:book_rent_id",controllers.RequestInPhieu())
+	router.GET("/inphieumuon/:book_hire_id",controllers.RequestInPhieuMuon())
 	// router.GET("/inphieumuon",controllers.InPhieuMuon())
 }
