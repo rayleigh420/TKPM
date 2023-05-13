@@ -177,3 +177,4 @@ DELETE http://localhost:8080/user/U02
 GET http://localhost:8080/inphieu/book_rent_id
 
 ### PRINT BORROW BOOK (in )
+GET http://localhost:8080/inphieumuon/book_hire_id
