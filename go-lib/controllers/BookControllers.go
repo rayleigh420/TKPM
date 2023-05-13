@@ -3,6 +3,8 @@ package controllers
 import (
 	"context"
 	"math"
+	"strings"
+
 	// "fmt"
 	"net/http"
 	"strconv"
@@ -58,12 +60,12 @@ func GetBooks() gin.HandlerFunc {
 				{Key: "as", Value: "type"},
 			}},
 		}
-		
+
 		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$type"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$type"}}},
 		}
-		cursor,cursorErr := BookCollection.Aggregate(ctx,mongo.Pipeline{
-			lookupStage,lookupStage2,unwindStage,
+		cursor, cursorErr := BookCollection.Aggregate(ctx, mongo.Pipeline{
+			lookupStage, lookupStage2, unwindStage,
 		})
 		if cursorErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": cursorErr.Error()})
@@ -151,11 +153,11 @@ func GetBookByID() gin.HandlerFunc {
 			return
 		}
 		typeModel := bson.M{}
-		TypeCollections.FindOne(ctx,bson.M{"typeid":bookModel["type_id"].(string)}).Decode(&typeModel)
+		TypeCollections.FindOne(ctx, bson.M{"typeid": bookModel["type_id"].(string)}).Decode(&typeModel)
 		booksRelated := []bson.M{}
 		matchStage := bson.D{
 			{Key: "$match", Value: bson.D{
-				{Key: "book_id",Value: bson.D{{Key: "$ne",Value: id}}},
+				{Key: "book_id", Value: bson.D{{Key: "$ne", Value: id}}},
 				{Key: "$or", Value: bson.A{
 					bson.D{{Key: "type_id", Value: bookModel["type_id"].(string)}},
 					bson.D{{Key: "author", Value: bson.D{{Key: "$regex", Value: bookModel["author"].(string)}, {Key: "$options", Value: "i"}}}},
@@ -183,7 +185,7 @@ func GetBookByID() gin.HandlerFunc {
 		}}}
 		limitStage := bson.D{{Key: "$limit", Value: 10}}
 		cursor, _ := BookCollection.Aggregate(ctx, mongo.Pipeline{
-			limitStage,matchStage, unsetStage,
+			limitStage, matchStage, unsetStage,
 		})
 		cursor.All(ctx, &booksRelated)
 		bookModel["type_name"] = typeModel["typename"].(string)
@@ -267,7 +269,11 @@ func CreateBook() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "bad book model"})
 			return
 		}
-		count, _ := BookCollection.CountDocuments(ctx, bson.M{})
+		opt := options.FindOne().SetSort(bson.M{"$natural": -1})
+		res := models.BookModel{}
+		BookCollection.FindOne(ctx, bson.M{}, opt).Decode(&res)
+		co := strings.Split(res.Book_id, "B")[1]
+		count, _ := strconv.Atoi(co)
 		count++
 		counts := strconv.Itoa(int(count))
 		id := "B" + counts
@@ -275,18 +281,18 @@ func CreateBook() gin.HandlerFunc {
 		// bookModel.Book_id = id
 		// bookModel.Created_at = now
 		// bookModel.Updated_at = now
-		typeid,err := InsertTypeByName(rec["type_name"].(string))
+		typeid, err := InsertTypeByName(rec["type_name"].(string))
 		if err != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"error type"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error type"})
 			return
 		}
-		delete(rec,"type_name")
+		delete(rec, "type_name")
 		rec["_id"] = primitive.NewObjectID()
 		rec["book_id"] = id
 		rec["created_at"] = now
 		rec["updated_at"] = now
 		rec["type_id"] = typeid
-		
+
 		// bookModel.Name = rec["name"].(string)
 		// bookModel.Publisher = rec["publisher"].(string)
 		// bookModel.Yearpublished = rec["yearpublished"].(int64)
@@ -615,5 +621,33 @@ func GetBookDetail() gin.HandlerFunc {
 		}
 		cursor.All(ctx, &bookDetail)
 		c.JSON(http.StatusOK, bookDetail)
+	}
+}
+
+func DeleteBook(id string) (error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+	defer cancel()
+	_,err := BookCollection.DeleteOne(ctx,bson.M{"book_id":id})
+	_,err2 := BookDetailCollection.DeleteMany(ctx,bson.M{"book_id":id})
+	if err != nil {
+		return err
+	}
+	if err2 != nil {
+		return err
+	}
+	return nil	
+}
+
+func DeleteBookById() gin.HandlerFunc{
+	return func(c *gin.Context) {
+		id := c.Param("book_id")
+		err := DeleteBook(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":err})
+			return
+		}
+		c.JSON(http.StatusOK,gin.H{
+			"status":"success",
+		})
 	}
 }

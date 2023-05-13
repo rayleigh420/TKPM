@@ -115,7 +115,20 @@ Content-Type: application/json
     "book_id": "RbPuAnhCPQsw",
     "user_id": "6clomWjyrM1n"
 }
+Res 
+{
+  "book_detail_id": "D21",
+  "book_rent_id": "fXdeUi5dznh9",
+  "reserve_date": "2023-05-12T20:28:24+07:00",
+  "succeeded": {
+    "InsertedID": "645e3ef8c7f4a15b2519bf3e"
+  },
+  "user_id": "U03"
+}
 
+{
+  "error": "error finding book to rent"
+}
 ### HIRE A BOOK
 POST http://localhost:8080/hire
 Content-Type: application/json
@@ -159,3 +172,8 @@ Content-Type: application/json
 
 ### DELETE USERS
 DELETE http://localhost:8080/user/U02
+
+### PRINT BORROW REQUEST
+GET http://localhost:8080/inphieu/book_rent_id
+
+### PRINT BORROW BOOK (in )

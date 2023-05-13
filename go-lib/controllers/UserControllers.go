@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	// "go.mongodb.org/mongo-driver/mongo"
+	"github.com/jung-kurt/gofpdf"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
@@ -232,3 +233,87 @@ func DeleteUser() gin.HandlerFunc {
 		})
 	}
 }
+
+func InPhieu(maPhieu string, maSach string,maSach2 string, ten string,ngay time.Time) (*gofpdf.Fpdf) {
+	pdf := gofpdf.New("P", "mm", "A4", "")
+
+	pdf.AddPage()
+	pdf.AddUTF8Font("ArialUnicodeMS", "", "arial-unicode-ms.TTF")
+	pdf.SetFont("ArialUnicodeMS", "", 10)
+	
+	x := 10.0 
+	y := 20.0 
+	w := []float64{35.0, 20.0, 20.0, 50.0,70.0}
+	h := 20.0 
+	header := []string{"Mã phiếu","Mã sách","Chi tiết", "Tên","Ngày đặt"}
+	
+	data := [][]string{
+		{maPhieu,maSach,maSach2,ten,ngay.String()},
+	}
+	pdf.SetFillColor(240, 240, 240)
+	pdf.SetTextColor(0, 0, 0) 
+	for i, str := range header {
+		pdf.SetXY(x, y)
+		pdf.CellFormat(w[i], h, str, "1", 0, "C", true, 0, "")
+		x += w[i]
+	}
+	y += h
+	pdf.SetFillColor(255, 255, 255)
+	pdf.SetTextColor(0, 0, 0)
+	for _, row := range data {
+		x = 10.0
+		for i, str := range row {
+			pdf.SetXY(x, y)
+			// pdf.CellFormat(w[i],h,str,"1",0, "C", true, 0, "")
+			pdf.MultiCell(w[i], h, str, "1", "C", false)
+			x += w[i]
+		}
+		y += h
+	}
+	return pdf
+}
+
+func RequestInPhieu() gin.HandlerFunc{
+	return func(c *gin.Context) {
+		id := c.Param("book_rent_id")
+		req,err := GetRequest(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":err})
+			return
+		}
+		maPhieu := req["book_rent_id"].(string)
+		maSach := req["book"].(bson.M)["book_id"].(string)
+		maSach2 := req["book_detail"].(bson.M)["book_detail_id"].(string)
+		ten := req["user"].(bson.M)["name"].(string)
+		ngay := req["reserve_date"].(primitive.DateTime)
+		// ngay2,_ := time.Parse(time.RFC3339,ngay)
+		ngay2 := ngay.Time()
+		// test = test.Local()
+		ngay2 = time.Date(ngay2.Year(),ngay2.Month(),ngay2.Day(),ngay2.Hour(),ngay2.Minute(),0,0,ngay2.Location())
+		pdf := InPhieu(maPhieu,maSach,maSach2,ten,ngay2)
+		c.Header("Content-Type","application/pdf")
+		err = pdf.Output(c.Writer)
+		if err != nil {
+            c.JSON(http.StatusInternalServerError,
+                gin.H{"error": err.Error()})
+            return
+        }
+	}
+}
+
+// func InPhieuMuon() gin.HandlerFunc{
+// 	return func(c *gin.Context) {
+// 		maPhieu := c.Query("book_borrow_id")
+// 		maSach := c.Query("book_id")
+// 		maSach2 := c.Query("book_detail_id")
+// 		ten := c.Query("name")
+// 		pdf := InPhieu(maPhieu,maSach,maSach2,ten)
+// 		c.Header("Content-Type","application/pdf")
+// 		err := pdf.Output(c.Writer)
+// 		if err != nil {
+//             c.JSON(http.StatusInternalServerError,
+//                 gin.H{"error": err.Error()})
+//             return
+//         }
+// 	}
+// }

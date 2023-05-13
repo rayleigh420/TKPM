@@ -72,7 +72,7 @@ func HireABook() gin.HandlerFunc {
 		historyModel.History_id, _ = gonanoid.Generate(NanoidString, 12)
 		historyModel.Book_hire_id = bookBorrowModel.Book_hire_id
 		historyModel.Status = "borrowing"
-		BookRentCollection.DeleteOne(ctx, bson.M{"book_rent_id": obj["book_rent_id"].(string)})
+		// BookRentCollection.DeleteOne(ctx, bson.M{"book_rent_id": obj["book_rent_id"].(string)})
 		BookBorrowedCollection.InsertOne(ctx, bookBorrowModel)
 		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookBorrowModel.Book_detail_id}, updateObj)
 		HistoryCollection.InsertOne(ctx, historyModel)

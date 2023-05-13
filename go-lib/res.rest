@@ -89,6 +89,9 @@ GET http://localhost:8080/borrowlist/search?search_id=BR01
 GET http://localhost:8080/history
 
 ###
+GET http://localhost:8080/history/user/U01
+
+###
 GET http://localhost:8080/returnlist
 
 ###
@@ -102,12 +105,15 @@ POST http://localhost:8080/rent
 Content-Type: application/json
 
 {
-    "book_id": "B1",
-    "user_id": "U02"
+    "book_id": "B2",
+    "user_id": "U03"
 }
 
 ###
 GET http://localhost:8080/rentlist/search?search_id=R1
+
+###
+GET http://localhost:8080/rentlist/user/U03
 
 
 ###
@@ -115,8 +121,8 @@ POST http://localhost:8080/hire
 Content-Type: application/json
 
 {
-    "book_rent_id": "JzicMckNStLj",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODMyMDUwOTN9.FmmRTlHnCGm6p8xv4xvoyuApw9Smdw1JkUfipTk4k2E"
+    "book_rent_id": "ncKYJX5oJ3tO",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVXNlciAwMTAiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODM4OTMxNTB9.xhekWby6qDOLIEjTkNb5F0NZD0QlXG7yKP4Hjibc4dc"
 }
 
 ###
@@ -147,3 +153,6 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/user/U02
+
+###
+GET http://localhost:8080/inphieu?book_rent_id=R1&book_id=B1&book_detail_id=D11&name="abc"

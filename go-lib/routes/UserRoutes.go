@@ -12,4 +12,6 @@ func UserRoute(router *gin.Engine){
 	router.DELETE("/user/:user_id",controllers.DeleteUser())
 	router.GET("/token",controllers.CheckToken())
 	router.GET("/admin/users",controllers.GetUsers())
+	router.GET("/inphieu/:book_rent_id",controllers.RequestInPhieu())
+	// router.GET("/inphieumuon",controllers.InPhieuMuon())
 }
