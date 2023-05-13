@@ -72,7 +72,7 @@ const UserLayout = () => {
                                         </div>
                                     </div>
                                 }
-                                Le Nhat Duy
+                                {auth.name}
                             </a></li>
                             <li></li>
                             <li className="menu-title">
