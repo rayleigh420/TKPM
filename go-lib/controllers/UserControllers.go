@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"bytes"
 	"context"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/baguette/go-lib/database"
@@ -10,7 +12,9 @@ import (
 	"github.com/baguette/go-lib/models"
 	"github.com/gin-gonic/gin"
 	gonanoid "github.com/matoous/go-nanoid/v2"
+
 	// "go.mongodb.org/mongo-driver/mongo"
+	"github.com/jung-kurt/gofpdf"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
@@ -230,5 +234,150 @@ func DeleteUser() gin.HandlerFunc {
 			"status":  "success",
 			"user_id": user_id,
 		})
+	}
+}
+
+func InPhieu(maPhieu string, tenSach string,idBook string,tenUser string, idVersion string, viTri string, ngayDat string) *gofpdf.Fpdf {
+	pdf := gofpdf.New("P", "mm", "A4", "")
+
+	pdf.AddPage()
+	pdf.AddUTF8Font("ArialUnicodeMS", "", "arial-unicode-ms.TTF")
+	pdf.SetFont("ArialUnicodeMS", "", 8)
+
+	x := 10.0
+	y := 20.0
+	w := []float64{25.0, 50.0, 20.0, 30.0, 20.0,25.0,20.0}
+	h := 20.0
+	header := []string{"Mã phiếu", "Tên sách","id Book", "Tên", "id Version","Vị trí", "Ngày đặt"}
+
+	data := [][]string{
+		{maPhieu, tenSach, idBook, tenUser,idVersion,viTri, ngayDat},
+	}
+	pdf.SetFillColor(240, 240, 240)
+	pdf.SetTextColor(0, 0, 0)
+	for i, str := range header {
+		pdf.SetXY(x, y)
+		pdf.CellFormat(w[i], h, str, "1", 0, "C", true, 0, "")
+		x += w[i]
+	}
+	y += h
+	pdf.SetFillColor(255, 255, 255)
+	pdf.SetTextColor(0, 0, 0)
+	for _, row := range data {
+		x = 10.0
+		for i, str := range row {
+			pdf.SetXY(x, y)
+			// pdf.CellFormat(w[i],h,str,"1",0, "C", true, 0, "")
+			pdf.MultiCell(w[i], h, str, "1", "C", false)
+			x += w[i]
+		}
+		y += h
+	}
+	return pdf
+}
+
+func RequestInPhieu() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("book_rent_id")
+		req, err := GetRequest(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			return
+		}
+		maPhieu := req["book_rent_id"].(string)
+		tenSach := req["book"].(bson.M)["name"].(string)
+		idBook := req["book"].(bson.M)["book_id"].(string)
+		tenUser := req["user"].(bson.M)["name"].(string)
+		idVersion := req["book_detail_id"].(string)
+		viTri := req["book_detail"].(bson.M)["location"].(string)
+		ngay := req["reserve_date"].(primitive.DateTime)
+		// ngay2,_ := time.Parse(time.RFC3339,ngay)
+		ngay2 := ngay.Time().Format("02/01/2006")
+		// test = test.Local()
+		
+		pdf := InPhieu(maPhieu, tenSach,idBook,tenUser,idVersion,viTri,ngay2)
+		c.Header("Content-Type", "application/pdf")
+		err = pdf.Output(c.Writer)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,
+				gin.H{"error": err.Error()})
+			return
+		}
+	}
+}
+
+func InPhieuMuon(maPhieu string, tenSach string, idSach string, tenUser string, idVersion string, viTri string, ngayMuon string, ngayTra string) *gofpdf.Fpdf {
+	pdf := gofpdf.New("P", "mm", "A4", "")
+
+	pdf.AddPage()
+	pdf.AddUTF8Font("ArialUnicodeMS", "", "arial-unicode-ms.TTF")
+	pdf.SetFont("ArialUnicodeMS", "", 8)
+	x := 10.0
+	y := 20.0
+	w := []float64{25.0, 50.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0}
+	h := 20.0
+	header := []string{"Mã phiếu", "Tên sách", "Id Book", "Tên", "Id Version", "Vị trí", "Ngày mượn", "Ngày trả"}
+
+	data := [][]string{
+		{maPhieu, tenSach, idSach, tenUser, idVersion, viTri, ngayMuon, ngayTra},
+	}
+	pdf.SetFillColor(240, 240, 240)
+	pdf.SetTextColor(0, 0, 0)
+	for i, str := range header {
+		pdf.SetXY(x, y)
+		pdf.CellFormat(w[i], h, str, "1", 0, "C", true, 0, "")
+		x += w[i]
+	}
+	y += h
+	pdf.SetFillColor(255, 255, 255)
+	pdf.SetTextColor(0, 0, 0)
+	for _, row := range data {
+		x = 10.0
+		for i, str := range row {
+			pdf.SetXY(x, y)
+			// pdf.CellFormat(w[i],h,str,"1",0, "C", true, 0, "")
+			pdf.MultiCell(w[i], h, str, "1", "C", false)
+			x += w[i]
+		}
+		y += h
+	}
+	return pdf
+}
+
+func RequestInPhieuMuon() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := c.Param("book_hire_id")
+		rent, err := BookBorrowById(id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			return
+		}
+		maPhieu := rent["book_hire_id"].(string)
+		tenSach := rent["book"].(bson.M)["name"].(string)[:35]
+		tenUser := rent["user"].(bson.M)["name"].(string)
+		b := bytes.Buffer{}
+		rec := strings.Split(tenUser, " ")
+		if len(rec) != 0 && len(rec) != 1 {
+			length := len(rec)
+			b.WriteString(rec[length-2])
+			b.WriteString(" ")
+			b.WriteString(rec[length-1])
+			tenUser = b.String() 
+		}
+		idSach := rent["book_id"].(string)
+		idVersion := rent["book_detail_id"].(string)
+		viTri := rent["book_detail"].(bson.M)["location"].(string)
+		ngayMuon1 := rent["date_borrowed"].(primitive.DateTime)
+		ngayTra1 := rent["date_end"].(primitive.DateTime)
+		ngayMuon := ngayMuon1.Time().Format("02/01/2006")
+		ngayTra := ngayTra1.Time().Format("02/01/2006")
+		pdf := InPhieuMuon(maPhieu, tenSach, idSach, tenUser, idVersion, viTri, ngayMuon, ngayTra)
+		c.Header("Content-Type", "application/pdf")
+		err = pdf.Output(c.Writer)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,
+				gin.H{"error": err.Error()})
+			return
+		}
 	}
 }

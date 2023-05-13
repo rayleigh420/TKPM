@@ -24,7 +24,7 @@ GET http://localhost:8080/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuY
 GET http://localhost:8080/books?page=1
 
 ### 
-GET http://localhost:8080/books/search?search_text=bjec
+GET http://localhost:8080/books/search?search_text=gsdfgsdfgd
 
 ###
 POST http://localhost:8080/books
@@ -74,7 +74,7 @@ GET http://localhost:8080/books/newest
 GET http://localhost:8080/books/popular
 
 ###
-GET http://localhost:8080/books/B13
+GET http://localhost:8080/books/B1
 
 ###
 GET http://localhost:8080/books/B5/detail
@@ -87,6 +87,9 @@ GET http://localhost:8080/borrowlist/search?search_id=BR01
 
 ###
 GET http://localhost:8080/history
+
+###
+GET http://localhost:8080/history/user/U01
 
 ###
 GET http://localhost:8080/returnlist
@@ -102,12 +105,15 @@ POST http://localhost:8080/rent
 Content-Type: application/json
 
 {
-    "book_id": "B1",
-    "user_id": "U02"
+    "book_id": "B2",
+    "user_id": "U03"
 }
 
 ###
-GET http://localhost:8080/rentlist/search?search_id=R1
+GET http://localhost:8080/rentlist/search?search_id=ncKYJX5oJ3tO
+
+###
+GET http://localhost:8080/rentlist/user/U03
 
 
 ###
@@ -115,8 +121,8 @@ POST http://localhost:8080/hire
 Content-Type: application/json
 
 {
-    "book_rent_id": "JzicMckNStLj",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODMyMDUwOTN9.FmmRTlHnCGm6p8xv4xvoyuApw9Smdw1JkUfipTk4k2E"
+    "book_rent_id": "Lyu7uwkWKg7a",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODM5Njc4ODV9.5WKhzIGQaep6tSe8NXKwaBhoYC0V6B7iCqJ72l5rv-o"
 }
 
 ###
@@ -146,4 +152,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/user/U02
+DELETE http://localhost:8080/books/B11
+
+###
+GET http://localhost:8080/inphieu?book_rent_id=R1&book_id=B1&book_detail_id=D11&name="abc"

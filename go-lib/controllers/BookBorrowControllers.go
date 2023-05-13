@@ -72,7 +72,7 @@ func HireABook() gin.HandlerFunc {
 		historyModel.History_id, _ = gonanoid.Generate(NanoidString, 12)
 		historyModel.Book_hire_id = bookBorrowModel.Book_hire_id
 		historyModel.Status = "borrowing"
-		BookRentCollection.DeleteOne(ctx, bson.M{"book_rent_id": obj["book_rent_id"].(string)})
+		// BookRentCollection.DeleteOne(ctx, bson.M{"book_rent_id": obj["book_rent_id"].(string)})
 		BookBorrowedCollection.InsertOne(ctx, bookBorrowModel)
 		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookBorrowModel.Book_detail_id}, updateObj)
 		HistoryCollection.InsertOne(ctx, historyModel)
@@ -267,6 +267,85 @@ func ReturnABook() gin.HandlerFunc {
 	}
 }
 
+func BookBorrowById(id string)(bson.M,error){
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	// history := bson.M{}
+	// HistoryCollection.FindOne(ctx, bson.M{"history_id": history_id}).Decode(&history)
+	matchStage := bson.D{
+		{Key: "$match", Value: bson.D{
+			{Key: "book_hire_id", Value: id},
+		}},
+	}		
+	lookupStage := bson.D{
+		{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "books"},
+			{Key: "let", Value: bson.D{{Key: "book_id", Value: "$book_id"}}},
+			{Key: "pipeline", Value: bson.A{
+				bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_id", "$$book_id"}}}}}}},
+				bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+			}},
+			{Key: "as", Value: "book"},
+		}},
+	}
+	lookupStage2 := bson.D{
+		{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "users"},
+			{Key: "let", Value: bson.D{{Key: "user_id", Value: "$user_id"}}},
+			{Key: "pipeline", Value: bson.A{
+				bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$user_id", "$$user_id"}}}}}}},
+				bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+			}},
+			{Key: "as", Value: "user"},
+		}},
+	}
+	lookupStage3 := bson.D{
+		{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "book_detail"},
+			{Key: "let", Value: bson.D{{Key: "book_detail_id", Value: "$book_detail_id"}}},
+			{Key: "pipeline", Value: bson.A{
+				bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_detail_id", "$$book_detail_id"}}}}}}},
+				bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+			}},
+			{Key: "as", Value: "book_detail"},
+		}},
+	}
+	lookupStage4 := bson.D{
+		{Key: "$lookup", Value: bson.D{
+			{Key: "from", Value: "book_types"},
+			{Key: "let", Value: bson.D{{Key: "book", Value: "$book"}}},
+			{Key: "pipeline", Value: bson.A{
+				// bson.D{{Key: "$unwind",Value: "$$book"}},
+				bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$typeid", "$$book.type_id"}}}}}}},
+				bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
+			}},
+			{Key: "as", Value: "type"},
+		}},
+	}
+
+	unwindStage := bson.D{
+		{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
+	}
+	unwindStage2 := bson.D{
+		{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
+	}
+	unwindStage3 := bson.D{
+		{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+	}
+	unwindStage4 := bson.D{
+		{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$type"}}},
+	}
+	cursor, err := BookBorrowedCollection.Aggregate(ctx, mongo.Pipeline{
+		matchStage, lookupStage,lookupStage2,lookupStage3,unwindStage,lookupStage4,unwindStage2,unwindStage3,unwindStage4,
+	})
+	res := []bson.M{}
+	if err != nil {
+		return bson.M{},err 
+	}
+	cursor.All(ctx,&res)
+	return res[0],nil
+}
+
 func GetBookBorrowById() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -278,63 +357,7 @@ func GetBookBorrowById() gin.HandlerFunc {
 			{Key: "$match", Value: bson.D{
 				{Key: "book_hire_id", Value: book_hire_id},
 			}},
-		}
-		// lookupStage := bson.D{
-		// 	{"$lookup",bson.D{
-		// 		{"from","books"},
-		// 		{"localField","book_id"},
-		// 		{"foreignField","book_id"},
-		// 		{"as","book"},
-		// 	}},
-		// }
-		// lookupStage2 := bson.D{
-		// 	{"$lookup",bson.D{
-		// 		{"from","users"},
-		// 		{"localField","user_id"},
-		// 		{"foreignField","user_id"},
-		// 		{"as","user"},
-		// 	}},
-		// }
-		// unwindStage := bson.D{
-		// 	{"$unwind",bson.D{{"path","$book"},{"preserveNullAndEmptyArrays",false}}},
-		// }
-		// unwindStage2 := bson.D{
-		// 	{"$unwind",bson.D{{"path","$user"},{"preserveNullAndEmptyArrays",false}}},
-		// }
-		// lookupStage := bson.D{
-		// 	{Key: "$lookup", Value: bson.D{
-		// 		{Key: "from", Value: "books"},
-		// 		{Key: "let", Value: bson.D{{Key: "book_id", Value: "$book_id"}}},
-		// 		{Key: "pipeline", Value: bson.A{
-		// 			bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_id", "$$book_id"}}}}}}},
-		// 			bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
-		// 		}},
-		// 		{Key: "as", Value: "book"},
-		// 	}},
-		// }
-		// lookupStage2 := bson.D{
-		// 	{Key: "$lookup", Value: bson.D{
-		// 		{Key: "from", Value: "users"},
-		// 		{Key: "let", Value: bson.D{{Key: "user_id", Value: "$user_id"}}},
-		// 		{Key: "pipeline", Value: bson.A{
-		// 			bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$user_id", "$$user_id"}}}}}}},
-		// 			bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
-		// 		}},
-		// 		{Key: "as", Value: "user"},
-		// 	}},
-		// }
-		// lookupStage3 := bson.D{
-		// 	{Key: "$lookup", Value: bson.D{
-		// 		{Key: "from", Value: "book_detail"},
-		// 		{Key: "let", Value: bson.D{{Key: "book_detail_id", Value: "$book_detail_id"}}},
-		// 		{Key: "pipeline", Value: bson.A{
-		// 			bson.D{{Key: "$match", Value: bson.D{{Key: "$expr", Value: bson.D{{Key: "$eq", Value: bson.A{"$book_detail_id", "$$book_detail_id"}}}}}}},
-		// 			bson.D{{Key: "$project", Value: bson.D{{Key: "_id", Value: 0}}}},
-		// 		}},
-		// 		{Key: "as", Value: "book_detail"},
-		// 	}},
-		// }
-		
+		}		
 		lookupStage := bson.D{
 			{Key: "$lookup", Value: bson.D{
 				{Key: "from", Value: "books"},
