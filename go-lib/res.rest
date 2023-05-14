@@ -156,3 +156,14 @@ DELETE http://localhost:8080/books/B11
 
 ###
 GET http://localhost:8080/inphieu?book_rent_id=R1&book_id=B1&book_detail_id=D11&name="abc"
+
+###
+DELETE http://localhost:8080/version/D104
+
+###
+POST http://localhost:8080/version/B10
+Content-Type: application/json
+
+{
+   "location":"ABC 11"
+}

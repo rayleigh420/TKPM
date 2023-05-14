@@ -178,3 +178,15 @@ GET http://localhost:8080/inphieu/book_rent_id
 
 ### PRINT BORROW BOOK (in )
 GET http://localhost:8080/inphieumuon/book_hire_id
+
+
+### DELETE VERSION BOOK
+DELETE http://localhost:8080/version/D104 <- book_detail_id (t lam bieng sua file thanh book_version_id qua :>> ) 
+
+### THEM VERSION BOOK
+POST http://localhost:8080/version/B10 <- book_id
+Content-Type: application/json
+
+{
+   "location":"ABC 11"
+}

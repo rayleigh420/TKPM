@@ -7,5 +7,6 @@ import (
 
 func BookDetailRoute(router *gin.Engine){
 	// router.GET("/books/book_detail/:book_id")
-	router.POST("/books/:book_id",controllers.CreateBooKDetail())
+	router.POST("/version/:book_id",controllers.CreateBooKDetail())
+	router.DELETE("/version/:book_detail_id",controllers.DeleteBookVersion())
 }

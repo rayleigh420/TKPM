@@ -629,6 +629,9 @@ func DeleteBook(id string) (error) {
 	defer cancel()
 	_,err := BookCollection.DeleteOne(ctx,bson.M{"book_id":id})
 	_,err2 := BookDetailCollection.DeleteMany(ctx,bson.M{"book_id":id})
+	BookRentCollection.DeleteMany(ctx,bson.M{"book_id":id})
+	BookBorrowedCollection.DeleteMany(ctx,bson.M{"book_id":id})
+	HistoryCollection.DeleteMany(ctx,bson.M{"book_id":id})
 	if err != nil {
 		return err
 	}

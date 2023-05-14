@@ -69,6 +69,7 @@ func SignUp() gin.HandlerFunc {
 		userModel.Created_at, _ = time.Parse(time.RFC3339, now)
 		userModel.Updated_at, _ = time.Parse(time.RFC3339, now)
 		userModel.Password, _ = HashPassword(userModel.Password)
+		userModel.Avatar = "https://static.thenounproject.com/png/5034901-200.png"
 		userModel.Role = "user"
 		insertRes, insertErr := UserCollection.InsertOne(ctx, userModel)
 		token, _ := helper.GenerateToken(userModel.Name, userModel.Email, userModel.Role, userModel.User_id, userModel.Avatar)
@@ -230,6 +231,9 @@ func DeleteUser() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error deleting"})
 			return
 		}
+		BookBorrowedCollection.DeleteMany(ctx,bson.M{"user_id":user_id})
+		BookRentCollection.DeleteMany(ctx,bson.M{"user_id":user_id})
+		HistoryCollection.DeleteMany(ctx,bson.M{"user_id":user_id})
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "success",
 			"user_id": user_id,
