@@ -37,7 +37,7 @@ Content-Type: application/json
    "author":"Joy Woodward",
    "book_image":"https://salt.tikicdn.com/cache/750x750/ts/product/c8/6f/36/17e0dd709f50c7c7530755e9b21c3865.jpg.webp",
    "amount":0,
-   "type_name":"Manga",
+   "type_name":"Biology",
    "page":280,
    "publishing_location":"USA",
    "borrowed_quantity":0,

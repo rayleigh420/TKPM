@@ -192,7 +192,7 @@ func GetBookByID() gin.HandlerFunc {
 		if len(booksRelated) != 0 {
 			bookModel["related_books"] = booksRelated
 		} else {
-			bookModel["related_books"] = "none"
+			bookModel["related_books"] = []bson.M{}
 		}
 		c.JSON(http.StatusOK, bookModel)
 	}
