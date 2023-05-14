@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	// "fmt"
@@ -43,16 +44,24 @@ func HireABook() gin.HandlerFunc {
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		month1, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
 		obj := bson.M{}
+		obj2 := bson.M{}
 		if err := BookRentCollection.FindOne(ctx, bson.M{"book_rent_id": book_rent_id}).Decode(&obj); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "what up"})
+			return
+		}
+		book_detail_id := obj["book_detail_id"].(string)
+		book_id := obj["book_id"].(string)
+		user_id := obj["user_id"].(string)
+		if err := BookDetailCollection.FindOne(ctx, bson.M{"book_detail_id": book_detail_id}).Decode(&obj2); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "what up"})
 			return
 		}
 		//create borrow model
 		bookBorrowModel := models.BookBorrowModel{}
 		bookBorrowModel.Id = primitive.NewObjectID()
-		bookBorrowModel.Book_id = obj["book_id"].(string)
-		bookBorrowModel.User_id = obj["user_id"].(string)
-		bookBorrowModel.Book_detail_id = obj["book_detail_id"].(string)
+		bookBorrowModel.Book_id = book_id
+		bookBorrowModel.User_id = user_id
+		bookBorrowModel.Book_detail_id = book_detail_id
 		bookBorrowModel.Book_hire_id, _ = gonanoid.Generate(NanoidString, 12)
 		bookBorrowModel.Date_borrowed = now
 		bookBorrowModel.Date_end = month1
@@ -65,30 +74,29 @@ func HireABook() gin.HandlerFunc {
 		//create history borrowing
 		historyModel := models.HistoryModel{}
 		historyModel.Id = primitive.NewObjectID()
-		historyModel.Book_id = obj["book_id"].(string)
-		historyModel.User_id = obj["user_id"].(string)
-		historyModel.Book_detail_id = obj["book_detail_id"].(string)
+		historyModel.Book_id = book_id
+		historyModel.User_id = user_id
+		historyModel.Book_detail_id = book_detail_id
 		historyModel.Date_borrowed = now
 		historyModel.History_id, _ = gonanoid.Generate(NanoidString, 12)
 		historyModel.Book_hire_id = bookBorrowModel.Book_hire_id
 		historyModel.Status = "borrowing"
-		// BookRentCollection.DeleteOne(ctx, bson.M{"book_rent_id": obj["book_rent_id"].(string)})
+		BookRentCollection.DeleteOne(ctx, bson.M{"book_rent_id": book_rent_id})
 		BookBorrowedCollection.InsertOne(ctx, bookBorrowModel)
 		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookBorrowModel.Book_detail_id}, updateObj)
 		HistoryCollection.InsertOne(ctx, historyModel)
 		c.JSON(http.StatusOK, gin.H{
 			"status":         "success",
 			"history_id":     historyModel.History_id,
-			"borrowed_id":    bookBorrowModel.Book_hire_id,
 			"book_detail_id": bookBorrowModel.Book_detail_id,
-			"book_id":        bookBorrowModel.Book_id,
-			"date_borrowed":  bookBorrowModel.Date_borrowed,
-			"book_hire_id": bookBorrowModel.Book_hire_id,
+			"location":       obj2["location"].(string),
+			"book_id":        book_id,
+			"date_borrowed":  now.Local(),
+			"date_end":       month1.Local(),
+			"book_hire_id":   bookBorrowModel.Book_hire_id,
 		})
 	}
 }
-
-
 
 func GetBorrowList() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -141,19 +149,19 @@ func GetBorrowList() gin.HandlerFunc {
 			}},
 		}
 		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}, {Key: "preserveNullAndEmptyArrays", Value: true}}},
 		}
 		unwindStage2 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"}, {Key: "preserveNullAndEmptyArrays", Value: true}}},
 		}
 		unwindStage3 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book_detail"}}},
 		}
 		unwindStage4 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$type"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$type"}}},
 		}
 		cursor, _ := BookBorrowedCollection.Aggregate(ctx, mongo.Pipeline{
-			lookupStage,lookupStage2,lookupStage3,unwindStage,lookupStage4,unwindStage2, unwindStage3,unwindStage4,
+			lookupStage, lookupStage2, lookupStage3, unwindStage, lookupStage4, unwindStage2, unwindStage3, unwindStage4,
 		})
 		cursor.All(ctx, &borrowList)
 		c.JSON(http.StatusOK, borrowList)
@@ -225,49 +233,49 @@ func GetBorrowListOfABook() gin.HandlerFunc {
 
 func ReturnABook() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		ctx,cancel := context.WithTimeout(context.Background(),50*time.Second)
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		rec := bson.M{}
 		c.ShouldBindJSON(&rec)
 		token := rec["token"].(string)
-		claim,msg := helper.ValidateToken(token)
+		claim, msg := helper.ValidateToken(token)
 		if msg != "" {
-			c.JSON(http.StatusBadRequest,gin.H{"error":msg})
+			c.JSON(http.StatusBadRequest, gin.H{"error": msg})
 			return
 		}
-		if claim.Role != "admin"{
-			c.JSON(http.StatusBadRequest,gin.H{"error":"unauthorized"})
+		if claim.Role != "admin" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "unauthorized"})
 			return
 		}
 		book_hire_id := c.Param("book_hire_id")
 		bookBorrowModel := bson.M{}
-		BookBorrowedCollection.FindOneAndDelete(ctx,bson.M{"book_hire_id":book_hire_id}).Decode(&bookBorrowModel)
+		BookBorrowedCollection.FindOneAndDelete(ctx, bson.M{"book_hire_id": book_hire_id}).Decode(&bookBorrowModel)
 		updateObj := bson.M{"$set": bson.M{"status": "ready", "updated_at": now}}
-		updateHis := bson.M{"$set": bson.M{"status": "returned", "date_return": now,"book_hire_id":""}}
-		updateObj2 := bson.M{"$inc": bson.M{"amount": 1,"borrowed_quantity":1}}
-		_,err1 := BookDetailCollection.UpdateOne(ctx,bson.M{"book_detail_id":bookBorrowModel["book_detail_id"].(string)},updateObj)
-		_,err2 := HistoryCollection.UpdateOne(ctx,bson.M{"book_hire_id":bookBorrowModel["book_hire_id"].(string)},updateHis)
-		_,err3 := BookCollection.UpdateOne(ctx,bson.M{"book_id":bookBorrowModel["book_id"].(string)},updateObj2)
+		updateHis := bson.M{"$set": bson.M{"status": "returned", "date_return": now, "book_hire_id": ""}}
+		updateObj2 := bson.M{"$inc": bson.M{"amount": 1, "borrowed_quantity": 1}}
+		_, err1 := BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookBorrowModel["book_detail_id"].(string)}, updateObj)
+		_, err2 := HistoryCollection.UpdateOne(ctx, bson.M{"book_hire_id": bookBorrowModel["book_hire_id"].(string)}, updateHis)
+		_, err3 := BookCollection.UpdateOne(ctx, bson.M{"book_id": bookBorrowModel["book_id"].(string)}, updateObj2)
 		if err1 != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"error 1"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error 1"})
 			return
 		}
 		if err2 != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"error 2"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error 2"})
 			return
 		}
 		if err3 != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":"error 3"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "error 3"})
 			return
 		}
-		c.JSON(http.StatusOK,gin.H{
-			"status":"returned",
+		c.JSON(http.StatusOK, gin.H{
+			"status": "returned",
 		})
 	}
 }
 
-func BookBorrowById(id string)(bson.M,error){
+func BookBorrowById(id string) (bson.M, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// history := bson.M{}
@@ -276,7 +284,7 @@ func BookBorrowById(id string)(bson.M,error){
 		{Key: "$match", Value: bson.D{
 			{Key: "book_hire_id", Value: id},
 		}},
-	}		
+	}
 	lookupStage := bson.D{
 		{Key: "$lookup", Value: bson.D{
 			{Key: "from", Value: "books"},
@@ -324,26 +332,26 @@ func BookBorrowById(id string)(bson.M,error){
 	}
 
 	unwindStage := bson.D{
-		{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
+		{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}, {Key: "preserveNullAndEmptyArrays", Value: true}}},
 	}
 	unwindStage2 := bson.D{
-		{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
+		{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"}, {Key: "preserveNullAndEmptyArrays", Value: true}}},
 	}
 	unwindStage3 := bson.D{
-		{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+		{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book_detail"}}},
 	}
 	unwindStage4 := bson.D{
-		{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$type"}}},
+		{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$type"}}},
 	}
 	cursor, err := BookBorrowedCollection.Aggregate(ctx, mongo.Pipeline{
-		matchStage, lookupStage,lookupStage2,lookupStage3,unwindStage,lookupStage4,unwindStage2,unwindStage3,unwindStage4,
+		matchStage, lookupStage, lookupStage2, lookupStage3, unwindStage, lookupStage4, unwindStage2, unwindStage3, unwindStage4,
 	})
 	res := []bson.M{}
 	if err != nil {
-		return bson.M{},err 
+		return bson.M{}, err
 	}
-	cursor.All(ctx,&res)
-	return res[0],nil
+	cursor.All(ctx, &res)
+	return res[0], nil
 }
 
 func GetBookBorrowById() gin.HandlerFunc {
@@ -357,7 +365,7 @@ func GetBookBorrowById() gin.HandlerFunc {
 			{Key: "$match", Value: bson.D{
 				{Key: "book_hire_id", Value: book_hire_id},
 			}},
-		}		
+		}
 		lookupStage := bson.D{
 			{Key: "$lookup", Value: bson.D{
 				{Key: "from", Value: "books"},
@@ -405,16 +413,16 @@ func GetBookBorrowById() gin.HandlerFunc {
 		}
 
 		unwindStage := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book"}, {Key: "preserveNullAndEmptyArrays", Value: true}}},
 		}
 		unwindStage2 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$user"},{Key: "preserveNullAndEmptyArrays",Value: true}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$user"}, {Key: "preserveNullAndEmptyArrays", Value: true}}},
 		}
 		unwindStage3 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$book_detail"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$book_detail"}}},
 		}
 		unwindStage4 := bson.D{
-			{Key: "$unwind",Value: bson.D{{Key: "path",Value: "$type"}}},
+			{Key: "$unwind", Value: bson.D{{Key: "path", Value: "$type"}}},
 		}
 		// setStage := bson.D{
 		// 	{"$set", bson.D{
@@ -430,7 +438,7 @@ func GetBookBorrowById() gin.HandlerFunc {
 		// 	}},
 		// }
 		cursor, err := BookBorrowedCollection.Aggregate(ctx, mongo.Pipeline{
-			matchStage, lookupStage,lookupStage2,lookupStage3,unwindStage,lookupStage4,unwindStage2,unwindStage3,unwindStage4,
+			matchStage, lookupStage, lookupStage2, lookupStage3, unwindStage, lookupStage4, unwindStage2, unwindStage3, unwindStage4,
 		})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})
@@ -443,5 +451,90 @@ func GetBookBorrowById() gin.HandlerFunc {
 			return
 		}
 		c.JSON(http.StatusOK, result[0])
+	}
+}
+
+func DirectlyBorrow(email string, book_id string) (bson.M, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+	defer cancel()
+	user := models.UserModel{}
+	result := bson.M{}
+	if err := UserCollection.FindOne(ctx, bson.M{"email": email}).Decode(&user); err != nil {
+		newErr := fmt.Errorf("user not found")
+		return result, newErr
+	}
+	now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+	month1, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
+	bookBorrowModel := models.BookBorrowModel{}
+	book, bookErr := FindBookToRentWithId(book_id)
+	if bookErr != nil {
+		return result, bookErr
+	}
+	/// book["location"].(string)
+	bookBorrowModel.Book_id = book_id
+	bookBorrowModel.Book_detail_id = book["book_detail_id"].(string)
+	bookBorrowModel.Date_borrowed = now
+	bookBorrowModel.Date_end = month1
+	bookBorrowModel.Id = primitive.NewObjectID()
+	bookBorrowModel.User_id = user.User_id
+	bookBorrowModel.Book_hire_id, _ = gonanoid.Generate(NanoidString, 12)
+
+	///
+	updateObj := bson.D{
+		{Key: "$set", Value: bson.D{{Key: "status", Value: "borrowed"}, {Key: "updated_at", Value: now}}},
+	}
+	updateObj2 := bson.M{"$inc": bson.M{"amount": -1}}
+	///
+	historyModel := models.HistoryModel{}
+	historyModel.Id = primitive.NewObjectID()
+	historyModel.History_id, _ = gonanoid.Generate(NanoidString, 12)
+	historyModel.Date_borrowed = now
+	historyModel.Book_id = book_id
+	historyModel.User_id = user.User_id
+	historyModel.Book_detail_id = book["book_detail_id"].(string)
+	historyModel.Status = "borrowing"
+	historyModel.Book_hire_id = bookBorrowModel.Book_hire_id
+	///
+	BookBorrowedCollection.InsertOne(ctx, bookBorrowModel)
+	BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookBorrowModel.Book_detail_id}, updateObj)
+	BookCollection.UpdateOne(ctx,bson.M{"book_id":book_id},updateObj2)
+	HistoryCollection.InsertOne(ctx, historyModel)
+	// c.JSON(http.StatusOK, gin.H{
+	// 		"status":         "success",
+	// 		"history_id":     historyModel.History_id,
+	// 		"book_detail_id": bookBorrowModel.Book_detail_id,
+	// 		"book_id":        bookBorrowModel.Book_id,
+	// 		"date_borrowed":  bookBorrowModel.Date_borrowed,
+	// 		"book_hire_id":   bookBorrowModel.Book_hire_id,
+	// 	})
+	// result["book_hire_id"] = bookBorrowModel.Book_hire_id
+	// result["status"] = "success"
+	// result[""]
+	result = bson.M{
+		"status":        "success",
+		"book_id":       book_id,
+		"book_hire_id":  bookBorrowModel.Book_hire_id,
+		"history_id":    historyModel.History_id,
+		"date_borrowed": bookBorrowModel.Date_borrowed,
+		"date_end":      bookBorrowModel.Date_end,
+		"user_id":       user.User_id,
+	}
+	return result, nil
+}
+
+func DirectlyBorrowHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		rec := bson.M{}
+		c.BindJSON(&rec)
+		email := rec["email"].(string)
+		book_id := rec["book_id"].(string)
+		result, err := DirectlyBorrow(email, book_id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err,
+			})
+			return
+		}
+		c.JSON(http.StatusOK, result)
 	}
 }

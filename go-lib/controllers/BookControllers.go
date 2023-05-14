@@ -210,7 +210,10 @@ func GetBooksByName() gin.HandlerFunc {
 		}
 		recordPerPage := 10
 		startIndex := (page - 1) * recordPerPage
-		name := c.Query("search_text")
+		rec := bson.M{}
+		c.Bind(&rec)
+
+		name := rec["search_text"].(string)
 		// query := fmt.Sprintf("%s", name)
 		count, _ := BookCollection.CountDocuments(ctx, bson.D{
 			{Key: "name", Value: bson.D{{Key: "$regex", Value: name}, {Key: "$options", Value: "i"}}},
@@ -325,18 +328,51 @@ func UpdateBook() gin.HandlerFunc {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		id := c.Param("book_id")
-		bookModel := models.BookModel{}
+		bookModel := bson.M{}
 		if err := c.BindJSON(&bookModel); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "bad book model"})
 			return
 		}
 		updateObj := bson.D{}
-		if bookModel.Name != "" {
-			updateObj = append(updateObj, bson.E{Key: "name", Value: bookModel.Name})
+		if name := bookModel["name"].(string); name != "" {
+			updateObj = append(updateObj, bson.E{Key: "name", Value: name})
 		}
-		if bookModel.Type_id != "" {
-			updateObj = append(updateObj, bson.E{Key: "type_id", Value: bookModel.Type_id})
+		if type_name := bookModel["type_name"].(string); type_name != "" {
+			typeid, err := InsertTypeByName(type_name)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "error type"})
+				return
+			}
+			updateObj = append(updateObj, bson.E{Key: "type_id", Value: typeid})
 		}
+		if des := bookModel["description"].(string); des != "" {
+			updateObj = append(updateObj, bson.E{Key: "description", Value: des})
+		}
+		if det := bookModel["details"].(string); det != "" {
+			updateObj = append(updateObj, bson.E{Key: "details", Value: det})
+		}
+		if lic := bookModel["license"].(string); lic != "" {
+			updateObj = append(updateObj, bson.E{Key: "license", Value: lic})
+		}
+		if a := bookModel["book_image"].(string); a != "" {
+			updateObj = append(updateObj, bson.E{Key: "book_image", Value: a})
+		}
+		if des := bookModel["publisher"].(string); des != "" {
+			updateObj = append(updateObj, bson.E{Key: "publisher", Value: des})
+		}
+		if des := bookModel["author"].(string); des != "" {
+			updateObj = append(updateObj, bson.E{Key: "author", Value: des})
+		}
+		if des := bookModel["yearpublished"].(float64); des != 0 {
+			updateObj = append(updateObj, bson.E{Key: "yearpublished", Value: int64(des)})
+		}
+		if des := bookModel["page"].(float64); des != 0 {
+			updateObj = append(updateObj, bson.E{Key: "page", Value: int64(des)})
+		}
+		if des := bookModel["publishing_location"].(string); des != "" {
+			updateObj = append(updateObj, bson.E{Key: "publishing_location", Value: des})
+		}
+
 		updateRes, updateErr := BookCollection.UpdateOne(ctx, bson.M{"book_id": id}, bson.D{{Key: "$set", Value: updateObj}})
 		if updateErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "cannot update"})
@@ -624,33 +660,34 @@ func GetBookDetail() gin.HandlerFunc {
 	}
 }
 
-func DeleteBook(id string) (error) {
+func DeleteBook(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancel()
-	_,err := BookCollection.DeleteOne(ctx,bson.M{"book_id":id})
-	_,err2 := BookDetailCollection.DeleteMany(ctx,bson.M{"book_id":id})
-	BookRentCollection.DeleteMany(ctx,bson.M{"book_id":id})
-	BookBorrowedCollection.DeleteMany(ctx,bson.M{"book_id":id})
-	HistoryCollection.DeleteMany(ctx,bson.M{"book_id":id})
+	rec := bson.M{}
+	err := BookCollection.FindOneAndDelete(ctx, bson.M{"book_id": id}).Decode(&rec)
 	if err != nil {
 		return err
 	}
+	_, err2 := BookDetailCollection.DeleteMany(ctx, bson.M{"book_id": id})
+	BookRentCollection.DeleteMany(ctx, bson.M{"book_id": id})
+	BookBorrowedCollection.DeleteMany(ctx, bson.M{"book_id": id})
+	HistoryCollection.DeleteMany(ctx, bson.M{"book_id": id})
 	if err2 != nil {
 		return err
 	}
-	return nil	
+	return nil
 }
 
-func DeleteBookById() gin.HandlerFunc{
+func DeleteBookById() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("book_id")
 		err := DeleteBook(id)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":err})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 			return
 		}
-		c.JSON(http.StatusOK,gin.H{
-			"status":"success",
+		c.JSON(http.StatusOK, gin.H{
+			"status": "success",
 		})
 	}
 }

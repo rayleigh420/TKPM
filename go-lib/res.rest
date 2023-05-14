@@ -21,10 +21,15 @@ Content-Type: application/json
 GET http://localhost:8080/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjMiLCJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwidXNlcl9pZCI6IjZjbG9tV2p5ck0xbiIsImF2YXRhciI6IiIsImV4cCI6MTY4Mjk1MjczNn0.lZfG41HGZw2mGqz_3w0kUgkRzp8FBGUJzkPjOk4hdBg
 
 ###
-GET http://localhost:8080/books?page=1
+GET http://localhost:8080/books?page=2
 
 ### 
-GET http://localhost:8080/books/search?search_text=gsdfgsdfgd
+POST http://localhost:8080/books/search?page=1
+Content-Type: application/json
+
+{
+    "search_text":"Cô gái"
+}
 
 ###
 POST http://localhost:8080/books
@@ -35,7 +40,7 @@ Content-Type: application/json
    "publisher":"Booklife",
    "yearpublished": 2020,
    "author":"Joy Woodward",
-   "book_image":"https://salt.tikicdn.com/cache/750x750/ts/product/c8/6f/36/17e0dd709f50c7c7530755e9b21c3865.jpg.webp",
+   "book_image":"https://fastly.picsum.photos/id/14/200/300.jpg?hmac=FMdb1SH_oeEo4ibDe66-ORzb8p0VYJUS3xWfN3h2qDU",
    "amount":0,
    "type_name":"Biology",
    "page":280,
@@ -44,6 +49,24 @@ Content-Type: application/json
    "license":"Joy Woodward",
    "description": "Cuốn sách sẽ cung cấp mọi thứ bạn cần để mài giũa trực giác của mình, hiểu rõ hơn những người xung quanh và thậm chí có thêm tự tin khi đưa ra các quyết định lớn.",
     "details":"Truyền thông ngập tràn những khám phá và những lời khuyên mới mẻ về những thứ chúng ta nạp vào cơ thể nhưng có cơ sở khoa học nào cho bất kỳ tuyên bố đó không\nVới những hình minh họa rõ ràng, dễ hiểu, cuốn sách Hiểu hết về thức ăn sẽ mang lại những thông tin lý thú liên quan đến thức ăn, từ công đoạn sản xuất đến ích lợi/tác hại của chúng với sức khỏe."
+}
+
+###
+PUT http://localhost:8080/books/B11
+Content-Type: application/json
+
+{
+   "name":"Thần Số Học Ứng Dụng 2",
+   "publisher":"BookLife",
+   "yearpublished": 2001,
+   "author":"Joy Woodward",
+   "book_image":"https://fastly.picsum.photos/id/14/200/300.jpg?hmac=FMdb1SH_oeEo4ibDe66-ORzb8p0VYJUS3xWfN3h2qDU",
+   "type_name":"Biology Advanced",
+   "page":300,
+   "publishing_location":"USA",
+   "license":"Joy Woodward's License",
+   "description": "sometimes you just want to stare out the window wishing you were in a lofi anime world... here's a POV to read if you see this comment :) ",
+    "details":"pov: you're walking home after studying at your school library. You've stopped at a boba store to get a taro-flavoured milk with pearls. Your books are in your bag and you've finished your assignment. You're wearing your headphones and listening to this. You walk home, looking down at the lights below. The sky is seems to be the canvas of the heavens', with lavender, pink and blue streaks being painted on the skies with an invisible paintbrush."
 }
 
 ###
@@ -89,7 +112,7 @@ GET http://localhost:8080/borrowlist/search?search_id=BR01
 GET http://localhost:8080/history
 
 ###
-GET http://localhost:8080/history/user/U01
+GET http://localhost:8080/history/user/U02
 
 ###
 GET http://localhost:8080/returnlist
@@ -121,8 +144,8 @@ POST http://localhost:8080/hire
 Content-Type: application/json
 
 {
-    "book_rent_id": "Lyu7uwkWKg7a",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODM5Njc4ODV9.5WKhzIGQaep6tSe8NXKwaBhoYC0V6B7iCqJ72l5rv-o"
+    "book_rent_id": "R1",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODQwODYyOTN9.OVAqB5CjorTpCNPvgctkICSwuXJzOatSjThywMY7pcc"
 }
 
 ###
@@ -166,4 +189,17 @@ Content-Type: application/json
 
 {
    "location":"ABC 11"
+}
+
+###
+GET http://localhost:8080/books/B10/history
+
+###
+###
+POST http://localhost:8080/direct_hire
+Content-Type: application/json
+
+{
+    "book_id": "B10",
+    "email": "user2@gmail.com"
 }
