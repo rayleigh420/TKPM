@@ -1,7 +1,10 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
+import { updateBook } from "../../api/bookApi"
+import { toast } from "react-toastify"
 
 const EditBook = ({ book }) => {
-    console.log(book?.name)
+    console.log(book)
     const [img, setImg] = useState(book?.book_img)
     const [name, setName] = useState(book?.name)
     const [author, setAuthor] = useState(book?.author)
@@ -13,6 +16,22 @@ const EditBook = ({ book }) => {
     const [publishing, setPublishing] = useState(book?.publishing_location)
     const [detail, setDetail] = useState(book?.details)
     const [description, setDescription] = useState(book?.description)
+
+    const queryClient = useQueryClient()
+
+    const updateBookMutate = useMutation({
+        mutationFn: (data) => updateBook(data),
+        onSuccess: (data) => {
+            console.log(data)
+            toast.info("Update book successed!")
+        },
+        onError: () => {
+            toast.error("Something wrong. Please try again")
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'books'] })
+        }
+    })
 
     useEffect(() => {
         setImg(book?.book_img)
@@ -83,6 +102,23 @@ const EditBook = ({ book }) => {
         setProducer('')
         setPublishing('')
         setDescription('')
+
+        updateBookMutate.mutate({
+            book_id: book?.book_id,
+            info: {
+                "name": name,
+                "publisher": producer,
+                "yearpublished": year,
+                "author": author,
+                "book_image": book?.book_img,
+                "type_name": type,
+                "page": page,
+                "publishing_location": publishing,
+                "license": licensed,
+                "description": description,
+                "details": detail
+            }
+        })
     }
 
     return (
@@ -128,7 +164,7 @@ const EditBook = ({ book }) => {
                                 </label>
                                 <select className="select select-bordered w-full max-w-xs" value={type} onChange={handleChangeType}>
                                     <option disabled selected>Enter type of book</option>
-                                    <option>Light Novel</option>
+                                    <option>Education</option>
                                     <option>Manga</option>
                                 </select>
                             </div>
