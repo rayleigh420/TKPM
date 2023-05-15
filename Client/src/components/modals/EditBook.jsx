@@ -1,7 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { updateBook } from "../../api/bookApi"
 import { toast } from "react-toastify"
+import { getListType } from "../../api/typeApi"
 
 const EditBook = ({ book }) => {
     console.log(book)
@@ -18,6 +19,11 @@ const EditBook = ({ book }) => {
     const [description, setDescription] = useState(book?.description)
 
     const queryClient = useQueryClient()
+
+    const { data: types, isLoading, iseError } = useQuery({
+        queryKey: ['types'],
+        queryFn: () => getListType(),
+    })
 
     const updateBookMutate = useMutation({
         mutationFn: (data) => updateBook(data),
@@ -108,7 +114,7 @@ const EditBook = ({ book }) => {
             info: {
                 "name": name,
                 "publisher": producer,
-                "yearpublished": year,
+                "yearpublished": Number(year),
                 "author": author,
                 "book_image": book?.book_img,
                 "type_name": type,
@@ -163,9 +169,11 @@ const EditBook = ({ book }) => {
                                     <span className="label-text text-[#ffffff]">Type</span>
                                 </label>
                                 <select className="select select-bordered w-full max-w-xs" value={type} onChange={handleChangeType}>
-                                    <option disabled selected>Enter type of book</option>
-                                    <option>Education</option>
-                                    <option>Manga</option>
+                                    {
+                                        types && types?.map(item => (
+                                            <option value={item.typename}>{item.typename}</option>
+                                        ))
+                                    }
                                 </select>
                             </div>
                         </div>
