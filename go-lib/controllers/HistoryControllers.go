@@ -478,18 +478,24 @@ func GetHistoryOfBook(book_id string) ([]bson.M, error) {
 		return []bson.M{}, err
 	}
 	result := []bson.M{}
-	cursor.All(ctx,&result)
+	cursor.All(ctx, &result)
 	return result, nil
 }
 
-func GetHistoryByBookId() gin.HandlerFunc{
-	return func (c *gin.Context)  {
+func GetHistoryByBookId() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		book_id := c.Param("book_id")
-		res,err := GetHistoryOfBook(book_id)
+		res, err := GetHistoryOfBook(book_id)
+		res2, err2 := GetRentListOfBook2(book_id)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError,gin.H{"error":err})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 			return
 		}
-		c.JSON(http.StatusOK,res)
+		if err2 != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			return
+		}
+		res = append(res, res2[0:]...)
+		c.JSON(http.StatusOK, res)
 	}
 }
