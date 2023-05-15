@@ -33,4 +33,9 @@ export const getVersionBook = async (id) => {
     return result.data
 }
 
+export const rentBook = async (info) => {
+    const result = await axios.post('/rent', info)
+    return result.data
+}
+
 // export const searchBook = async ()

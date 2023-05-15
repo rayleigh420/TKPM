@@ -3,8 +3,8 @@ import HistoryBook from "../components/admin/HistoryBook"
 import AddVersionBook from "../components/modals/AddVersionBook"
 import RelatedBook from "../components/list/RelatedBook"
 import { Link, useParams } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
-import { getDetailBook } from "../api/bookApi"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { getDetailBook, rentBook } from "../api/bookApi"
 import AuthContext from "../context/AuthProvider"
 import LocationVersion from "../components/admin/LocationVersion"
 
@@ -25,6 +25,13 @@ const Book = () => {
         queryFn: () => getDetailBook(id)
     })
 
+    const rentBookMutate = useMutation({
+        mutationFn: (info) => rentBook(info),
+        onSuccess: (data) => {
+            console.log("Data: ", data)
+            // alert(data.)
+        }
+    })
 
     const handleTabAbout = () => {
         setTab(false)
@@ -34,7 +41,12 @@ const Book = () => {
         setTab(true)
     }
 
-    console.log(book)
+    const handleRentBook = (item) => {
+        rentBookMutate.mutate({
+            book_id: id,
+            user_id: auth?.user_id
+        })
+    }
 
     return (
         <>
@@ -59,7 +71,7 @@ const Book = () => {
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Year: {book?.yearpublished}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Producer: {book?.publisher}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Publishing Location: {book?.publishing_location}</p>
-                        <button className="btn w-[150px] mt-[55px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600">Rent Book</button>
+                        <button className="btn w-[150px] mt-[55px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600" onClick={() => handleRentBook(book?.book_id)}>Rent Book</button>
                     </div>
                 </div>
                 <div className="tabs w-full tab-bordered flex flex-col items-center">

@@ -8,7 +8,7 @@ const PopularBook = () => {
         queryFn: () => getGenericBook("popular", 1)
     })
 
-    console.log(data)
+    // console.log(data)
 
     return (
         <div className="flex flex-col items-start mt-[50px]">

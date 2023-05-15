@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 
 const BookList = ({ data, isLoading }) => {
-    console.log(data)
+    // console.log(data)
     return (
         <div className="flex gap-5 flex-wrap mt-[20px]">
             {
