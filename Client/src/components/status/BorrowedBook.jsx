@@ -1,17 +1,36 @@
 import { Link } from "react-router-dom"
 import { data } from "../../pages/home"
-import { useState } from "react"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { getBorrowedBook, searchBorrowedBook } from "../../api/manageApi"
+import { useContext, useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { getBorrowedBook, paidBook, searchBorrowedBook } from "../../api/manageApi"
 import { toast } from "react-toastify"
+import AuthContext from "../../context/AuthProvider"
 
 const BorrowedBook = () => {
     const [search, setSearch] = useState('')
     const [searchResult, setSearchResult] = useState()
 
+    const { auth } = useContext(AuthContext)
+
+    const queryClient = useQueryClient()
+
     const { data: books, isLoading, isError } = useQuery({
         queryKey: ['admin', 'borrowed'],
         queryFn: () => getBorrowedBook()
+    })
+
+    const paidBookMutate = useMutation({
+        mutationFn: (info) => paidBook(info),
+        onSuccess: (data) => {
+            console.log(data)
+            toast.info("Paid Book Success!")
+        },
+        onError: () => {
+            toast.error("Somethings error. Please try again!")
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'borrowed'] })
+        }
     })
 
     const searchBorrowedBookMutate = useMutation({
@@ -46,9 +65,15 @@ const BorrowedBook = () => {
         }
     }
 
-    const handleChangePaid = (index) => {
-        console.log("Change to borrowed: ", index)
+    const handleChangePaid = (item) => {
+        console.log("Change to borrowed: ", item)
+        paidBookMutate.mutate({
+            book_hire_id: item,
+            token: auth.token
+        })
     }
+
+    console.log(books)
 
     return (
         <>
@@ -81,7 +106,7 @@ const BorrowedBook = () => {
                                     <tr key={item?._id}>
                                         <td>
                                             <label>
-                                                <input type="checkbox" className="checkbox" onChange={() => handleChangePaid(item?._id)} />
+                                                <input type="checkbox" className="checkbox" onChange={() => handleChangePaid(item?.book_hire_id)} />
                                             </label>
                                         </td>
                                         <td>
