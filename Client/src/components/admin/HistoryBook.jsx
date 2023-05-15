@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
+import { Link, useParams } from "react-router-dom"
+import { historyVersion } from "../../api/manageApi"
+import { data } from "autoprefixer"
 
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
@@ -9,6 +12,14 @@ const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 // returned: green
 
 const HistoryBook = () => {
+    const { id } = useParams()
+
+    const { data: books, isLoading, isError } = useQuery({
+        queryKey: ['admin', 'history', 'version', id],
+        queryFn: () => historyVersion(id)
+    })
+
+    console.log(books)
     return (
         <>
             {/* <label htmlFor="history_book" className="btn">open modal</label> */}
@@ -32,28 +43,29 @@ const HistoryBook = () => {
                             <tbody>
                                 {/* row 1 */}
                                 {
-                                    arr.map(item => (
+                                    books && books?.map(item => (
                                         <tr>
                                             <td>
                                                 <div className="flex items-center space-x-3">
                                                     <div className="avatar">
                                                         <div className="mask mask-squircle w-12 h-12">
-                                                            <img src='https://cdn.wuxiaworld.com/images/covers/bfbt.jpg?ver=fbc27beb0a7017f23af5a9560099d3aeaa2b8d2b' alt="Avatar Tailwind CSS Component" />
+                                                            <img src={item?.user.avatar} alt="Avatar Tailwind CSS Component" />
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <Link to="/">
-                                                            <div className="font-bold">Le Nhat Duy</div>
-                                                        </Link>
+                                                        {/* <Link to="/"> */}
+                                                        <div className="font-bold">{item?.user.name}</div>
+                                                        {/* </Link> */}
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>69696969</td>
-                                            <td>12/03/2023</td>
-                                            <td>12/05/2023</td>
+                                            <td>{item?.book_detail_id}</td>
+                                            <td>{item?.date_borrowed}</td>
+                                            <td>{item?.date_return}</td>
                                             <td>
                                                 {
-                                                    (item % 2 == 0) ?
+
+                                                    (item?.status == 'returned') ?
                                                         (
 
                                                             <div className="badge bg-red-500 text-[#ffffff] font-semibold">Borrowed</div>
@@ -67,26 +79,6 @@ const HistoryBook = () => {
                                         </tr>
                                     ))
                                 }
-                                {/* <tr>
-                                <td>
-                                    <div className="flex items-center space-x-3">
-                                    <div className="avatar">
-                                    <div className="mask mask-squircle w-12 h-12">
-                                    <img src="https://cdn.wuxiaworld.com/images/covers/bfbt.jpg?ver=fbc27beb0a7017f23af5a9560099d3aeaa2b8d2b" alt="Avatar Tailwind CSS Component" />
-                                    </div>
-                                    </div>
-                                    <div>
-                                    <Link to="">
-                                    <div className="font-bold">Le Nhat Duy</div>
-                                    </Link>
-                                    </div>
-                                    </div>
-                                    </td>
-                                    <td>69696969</td>
-                                    <td>12/03/2023</td>
-                                    <td>12/05/2023</td>
-                                    <td>Done</td>
-                                </tr>*/}
                             </tbody>
                             {/* foot */}
                             {/* <tfoot>
