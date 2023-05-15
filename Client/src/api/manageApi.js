@@ -27,9 +27,13 @@ export const getPaidBook = async () => {
 }
 
 export const addVersionBook = async (info) => {
-    console.log("API:", info)
     const result = await axios.post(`/version/${info.book_id}`, {
         location: info.location
     })
+    return result.data
+}
+
+export const historyVersion = async (bookId) => {
+    const result = await axios.get(`/books/${bookId}/history`)
     return result.data
 }
