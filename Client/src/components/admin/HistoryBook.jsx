@@ -68,11 +68,15 @@ const HistoryBook = () => {
                                                     (item?.status == 'returned') ?
                                                         (
 
-                                                            <div className="badge bg-red-500 text-[#ffffff] font-semibold">Borrowed</div>
+                                                            <div className="badge bg-green-500 text-[#ffffff] font-semibold">Returned</div>
                                                         )
                                                         :
                                                         (
-                                                            <div className="badge bg-yellow-500 text-[#ffffff] font-semibold">Booked</div>
+                                                            (item?.status == 'booked') ?
+                                                                <div className="badge bg-yellow-500 text-[#ffffff] font-semibold">Booked</div>
+                                                                :
+                                                                <div className="badge bg-red-500 text-[#ffffff] font-semibold">Borowed</div>
+
                                                         )
                                                 }
                                             </td>
