@@ -37,3 +37,11 @@ export const historyVersion = async (bookId) => {
     const result = await axios.get(`/books/${bookId}/history`)
     return result.data
 }
+
+export const borrowedBook = async ({ book_rent_id, token }) => {
+    const result = await axios.post(`/hire`, {
+        book_rent_id: book_rent_id,
+        token: token
+    })
+    return result.data
+}

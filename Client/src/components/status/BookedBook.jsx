@@ -2,18 +2,36 @@ import { Link } from "react-router-dom"
 import { data } from "../../pages/home"
 import AddBook from "../modals/AddBook"
 import EditBook from "../modals/EditBook"
-import { useState } from "react"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { getBookedBook, searchBookedBook } from "../../api/manageApi"
+import { useContext, useState } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { borrowedBook, getBookedBook, searchBookedBook } from "../../api/manageApi"
 import { toast } from "react-toastify"
+import AuthContext from "../../context/AuthProvider"
 
 const BookedBook = () => {
     const [search, setSearch] = useState('')
     const [searchResult, setSearchResult] = useState()
 
+    const { auth } = useContext(AuthContext)
+    const queryClient = useQueryClient()
+
     const { data: books, isLoading, isError } = useQuery({
         queryKey: ['admin', 'booked'],
         queryFn: () => getBookedBook(),
+    })
+
+    const borrowedBookMutate = useMutation({
+        mutationFn: (info) => borrowedBook(info),
+        onSuccess: (data) => {
+            console.log(data),
+                toast.info('Borrowed Book Success!')
+        },
+        onError: () => {
+            toast.error("Somethings error. Please try again!")
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'booked'] })
+        }
     })
 
     const searchBookedBookMutate = useMutation({
@@ -48,11 +66,15 @@ const BookedBook = () => {
         }
     }
 
-    const handleChangeBorrowed = (index) => {
-        console.log("Change to borrowed: ", index)
+    const handleChangeBorrowed = (item) => {
+        console.log("Change to borrowed: ", item)
+        borrowedBookMutate.mutate({
+            book_rent_id: item,
+            token: auth.token
+        })
     }
 
-    console.log(books)
+    // console.log(books)
 
     return (
         <>
