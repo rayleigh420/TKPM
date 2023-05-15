@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { addVersionBook } from "../../api/manageApi"
 import { useParams } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -8,11 +8,16 @@ const AddVersionBook = () => {
     const { id } = useParams()
     const [location, setLocation] = useState('')
 
+    const queryClient = useQueryClient()
+
     const addVersionBookMutate = useMutation({
         mutationFn: (info) => addVersionBook(info),
         onSuccess: (data) => {
             console.log(data)
             toast.info("Add more version sucess!")
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['version', id] })
         }
     })
 
