@@ -1,5 +1,4 @@
 const MessageRent = ({ rent }) => {
-    console.log("Booked ID: ", rent)
     return (
         <>
             <input type="checkbox" id="messagerent" className="modal-toggle" />

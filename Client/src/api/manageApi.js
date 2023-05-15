@@ -25,3 +25,11 @@ export const getPaidBook = async () => {
     const result = await axios.get('/returnlist')
     return result.data
 }
+
+export const addVersionBook = async (info) => {
+    console.log("API:", info)
+    const result = await axios.post(`/version/${info.book_id}`, {
+        location: info.location
+    })
+    return result.data
+}

@@ -1,7 +1,9 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import AddVersionBook from "../modals/AddVersionBook"
 import HistoryBook from "./HistoryBook"
 import { getVersionBook } from "../../api/bookApi"
+import { addVersionBook } from "../../api/manageApi"
+import { toast } from "react-toastify"
 
 const LocationVersion = ({ id }) => {
 
@@ -18,7 +20,7 @@ const LocationVersion = ({ id }) => {
                 <div className="flex flex-row justify-between mb-[20px]">
                     <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px]">Status of all versions</h4>
                     <div>
-                        <HistoryBook />
+                        <HistoryBook id={id} />
                         {/* <button className="btn "> */}
                         <label htmlFor="history_book" className="cursor-pointer btn bg-[#eeeeee] text-[#000000] mr-[10px] hover:text-[#ffffff]">
                             Watch History Rent

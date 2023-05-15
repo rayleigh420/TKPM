@@ -1,21 +1,32 @@
 import { useState } from "react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { addVersionBook } from "../../api/manageApi"
+import { useParams } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const AddVersionBook = () => {
-    const [id, setID] = useState('')
+    const { id } = useParams()
     const [location, setLocation] = useState('')
 
-    const handleChangeID = (e) => {
-        setID(e.target.value)
-    }
+    const addVersionBookMutate = useMutation({
+        mutationFn: (info) => addVersionBook(info),
+        onSuccess: (data) => {
+            console.log(data)
+            toast.info("Add more version sucess!")
+        }
+    })
 
     const handleChangeLocation = (e) => {
         setLocation(e.target.value)
     }
 
     const handleAddVersion = () => {
-        setID('')
-        setLocation('')
         console.log(id, location)
+        addVersionBookMutate.mutate({
+            book_id: id,
+            location: location
+        })
+        setLocation('')
     }
 
     return (
@@ -28,14 +39,6 @@ const AddVersionBook = () => {
             <label htmlFor="modal_addVersion" className="modal cursor-pointer">
                 <label className="modal-box relative" htmlFor="">
                     <h3 className="text-lg font-bold text-center">Add new version for book</h3>
-                    <div className="w-full mt-[22px]">
-                        <div className="form-control w-full max-w-xs">
-                            <label className="label">
-                                <span className="label-text text-[#ffffff]">ID version</span>
-                            </label>
-                            <input value={id} onChange={handleChangeID} type="text" placeholder="Enter new ID" className="input input-bordered w-full max-w-xs" />
-                        </div>
-                    </div>
 
                     <div className="w-full mt-[24px]">
                         <div className="form-control w-full max-w-xs">
