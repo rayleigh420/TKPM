@@ -21,7 +21,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/352/200/300.jpg?hmac=JRE6d4eB1tvPUpBESG8XEM2_22EaXNe2luRrVkydr2E",
 		Author:              "Thích Nhất Hạnh",
 		Borrowed_quantity:   12,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "2",
 		Publishing_location: "VietNam",
 		Page:                100,
@@ -36,7 +36,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/94/200/300.jpg?hmac=CA7x5S3EdSeRqM9TK0RxiKTcx1R96lIncvKTjTP3beI",
 		Author:              "Nguyên Phong",
 		Borrowed_quantity:   120,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "2",
 		Publishing_location: "VietNam",
 		Page:                100,
@@ -51,7 +51,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/882/200/300.jpg?hmac=j02hkJZfREXyROkSfM6KpIIPHsAaGLmWylVEr5sRzok",
 		Author:              "Thích Nhất Hạnh",
 		Borrowed_quantity:   20,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "2",
 		Publishing_location: "VietNam",
 		Page:                100,
@@ -66,7 +66,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/25/200/300.jpg?hmac=ScdLbPfGd_kI3MUHvJUb12Fsg1meDQEaHY_mM613BVM",
 		Author:              "Thích Nhất Hạnh",
 		Borrowed_quantity:   42,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "2",
 		Publishing_location: "Korea",
 		Page:                100,
@@ -81,7 +81,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/200/200/300.jpg?hmac=XVCLpc2Ddr652IrKMt3L7jISDD4au5O9ZIr3fwBtxo8",
 		Author:              "Tatsuki Fujimoto",
 		Borrowed_quantity:   512,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "1",
 		Publishing_location: "Japan",
 		Page:                100,
@@ -96,7 +96,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/461/200/300.jpg?hmac=dIwmQxeVflRD0QrOZ_p0_q-LpAY7sVhua6FCEIR_xi8",
 		Author:              "Yuki Midorikawa",
 		Borrowed_quantity:   162,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "1",
 		Publishing_location: "Japan",
 		Page:                300,
@@ -111,7 +111,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/615/200/300.jpg?hmac=ehJCfeXO1-ZbwBXgbYKroA97kTtoPKNoyEbCxnzsYfU",
 		Author:              "Nagabe",
 		Borrowed_quantity:   127,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "1",
 		Publishing_location: "Japan",
 		Page:                352,
@@ -126,7 +126,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/183/200/300.jpg?hmac=Z9yCtuuIPn5CuOhwIntNEQFIRotghuBn06nqOSL828c",
 		Author:              "Nagabe",
 		Borrowed_quantity:   182,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "1",
 		Publishing_location: "Japan",
 		Page:                451,
@@ -141,7 +141,7 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/435/200/300.jpg?hmac=gSfIK7r5rB4f3aJq0RTylep967d4sBRbIUuAOuq433o",
 		Author:              "Mark Gates",
 		Borrowed_quantity:   192,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "3",
 		Publishing_location: "USA",
 		Page:                256,
@@ -156,10 +156,25 @@ func SeedBook() {
 		Book_img:            "https://fastly.picsum.photos/id/972/200/300.jpg?hmac=UMf5f6BV9GkLiz0Xz9kMwm1riiTtlpIG2jt0WrxZ51Q",
 		Author:              "Tăng Kim Long",
 		Borrowed_quantity:   1012,
-		Amount:              50,
+		Amount:              5,
 		Type_id:             "3",
 		Publishing_location: "VietNam",
 		Page:                444,
+		License:             "Tăng Kim Long",
+		Details:             `Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis pellentesque euismod tellus pharetra placerat. Sed quis sapien nisi. Duis felis tellus, lobortis a tempor ac, accumsan ut neque. Fusce hendrerit leo non ligula convallis, ut consectetur lacus gravida. Donec eu leo ut sem vulputate mollis. Curabitur finibus ipsum.`,
+		Description:         `Suspendisse ut varius libero. Curabitur consectetur fringilla ante sodales suscipit. Aenean sed neque felis. Quisque mollis diam eu odio interdum ornare. Nullam facilisis metus quam, nec ultricies mauris congue id. Donec eget lobortis velit. Etiam sit amet consectetur erat. Nunc egestas nisl quis bibendum dictum`,
+	}
+	Book11 := models.BookModel{
+		Name:                "Object Oriented Programming for Java",
+		Publisher:           "TKLong",
+		Yearpublished:       2000,
+		Book_img:            "https://fastly.picsum.photos/id/972/200/300.jpg?hmac=UMf5f6BV9GkLiz0Xz9kMwm1riiTtlpIG2jt0WrxZ51Q",
+		Author:              "Tăng Kim Long",
+		Borrowed_quantity:   0,
+		Amount:              0,
+		Type_id:             "3",
+		Publishing_location: "VietNam",
+		Page:                222,
 		License:             "Tăng Kim Long",
 		Details:             `Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis pellentesque euismod tellus pharetra placerat. Sed quis sapien nisi. Duis felis tellus, lobortis a tempor ac, accumsan ut neque. Fusce hendrerit leo non ligula convallis, ut consectetur lacus gravida. Donec eu leo ut sem vulputate mollis. Curabitur finibus ipsum.`,
 		Description:         `Suspendisse ut varius libero. Curabitur consectetur fringilla ante sodales suscipit. Aenean sed neque felis. Quisque mollis diam eu odio interdum ornare. Nullam facilisis metus quam, nec ultricies mauris congue id. Donec eget lobortis velit. Etiam sit amet consectetur erat. Nunc egestas nisl quis bibendum dictum`,
@@ -174,6 +189,7 @@ func SeedBook() {
 	Book8.Book_id = "B8"
 	Book9.Book_id = "B9"
 	Book10.Book_id = "B10"
+	Book11.Book_id = "B11"
 	Book1.Id = primitive.NewObjectID()
 	Book2.Id = primitive.NewObjectID()
 	Book3.Id = primitive.NewObjectID()
@@ -184,6 +200,7 @@ func SeedBook() {
 	Book8.Id = primitive.NewObjectID()
 	Book9.Id = primitive.NewObjectID()
 	Book10.Id = primitive.NewObjectID()
+	Book11.Id = primitive.NewObjectID()
 	Book1.Created_at = week1
 	Book2.Created_at = week1
 	Book3.Created_at = week1
@@ -194,6 +211,8 @@ func SeedBook() {
 	Book8.Created_at = week1
 	Book9.Created_at = week1
 	Book10.Created_at = week1
+	Book11.Created_at = week1
+
 	Book1.Updated_at = week1
 	Book2.Updated_at = week1
 	Book3.Updated_at = week1
@@ -204,6 +223,7 @@ func SeedBook() {
 	Book8.Updated_at = now
 	Book9.Updated_at = week1
 	Book10.Updated_at = now
+	Book11.Updated_at = now
 
 	books := []interface{}{}
 	books = append(books, Book1)
@@ -216,6 +236,7 @@ func SeedBook() {
 	books = append(books, Book8)
 	books = append(books, Book9)
 	books = append(books, Book10)
+	books = append(books, Book11)
 	BookCollection.InsertMany(ctx, books)
 }
 
@@ -226,7 +247,7 @@ func SeedBookDetail() {
 	BookDetail1 := models.BookDetailModel{
 		Book_id:    "B1",
 		Location:   "ABC123",
-		Status:     "booked",
+		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
@@ -366,14 +387,14 @@ func SeedBookDetail() {
 	BookDetail21 := models.BookDetailModel{
 		Book_id:    "B5",
 		Location:   "ABC123",
-		Status:     "booked",
+		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail22 := models.BookDetailModel{
 		Book_id:    "B5",
 		Location:   "ABC123",
-		Status:     "booked",
+		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
@@ -401,14 +422,14 @@ func SeedBookDetail() {
 	BookDetail26 := models.BookDetailModel{
 		Book_id:    "B6",
 		Location:   "ABC123",
-		Status:     "borrowed",
+		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail27 := models.BookDetailModel{
 		Book_id:    "B6",
 		Location:   "ABC123",
-		Status:     "borrowed",
+		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
@@ -464,14 +485,14 @@ func SeedBookDetail() {
 	BookDetail35 := models.BookDetailModel{
 		Book_id:    "B7",
 		Location:   "ABC123",
-		Status:     "borrowed",
+		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail36 := models.BookDetailModel{
 		Book_id:    "B8",
 		Location:   "ABC123",
-		Status:     "borrowed",
+		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
@@ -569,7 +590,7 @@ func SeedBookDetail() {
 	BookDetail50 := models.BookDetailModel{
 		Book_id:    "B10",
 		Location:   "ABC123",
-		Status:     "booked",
+		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
@@ -734,86 +755,85 @@ func SeedBookRent() {
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancel()
 	BookRent1 := models.BookRentModel{
-		Book_id:      "B1",
-		User_id:      "U02",
-		Reserve_date: now,
+		Book_id:      "nil",
+		User_id:      "nil",
 	}
-	BookRent2 := models.BookRentModel{
-		Book_id:      "B5",
-		User_id:      "U03",
-		Reserve_date: now,
-	}
-	BookRent3 := models.BookRentModel{
-		Book_id:      "B5",
-		User_id:      "U04",
-		Reserve_date: now,
-	}
-	BookRent4 := models.BookRentModel{
-		Book_id:      "B10",
-		User_id:      "U05",
-		Reserve_date: now,
-	}
-	BookRent1.Book_detail_id = "D11"
-	BookRent2.Book_detail_id = "D51"
-	BookRent3.Book_detail_id = "D52"
-	BookRent4.Book_detail_id = "D105"
-	BookRent1.Book_rent_id = "R1"
-	BookRent2.Book_rent_id = "R2"
-	BookRent3.Book_rent_id = "R3"
-	BookRent4.Book_rent_id = "R4"
+	// BookRent2 := models.BookRentModel{
+	// 	Book_id:      "B5",
+	// 	User_id:      "U03",
+	// 	Reserve_date: now,
+	// }
+	// BookRent3 := models.BookRentModel{
+	// 	Book_id:      "B5",
+	// 	User_id:      "U04",
+	// 	Reserve_date: now,
+	// }
+	// BookRent4 := models.BookRentModel{
+	// 	Book_id:      "B10",
+	// 	User_id:      "U05",
+	// 	Reserve_date: now,
+	// }
+	BookRent1.Book_detail_id = "nil"
+	// BookRent2.Book_detail_id = "D51"
+	// BookRent3.Book_detail_id = "D52"
+	// BookRent4.Book_detail_id = "D105"
+	BookRent1.Book_rent_id = "nil"
+	// BookRent2.Book_rent_id = "R2"
+	// BookRent3.Book_rent_id = "R3"
+	// BookRent4.Book_rent_id = "R4"
 
 	BookRent1.Id = primitive.NewObjectID()
-	BookRent2.Id = primitive.NewObjectID()
-	BookRent3.Id = primitive.NewObjectID()
-	BookRent4.Id = primitive.NewObjectID()
+	// BookRent2.Id = primitive.NewObjectID()
+	// BookRent3.Id = primitive.NewObjectID()
+	// BookRent4.Id = primitive.NewObjectID()
 
-	BookRent := []interface{}{
-		BookRent1,
-		BookRent2,
-		BookRent3,
-		BookRent4,
-	}
-	BookRentCollection.InsertMany(ctx, BookRent)
+	// BookRent := []interface{}{
+	// 	BookRent1,
+	// 	BookRent2,
+	// 	BookRent3,
+	// 	BookRent4,
+	// }
+	BookRentCollection.InsertOne(ctx, BookRent1)
 }
 
 func SeedBookBorrow() {
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancel()
 	BookBorrow1 := models.BookBorrowModel{
-		User_id:        "U02",
-		Book_id:        "B6",
-		Book_detail_id: "D61",
+		User_id:        "nil",
+		Book_id:        "nil",
+		Book_detail_id: "nil",
 	}
-	BookBorrow2 := models.BookBorrowModel{
-		User_id:        "U03",
-		Book_id:        "B6",
-		Book_detail_id: "D62",
-	}
-	BookBorrow3 := models.BookBorrowModel{
-		User_id:        "U04",
-		Book_id:        "B7",
-		Book_detail_id: "D75",
-	}
-	BookBorrow4 := models.BookBorrowModel{
-		User_id:        "U05",
-		Book_id:        "B8",
-		Book_detail_id: "D81",
-	}
+	// BookBorrow2 := models.BookBorrowModel{
+	// 	User_id:        "U03",
+	// 	Book_id:        "B6",
+	// 	Book_detail_id: "D62",
+	// }
+	// BookBorrow3 := models.BookBorrowModel{
+	// 	User_id:        "U04",
+	// 	Book_id:        "B7",
+	// 	Book_detail_id: "D75",
+	// }
+	// BookBorrow4 := models.BookBorrowModel{
+	// 	User_id:        "U05",
+	// 	Book_id:        "B8",
+	// 	Book_detail_id: "D81",
+	// }
 	BookBorrow1.Id = primitive.NewObjectID()
-	BookBorrow2.Id = primitive.NewObjectID()
-	BookBorrow3.Id = primitive.NewObjectID()
-	BookBorrow4.Id = primitive.NewObjectID()
-	BookBorrow1.Book_hire_id = "BR01"
-	BookBorrow2.Book_hire_id = "BR02"
-	BookBorrow3.Book_hire_id = "BR03"
-	BookBorrow4.Book_hire_id = "BR04"
-	BookBorrows := []interface{}{
-		BookBorrow1,
-		BookBorrow2,
-		BookBorrow3,
-		BookBorrow4,
-	}
-	BookBorrowCollection.InsertMany(ctx, BookBorrows)
+	// BookBorrow2.Id = primitive.NewObjectID()
+	// BookBorrow3.Id = primitive.NewObjectID()
+	// BookBorrow4.Id = primitive.NewObjectID()
+	BookBorrow1.Book_hire_id = "nil"
+	// BookBorrow2.Book_hire_id = "BR02"
+	// BookBorrow3.Book_hire_id = "BR03"
+	// BookBorrow4.Book_hire_id = "BR04"
+	// BookBorrows := []interface{}{
+	// 	BookBorrow1,
+	// 	BookBorrow2,
+	// 	BookBorrow3,
+	// 	BookBorrow4,
+	// }
+	BookBorrowCollection.InsertOne(ctx, BookBorrow1)
 }
 
 func SeedHistory() {

@@ -64,8 +64,12 @@ func CreateBooKDetail() gin.HandlerFunc{
 		bookDetailModel.Created_at = now
 		bookDetailModel.Updated_at = now
 
-		updateObj := bson.M{"$inc": bson.M{"amount": 1},"updated_at":now}
-		BookCollection.UpdateOne(ctx,bson.M{"book_id":book_id},updateObj)
+		updateObj := bson.M{"$inc": bson.M{"amount": 1},"$set":bson.M{"updated_at":now}}
+		_,err := BookCollection.UpdateOne(ctx,bson.M{"book_id":book_id},updateObj)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":"error updating"})
+			return
+		}
 		_,insertErr := BookDetailCollection.InsertOne(ctx,bookDetailModel)
 		if insertErr != nil {
 			c.JSON(http.StatusInternalServerError,gin.H{"error":insertErr})

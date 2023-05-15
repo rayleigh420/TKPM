@@ -588,7 +588,24 @@ func RentABook() gin.HandlerFunc {
 		// userid
 		// bookid
 		if err := c.ShouldBindJSON(&obj); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "bad rent model"})
+			return
+		}
+		//check if user is already borrowing
+		count, _ := BookRentCollection.CountDocuments(ctx, bson.M{"user_id": obj["user_id"].(string)})
+		if count > 0 {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": "failed",
+				"error":  "already requesting another book",
+			})
+			return
+		}
+		count2, _ := BookBorrowedCollection.CountDocuments(ctx, bson.M{"user_id": obj["user_id"].(string)})
+		if count2 > 0 {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": "failed",
+				"error":  "already borrowing another book",
+			})
 			return
 		}
 		book_id := obj["book_id"].(string)
@@ -616,9 +633,10 @@ func RentABook() gin.HandlerFunc {
 			return
 		}
 		updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "booked"}, {Key: "updated_at", Value: now}}}}
-		updateObj2 := bson.D{{Key: "$set", Value: bson.D{{Key: "amount", Value: amount["amount"].(int64) - 1}}}}
+		// updateObj2 := bson.D{{Key: "$set", Value: bson.D{{Key: "amount", Value: amount["amount"].(int64) - 1}}}}
+		upd := bson.M{"$inc":bson.M{"amount":-1}}
 		//
-		BookCollection.UpdateOne(ctx, bson.M{"book_id": book_id}, updateObj2)
+		BookCollection.UpdateOne(ctx, bson.M{"book_id": book_id}, upd)
 		BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookToRent["book_detail_id"].(string)}, updateObj)
 		c.JSON(http.StatusOK, gin.H{
 			"succeeded":      insertRes,
@@ -636,20 +654,20 @@ func GetBookDetail() gin.HandlerFunc {
 		defer cancel()
 		bookDetail := []bson.M{}
 		book_id := c.Param("book_id")
-		page, _ := strconv.Atoi(c.Query("page"))
-		if page <= 0 {
-			page = 1
-		}
-		recordPerPage := 5
-		startIndex := (page - 1) * recordPerPage
-		count, _ := BookDetailCollection.CountDocuments(ctx, bson.D{{Key: "book_id", Value: book_id}})
-		count2 := float64(count)
-		count2 = math.Ceil(count2 / 10)
-		totalCount := strconv.Itoa(int(count2))
-		c.Writer.Header().Add("Total", totalCount)
+		// page, _ := strconv.Atoi(c.Query("page"))
+		// if page <= 0 {
+		// 	page = 1
+		// }
+		// recordPerPage := 5
+		// startIndex := (page - 1) * recordPerPage
+		// count, _ := BookDetailCollection.CountDocuments(ctx, bson.D{{Key: "book_id", Value: book_id}})
+		// count2 := float64(count)
+		// count2 = math.Ceil(count2 / 10)
+		// totalCount := strconv.Itoa(int(count2))
+		// c.Writer.Header().Add("Total", totalCount)
 
-		opt := options.Find().SetSkip(int64(startIndex)).SetLimit(int64(recordPerPage))
-		cursor, err := BookDetailCollection.Find(ctx, bson.M{"book_id": book_id}, opt)
+		// opt := options.Find().SetSkip(int64(startIndex)).SetLimit(int64(recordPerPage))
+		cursor, err := BookDetailCollection.Find(ctx, bson.M{"book_id": book_id})
 
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error finding"})

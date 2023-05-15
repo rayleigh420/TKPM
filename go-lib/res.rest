@@ -69,13 +69,6 @@ Content-Type: application/json
     "details":"pov: you're walking home after studying at your school library. You've stopped at a boba store to get a taro-flavoured milk with pearls. Your books are in your bag and you've finished your assignment. You're wearing your headphones and listening to this. You walk home, looking down at the lights below. The sky is seems to be the canvas of the heavens', with lavender, pink and blue streaks being painted on the skies with an invisible paintbrush."
 }
 
-###
-POST http://localhost:8080/books/B10
-Content-Type: application/json
-
-{
-   "location":"ABC 11"
-}
 
 
 ###
@@ -100,7 +93,7 @@ GET http://localhost:8080/books/popular
 GET http://localhost:8080/books/B1
 
 ###
-GET http://localhost:8080/books/B5/detail
+GET http://localhost:8080/books/B8/detail
 
 ###
 GET http://localhost:8080/borrowlist
@@ -128,7 +121,7 @@ POST http://localhost:8080/rent
 Content-Type: application/json
 
 {
-    "book_id": "B2",
+    "book_id": "B1",
     "user_id": "U03"
 }
 
@@ -144,16 +137,16 @@ POST http://localhost:8080/hire
 Content-Type: application/json
 
 {
-    "book_rent_id": "R1",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODQwODYyOTN9.OVAqB5CjorTpCNPvgctkICSwuXJzOatSjThywMY7pcc"
+    "book_rent_id": "DPXME49O5D4U",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODQxMzAwNjh9.T7OkQ2_cHdgIEJTUXFnl7I7hkalPnyGj6UfLtKsDS0c"
 }
 
 ###
-POST http://localhost:8080/return/ROsknkcD1B6w
+POST http://localhost:8080/return/XVyKm1pfiD7e
 Content-Type: application/json
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODMyMDUwOTN9.FmmRTlHnCGm6p8xv4xvoyuApw9Smdw1JkUfipTk4k2E"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODQxMzAwNjh9.T7OkQ2_cHdgIEJTUXFnl7I7hkalPnyGj6UfLtKsDS0c"
 }
 
 ###
@@ -181,14 +174,17 @@ DELETE http://localhost:8080/books/B11
 GET http://localhost:8080/inphieu?book_rent_id=R1&book_id=B1&book_detail_id=D11&name="abc"
 
 ###
+GET http://localhost:8080/books/B1
+
+###
 DELETE http://localhost:8080/version/D104
 
 ###
-POST http://localhost:8080/version/B10
+POST http://localhost:8080/version/B1
 Content-Type: application/json
 
 {
-   "location":"ABC 11"
+   "location":"Floor 1 shell A 123"
 }
 
 ###
