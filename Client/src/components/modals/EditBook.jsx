@@ -5,7 +5,7 @@ import { toast } from "react-toastify"
 import { getListType } from "../../api/typeApi"
 
 const EditBook = ({ book }) => {
-    // console.log(book)
+    console.log(book)
     const [img, setImg] = useState(book?.book_img)
     const [name, setName] = useState(book?.name)
     const [author, setAuthor] = useState(book?.author)
@@ -111,7 +111,7 @@ const EditBook = ({ book }) => {
                 "publisher": producer,
                 "yearpublished": Number(year),
                 "author": author,
-                "book_image": book?.book_img,
+                "book_image": book?.book_img || "https://play-lh.googleusercontent.com/wnIIGkeBT-1w5TUAJlnfAbg7Ko8g2Hc4ynTyuEvEGS9gG-OXugAhf1pGNg2BkDC2NA",
                 "type_name": type,
                 "page": Number(page),
                 "publishing_location": publishing,

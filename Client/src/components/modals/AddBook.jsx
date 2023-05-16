@@ -113,6 +113,7 @@ const AddBook = () => {
         setLicensed('')
         setProducer('')
         setPublishing('')
+        setDetail('')
         setDescription('')
     }
 

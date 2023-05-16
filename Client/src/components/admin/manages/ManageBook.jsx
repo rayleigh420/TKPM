@@ -100,7 +100,7 @@ const ManageBook = () => {
                                             <div className="flex items-center space-x-3">
                                                 <div className="avatar">
                                                     <div className="mask mask-squircle w-12 h-12">
-                                                        <img src={item.book_img} alt="Avatar Tailwind CSS Component" />
+                                                        <img src={item.book_img || "https://play-lh.googleusercontent.com/wnIIGkeBT-1w5TUAJlnfAbg7Ko8g2Hc4ynTyuEvEGS9gG-OXugAhf1pGNg2BkDC2NA"} alt="Avatar Tailwind CSS Component" />
                                                     </div>
                                                 </div>
                                                 <div>
