@@ -5,7 +5,7 @@ const NewestBook = () => {
     return (
         <div className="flex flex-col items-start mt-[30px]">
             <p className='text-[28px] font-bold leading-[32.2px] tracking-[-0.56px] text-[#ffffff]'>Newest</p>
-            <div className="carousel carousel-center max-w-[370px] h-[430px] p-4 space-x-4 bg-neutral rounded-box">
+            {/* <div className="carousel carousel-center max-w-[370px] h-[430px] p-4 space-x-4 bg-neutral rounded-box">
                 {data.map(item => (
                     <div className="carousel-item w-[220px] flex flex-col gap-[20px] cursor-pointer">
                         <Link to='book'>
@@ -14,7 +14,7 @@ const NewestBook = () => {
                         </Link>
                     </div>
                 ))}
-            </div>
+            </div> */}
             {/* <BookList data={data} /> */}
         </div>
     )
