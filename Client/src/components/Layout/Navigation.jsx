@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { avaURL } from "../../pages/UserLayout"
 import AuthContext from "../../context/AuthProvider"
 import { useQuery } from "@tanstack/react-query"
@@ -10,6 +10,7 @@ const Navigation = ({ setLog }) => {
 
     const [search, setSearch] = useState('')
     const { auth, setAuth } = useContext(AuthContext)
+    const navigate = useNavigate()
 
     const setLogout = useLogout(false)
     // console.log(auth)
@@ -24,7 +25,13 @@ const Navigation = ({ setLog }) => {
     }
 
     const handleSubmit = (e) => {
-        alert(e.target.value)
+        e.preventDefault()
+        if (search == '') {
+            return;
+        }
+        const keyword = encodeURIComponent(search)
+        navigate(`/search?keyword=${keyword}`);
+        console.log(search)
     }
 
     const handleOpen = () => {
@@ -84,9 +91,11 @@ const Navigation = ({ setLog }) => {
                     </div> */}
                 </div>
                 <div className="flex-none gap-2">
-                    <div className="form-control">
-                        <input type="text" placeholder="Search" className="input input-bordered rounded-full bg-[#262627] w-[150px] focus:w-[220px] focus:ease-out duration-300" onChange={handleChangeSearch} value={search} onSubmit={handleSubmit} />
-                    </div>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-control">
+                            <input type="text" placeholder="Search" className="input input-bordered rounded-full bg-[#262627] w-[150px] focus:w-[220px] focus:ease-out duration-300" onChange={handleChangeSearch} value={search} />
+                        </div>
+                    </form>
                     <div className="dropdown dropdown-end">
                         <label tabIndex={auth?.name && 0} className="btn btn-ghost btn-circle avatar" onClick={handleOpen}>
                             <div className="w-10 rounded-full">

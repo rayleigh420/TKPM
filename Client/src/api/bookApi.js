@@ -53,4 +53,9 @@ export const deleteBook = async (book_id) => {
     return result.data
 }
 
-// export const searchBook = async ()
+export const searchBook = async (search_text, page) => {
+    const result = await axios.post(`/books/search?page=${page}`, {
+        search_text: search_text
+    })
+    return result.data
+}

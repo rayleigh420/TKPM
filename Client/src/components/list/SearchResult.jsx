@@ -1,51 +1,47 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom"
-import { getBookType, getGenericBook, searchBook } from "../../api/bookApi"
+import { Link, useLocation, useParams } from "react-router-dom"
+import { searchBook } from "../../api/bookApi";
 
-const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-
-const GenericBookList = () => {
-    const { generic } = useParams();
+const SearchResult = () => {
     const [page, setPage] = useState(1)
+
+    const location = useLocation()
+    const searchParams = new URLSearchParams(location.search);
+    const encodedKeyword = searchParams.get('keyword');
+    const keyword = decodeURIComponent(encodedKeyword);
+
+    console.log(keyword)
 
     const queryClient = useQueryClient()
 
     const { data, isLoading, isFetching, isError } = useQuery({
-        queryKey: ['books', generic, page],
-        queryFn: () => {
-            if (generic == 'popular' || generic == 'newest') {
-                return getGenericBook(generic, page)
-            }
-            else if (generic == 'search') {
-                // return searchBook(, page)
-            }
-            else {
-                return getBookType(generic, page)
-            }
-        },
+        queryKey: ['search', keyword, page],
+        queryFn: () => searchBook(keyword, page),
         keepPreviousData: true
     })
 
     const prefetchPrevPage = (page) => {
-        queryClient.prefetchQuery(['books', generic, page], {
-            queryFn: () => getGenericBook(generic, page),
+        queryClient.prefetchQuery(['books', keyword, page], {
+            queryFn: () => searchBook(keyword, page),
             staleTime: 10 * 1000,
             cacheTime: 10 * 1000,
         })
     }
 
     const prefetchNextPage = (page) => {
-        queryClient.prefetchQuery(['books', generic, page], {
-            queryFn: () => getGenericBook(generic, page),
+        queryClient.prefetchQuery(['books', keyword, page], {
+            queryFn: () => searchBook(keyword, page),
             staleTime: 10 * 1000,
             cacheTime: 10 * 1000,
         })
     }
 
+    console.log(data)
+
     return (
         <div className="flex flex-col items-start mt-[50px]">
-            <p className='text-[28px] font-bold leading-[32.2px] tracking-[-0.56px] text-[#ffffff] capitalize'>{generic}</p>
+            <p className='text-[28px] font-bold leading-[32.2px] tracking-[-0.56px] text-[#ffffff] capitalize'>Search {keyword}:</p>
             <div className="w-full mt-[20px] grid grid-cols-2 gap-y-6 gap-x-3">
                 {
                     isLoading ?
@@ -64,12 +60,12 @@ const GenericBookList = () => {
                                         <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-[320px] mb-2.5"></div>
                                         <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 w-[360px]"></div>
                                     </div>
-                                </div>
+                                </div >
                             ))
                         )
                         :
                         (
-                            data.books && data.books.map(item => (
+                            data && data.map(item => (
                                 <div className="flex flex-row gap-[12px]" key={item.book_id}>
                                     <Link to={"/book/" + item.book_id}>
                                         <div className=" cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px] overflow-hidden">
@@ -92,35 +88,16 @@ const GenericBookList = () => {
                         )
 
                 }
-                {/* {
-                    books && books.map(item => (
-                        <div className="flex flex-row gap-[12px]" key={item.book_id}>
-                            <Link to="/book">
-                                <div className={`bg-[url('${item.book_img}')]` + " cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px]"}></div>
-                            </Link>
-                            <div className="">
-                                <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
-                                <Link to="/book">
-                                    <h1 className="mt-[5px] text-[#ffffff] font-bold leading-[20px] cursor-pointer">{item.name}</h1>
-                                </Link>
-                                <p className="mt-[10px] text-[#bdbdbd] text-[14px] font-medium">Author: {item.author}</p>
-                                <p className="text-ellipsis overflow-hidden mt-[10px] text-[#bdbdbd] text-[14px] font-medium">
-                                    For decades, he had lived as a puppet of the tower. Throughout that time, who knew how many deaths he had encountered? One day, however, his memories returned to him. The First Floor Boss finally awakened
-                                </p>
-                            </div>
-                        </div>
-                    ))
-                } */}
-            </div>
-            <div className="flex flex-row justify-center mt-[100px] w-full">
+            </div >
+            <div div className="flex flex-row justify-center mt-[100px] w-full" >
                 <div className="btn-group grid grid-cols-3">
                     <button className="btn hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev - 1)} disabled={page == 1} onMouseEnter={() => prefetchPrevPage(page - 1)}>Previous page</button>
                     <button className="btn bg-[#242933] text-[#ffffff] font-bold hover:bg-[#242933]">Page {page}</button>
                     <button className="btn hover:bg-[#661ae6] hover:text-[#ffffff] hover:font-bold" onClick={() => setPage(prev => prev + 1)} disabled={page == data?.maxPage} onMouseEnter={() => prefetchNextPage(page + 1)}>Next</button>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 
-export default GenericBookList
+export default SearchResult

@@ -13,7 +13,7 @@ const ListRentedBook = () => {
         queryFn: () => getListRentedBook(auth?.user_id)
     })
 
-    console.log(books)
+    // console.log(books)
 
     return (
         <div className="ml-[180px] w-[880px]" >

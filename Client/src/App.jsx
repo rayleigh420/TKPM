@@ -14,6 +14,7 @@ import PaidBook from './components/status/PaidBook'
 import GenericBook from './pages/GenericBook'
 import RequireAuth from './components/auth/RequireAuth'
 import ScrollToTop from './HOC/ScrollToTop'
+import SearchResult from './components/list/SearchResult'
 
 function App() {
 
@@ -55,6 +56,7 @@ function App() {
 
           </Route>
           <Route path="/:generic" element={<GenericBook />} />
+          <Route path='/search' element={<SearchResult />} />
         </Route>
       </Routes>
     </>
