@@ -1,7 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { addBook } from "../../api/bookApi"
 import { toast } from "react-toastify"
+import { getListType } from "../../api/typeApi"
 
 const AddBook = () => {
     const [img, setImg] = useState(null)
@@ -17,6 +18,11 @@ const AddBook = () => {
     const [description, setDescription] = useState('')
 
     const queryClient = useQueryClient()
+
+    const { data: types, isLoading, iseError } = useQuery({
+        queryKey: ['types'],
+        queryFn: () => getListType(),
+    })
 
     const addBookMutate = useMutation({
         mutationFn: (data) => addBook(data),
@@ -79,21 +85,21 @@ const AddBook = () => {
     const handleAddBook = () => {
         console.log(name, author, type, year, page, licensed, producer, publishing, detail, description)
 
-        if (name == '' || author == '' || type == '' || licensed == '' || producer == '' || publishing == '' || detail == '' || description == '') {
-            return;
-        }
+        // if (name == '' || author == '' || type == '' || licensed == '' || producer == '' || publishing == '' || detail == '' || description == '') {
+        //     return;
+        // }
 
         addBookMutate.mutate({
             "name": name,
             "publisher": producer,
             "yearpublished": Number(year),
             "author": author,
-            "book_image": book?.book_img,
-            "amount": 0,
+            "book_image": img,
+            "amount": Number(0),
             "type_name": type,
-            "page": page,
+            "page": Number(page),
             "publishing_location": publishing,
-            "borrowed_quantity": 0,
+            "borrowed_quantity": Number(0),
             "license": licensed,
             "description": description,
             "details": detail
@@ -152,9 +158,11 @@ const AddBook = () => {
                                     <span className="label-text text-[#ffffff]">Type</span>
                                 </label>
                                 <select required className="select select-bordered w-full max-w-xs" value={type} onChange={handleChangeType}>
-                                    <option disabled selected>Enter type of book</option>
-                                    <option value="ln">Light Novel</option>
-                                    <option value="mg">Manga</option>
+                                    {
+                                        types && types?.map(item => (
+                                            <option value={item.typename}>{item.typename}</option>
+                                        ))
+                                    }
                                 </select>
                             </div>
                         </div>
