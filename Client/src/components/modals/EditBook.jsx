@@ -99,15 +99,10 @@ const EditBook = ({ book }) => {
 
     const handleUpdateBook = () => {
         console.log(name, author, type, year, page, licensed, producer, publishing, detail, description)
-        setName('')
-        setAuthor('')
-        setType('')
-        setYear('')
-        setPage('')
-        setLicensed('')
-        setProducer('')
-        setPublishing('')
-        setDescription('')
+
+        if (name == '' || author == '' || type == '' || licensed == '' || producer == '' || publishing == '' || detail == '' || description == '') {
+            return;
+        }
 
         updateBookMutate.mutate({
             book_id: book?.book_id,
@@ -125,6 +120,18 @@ const EditBook = ({ book }) => {
                 "details": detail
             }
         })
+
+        setName('')
+        setAuthor('')
+        setType('')
+        setYear('')
+        setPage('')
+        setLicensed('')
+        setProducer('')
+        setPublishing('')
+        setDescription('')
+
+
     }
 
     return (
@@ -149,7 +156,7 @@ const EditBook = ({ book }) => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Name</span>
                                 </label>
-                                <input value={name} onChange={handleChangeName} type="text" placeholder="Enter name of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={name} onChange={handleChangeName} type="text" placeholder="Enter name of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
 
@@ -158,7 +165,7 @@ const EditBook = ({ book }) => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Author</span>
                                 </label>
-                                <input value={author} onChange={handleChangeAuthor} type="text" placeholder="Enter author of book " className="input input-bordered w-full max-w-xs" />
+                                <input required value={author} onChange={handleChangeAuthor} type="text" placeholder="Enter author of book " className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
                     </div>
@@ -183,7 +190,7 @@ const EditBook = ({ book }) => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Year</span>
                                 </label>
-                                <input value={year} onChange={handleChangeYear} type="number" min="1900" max="2099" step="1" placeholder="Chose year of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={year} onChange={handleChangeYear} type="number" min="1900" max="2099" step="1" placeholder="Chose year of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
                     </div>
@@ -194,7 +201,7 @@ const EditBook = ({ book }) => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Producer</span>
                                 </label>
-                                <input value={producer} onChange={handleChangeProducer} type="text" placeholder="Enter producer of book " className="input input-bordered w-full max-w-xs" />
+                                <input required value={producer} onChange={handleChangeProducer} type="text" placeholder="Enter producer of book " className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
 
@@ -203,7 +210,7 @@ const EditBook = ({ book }) => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Publishing Location</span>
                                 </label>
-                                <input value={publishing} onChange={handleChangePublishing} type="text" placeholder="Enter publishing location of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={publishing} onChange={handleChangePublishing} type="text" placeholder="Enter publishing location of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
                     </div>
@@ -215,7 +222,7 @@ const EditBook = ({ book }) => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Pages</span>
                                 </label>
-                                <input value={page} onChange={handleChangePage} type="number" min="1" max="3000" step="1" placeholder="Enter page of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={page} onChange={handleChangePage} type="number" min="1" max="3000" step="1" placeholder="Enter page of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
                         <div className="w-full mt-[22px]">
@@ -223,7 +230,7 @@ const EditBook = ({ book }) => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Licensed</span>
                                 </label>
-                                <input value={licensed} onChange={handleChangeLicensed} type="text" placeholder="Enter licensed of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={licensed} onChange={handleChangeLicensed} type="text" placeholder="Enter licensed of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
 
