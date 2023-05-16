@@ -1,4 +1,7 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
+import { addBook } from "../../api/bookApi"
+import { toast } from "react-toastify"
 
 const AddBook = () => {
     const [img, setImg] = useState(null)
@@ -12,6 +15,22 @@ const AddBook = () => {
     const [publishing, setPublishing] = useState('')
     const [detail, setDetail] = useState('')
     const [description, setDescription] = useState('')
+
+    const queryClient = useQueryClient()
+
+    const addBookMutate = useMutation({
+        mutationFn: (data) => addBook(data),
+        onSuccess: (data) => {
+            console.log(data)
+            toast.info("Add new book success!")
+        },
+        onError: () => {
+            toast.error("Somethings wrong. Pleaes try again!")
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'books'] })
+        }
+    })
 
     const handleChangeImage = (e) => {
         setImg(URL.createObjectURL(e.target.files[0]))
@@ -59,6 +78,27 @@ const AddBook = () => {
 
     const handleAddBook = () => {
         console.log(name, author, type, year, page, licensed, producer, publishing, detail, description)
+
+        if (name == '' || author == '' || type == '' || licensed == '' || producer == '' || publishing == '' || detail == '' || description == '') {
+            return;
+        }
+
+        addBookMutate.mutate({
+            "name": name,
+            "publisher": producer,
+            "yearpublished": Number(year),
+            "author": author,
+            "book_image": book?.book_img,
+            "amount": 0,
+            "type_name": type,
+            "page": page,
+            "publishing_location": publishing,
+            "borrowed_quantity": 0,
+            "license": licensed,
+            "description": description,
+            "details": detail
+        })
+
         setName('')
         setAuthor('')
         setType('')
@@ -92,7 +132,7 @@ const AddBook = () => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Name</span>
                                 </label>
-                                <input value={name} onChange={handleChangeName} type="text" placeholder="Enter name of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={name} onChange={handleChangeName} type="text" placeholder="Enter name of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
 
@@ -101,7 +141,7 @@ const AddBook = () => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Author</span>
                                 </label>
-                                <input value={author} onChange={handleChangeAuthor} type="text" placeholder="Enter author of book " className="input input-bordered w-full max-w-xs" />
+                                <input required value={author} onChange={handleChangeAuthor} type="text" placeholder="Enter author of book " className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
                     </div>
@@ -111,7 +151,7 @@ const AddBook = () => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Type</span>
                                 </label>
-                                <select className="select select-bordered w-full max-w-xs" value={type} onChange={handleChangeType}>
+                                <select required className="select select-bordered w-full max-w-xs" value={type} onChange={handleChangeType}>
                                     <option disabled selected>Enter type of book</option>
                                     <option value="ln">Light Novel</option>
                                     <option value="mg">Manga</option>
@@ -124,7 +164,7 @@ const AddBook = () => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Year</span>
                                 </label>
-                                <input value={year} onChange={handleChangeYear} type="number" min="1900" max="2099" step="1" placeholder="Chose year of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={year} onChange={handleChangeYear} type="number" min="1900" max="2099" step="1" placeholder="Chose year of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
                     </div>
@@ -135,7 +175,7 @@ const AddBook = () => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Producer</span>
                                 </label>
-                                <input value={producer} onChange={handleChangeProducer} type="text" placeholder="Enter producer of book " className="input input-bordered w-full max-w-xs" />
+                                <input required value={producer} onChange={handleChangeProducer} type="text" placeholder="Enter producer of book " className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
 
@@ -144,7 +184,7 @@ const AddBook = () => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Publishing Location</span>
                                 </label>
-                                <input value={publishing} onChange={handleChangePublishing} type="text" placeholder="Enter publishing location of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={publishing} onChange={handleChangePublishing} type="text" placeholder="Enter publishing location of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
                     </div>
@@ -156,7 +196,7 @@ const AddBook = () => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Pages</span>
                                 </label>
-                                <input value={page} onChange={handleChangePage} type="number" min="1" max="3000" step="1" placeholder="Enter page of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={page} onChange={handleChangePage} type="number" min="1" max="3000" step="1" placeholder="Enter page of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
                         <div className="w-full mt-[22px]">
@@ -164,7 +204,7 @@ const AddBook = () => {
                                 <label className="label">
                                     <span className="label-text text-[#ffffff]">Licensed</span>
                                 </label>
-                                <input value={licensed} onChange={handleChangeLicensed} type="text" placeholder="Enter licensed of book" className="input input-bordered w-full max-w-xs" />
+                                <input required value={licensed} onChange={handleChangeLicensed} type="text" placeholder="Enter licensed of book" className="input input-bordered w-full max-w-xs" />
                             </div>
                         </div>
 

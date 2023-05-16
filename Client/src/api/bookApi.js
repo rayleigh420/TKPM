@@ -38,6 +38,11 @@ export const rentBook = async (info) => {
     return result.data
 }
 
+export const addBook = async (data) => {
+    const result = await axios.post('/books', data)
+    return result.data
+}
+
 export const updateBook = async (data) => {
     const result = await axios.put(`/books/${data.book_id}`, data.info)
     return result.data
