@@ -52,3 +52,8 @@ export const paidBook = async ({ book_hire_id, token }) => {
     })
     return result.data
 }
+
+export const getListRentedBook = async (user_id) => {
+    const result = await axios.get(`/history/user/${user_id}`)
+    return result.data
+}

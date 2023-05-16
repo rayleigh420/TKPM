@@ -1,7 +1,20 @@
 import { Link } from "react-router-dom"
 import { data } from "../../pages/home"
+import { useContext } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { getListRentedBook } from "../../api/manageApi"
+import AuthContext from "../../context/AuthProvider"
 
 const ListRentedBook = () => {
+    const { auth } = useContext(AuthContext)
+
+    const { data: books, isLoading, isError } = useQuery({
+        queryKey: ['user', 'history'],
+        queryFn: () => getListRentedBook(auth?.user_id)
+    })
+
+    console.log(books)
+
     return (
         <div className="ml-[180px] w-[880px]" >
             <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">List rented book</h1>
