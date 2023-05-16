@@ -48,4 +48,9 @@ export const updateBook = async (data) => {
     return result.data
 }
 
+export const deleteBook = async (book_id) => {
+    const result = await axios.delete(`/books/${book_id}`)
+    return result.data
+}
+
 // export const searchBook = async ()
