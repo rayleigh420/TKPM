@@ -83,7 +83,7 @@ const SignUp = ({ sign, setLog, setSign }) => {
 
     return (
         <>
-            <input checked={sign} type="checkbox" id="my-modal-5" className="modal-toggle" />
+            <input checked={sign} type="checkbox" id="my-modal-5" className="modal-toggle" readOnly />
             <label htmlFor="my-modal-5" className="modal cursor-pointer">
                 <label className="modal-box relative flex flex-col items-center max-w-md" htmlFor="">
                     <label htmlFor="my-modal-4" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={handleCloseSignUp}>✕</label>
