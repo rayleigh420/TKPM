@@ -27,6 +27,9 @@ const AddVersionBook = () => {
 
     const handleAddVersion = () => {
         console.log(id, location)
+        if (location == '') {
+            return;
+        }
         addVersionBookMutate.mutate({
             book_id: id,
             location: location
@@ -50,7 +53,7 @@ const AddVersionBook = () => {
                             <label className="label">
                                 <span className="label-text text-[#ffffff]">Location</span>
                             </label>
-                            <input value={location} onChange={handleChangeLocation} type="text" placeholder="Enter new location " className="input input-bordered w-full max-w-xs" />
+                            <input required value={location} onChange={handleChangeLocation} type="text" placeholder="Enter new location " className="input input-bordered w-full max-w-xs" />
                         </div>
                     </div>
                     <div className="flex flex-row justify-end mt-[20px]">
