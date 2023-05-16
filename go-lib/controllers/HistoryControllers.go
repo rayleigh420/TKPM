@@ -116,12 +116,10 @@ func GetHistory() gin.HandlerFunc {
 	}
 }
 
-func GetHistoryByUserId() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+func GetHistoryOfUser(user_id string)([]bson.M,error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
 		defer cancel()
 		res := []bson.M{}
-		user_id := c.Param("user_id")
 		matchStage := bson.D{{Key: "$match", Value: bson.D{{Key: "user_id", Value: user_id}}}}
 		lookupStage := bson.D{
 			{Key: "$lookup", Value: bson.D{
@@ -196,11 +194,27 @@ func GetHistoryByUserId() gin.HandlerFunc {
 			matchStage, lookupStage, lookupStage2, lookupStage3, unwindStage, lookupStage4, unwindStage2, unwindStage3, unwindStage4,
 		})
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "error aggregating"})
-			return
+			return res,err
 		}
 		cursor.All(ctx, &res)
-		c.JSON(http.StatusOK, res)
+		return res,nil
+}
+
+func GetHistoryByUserId() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user_id := c.Param("user_id")
+		res,err := GetHistoryOfUser(user_id)
+		res2,err2 := GetRentListOfUserById(user_id)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":err})
+			return
+		}
+		if err2 != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{"error":err})
+			return
+		}
+		res = append(res, res2[0:]...)
+		c.JSON(http.StatusOK,res)
 	}
 }
 
