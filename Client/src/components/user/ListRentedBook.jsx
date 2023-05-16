@@ -33,53 +33,48 @@ const ListRentedBook = () => {
                     <tbody className="mt-[30px]">
                         {/* row 1 */}
                         {
-                            data.map(item => (
-                                <tr>
+                            books && books?.map(item => (
+                                <tr key={item?.history_id}>
                                     <td>
                                         <div className="flex items-center space-x-3">
                                             <div className="avatar">
                                                 <div className="mask mask-squircle w-12 h-12">
-                                                    <img src={item.src} alt="Avatar Tailwind CSS Component" />
+                                                    <img src={item?.book.book_img} alt="Avatar Tailwind CSS Component" />
                                                 </div>
                                             </div>
                                             <div>
-                                                <Link to="/book">
-                                                    <div className="font-bold">{item.name}</div>
+                                                <Link to={`/book/${item.book.book_id}`}>
+                                                    <div className="font-bold">{item?.book.name}</div>
+                                                    <div className="text-sm opacity-50">Code: {item?.book_rent_id || item?.book_hire_id || item?.history_id}</div>
                                                 </Link>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>69696969</td>
-                                    <td>12/03/2023</td>
-                                    <td>12/05/2023</td>
+                                    <td>{item?.book_detail_id}</td>
+                                    <td>{item?.date_borrowed}</td>
+                                    <td>{item?.date_return}</td>
                                     <td>
-                                        <div className="badge bg-red-500 text-[#ffffff] font-semibold">Waiting</div>
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                        {
-                            data.map(item => (
-                                <tr>
-                                    <td>
-                                        <div className="flex items-center space-x-3">
-                                            <div className="avatar">
-                                                <div className="mask mask-squircle w-12 h-12">
-                                                    <img src={item.src} alt="Avatar Tailwind CSS Component" />
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <Link to="/book">
-                                                    <div className="font-bold">{item.name}</div>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>69696969</td>
-                                    <td>12/03/2023</td>
-                                    <td>12/05/2023</td>
-                                    <td>
-                                        <div className="badge bg-red-500 text-[#ffffff] font-semibold">Waiting</div>
+                                        {
+                                            item?.status == 'returned'
+                                                ?
+                                                (
+                                                    <div className="badge bg-green-500 text-[#ffffff] font-semibold">Returned</div>
+                                                )
+                                                :
+                                                (
+                                                    item?.status == 'booked'
+                                                        ?
+                                                        (
+                                                            <div className="badge bg-yellow-500 text-[#ffffff] font-semibold">Booked</div>
+
+                                                        )
+                                                        :
+                                                        (
+                                                            <div className="badge bg-red-500 text-[#ffffff] font-semibold">Borrowed</div>
+
+                                                        )
+                                                )
+                                        }
                                     </td>
                                 </tr>
                             ))
@@ -89,7 +84,7 @@ const ListRentedBook = () => {
                     <tfoot className="sticky bottom-0">
                         <tr>
                             <th>Name Book</th>
-                            <th>ID Book</th>
+                            <th>ID</th>
                             <th>From</th>
                             <th>To</th>
                             <th>Status</th>
