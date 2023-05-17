@@ -8,6 +8,7 @@ import { getDetailBook, rentBook } from "../api/bookApi"
 import AuthContext from "../context/AuthProvider"
 import LocationVersion from "../components/admin/LocationVersion"
 import MessageRent from "../components/modals/MessageRent"
+import { toast } from "react-toastify"
 
 //status:
 
@@ -19,6 +20,7 @@ const Book = () => {
     const [tab, setTab] = useState(false)
     const [rent, setRent] = useState()
     const { id } = useParams()
+    const { error, setError } = useState('')
 
     const { auth } = useContext(AuthContext)
 
@@ -32,7 +34,10 @@ const Book = () => {
         onSuccess: (data) => {
             setRent(data.book_rent_id)
             console.log("Data: ", data)
-            // alert(data.)
+        },
+        onError: (err) => {
+            toast.error(err.response.data.error)
+            setRent(err.response.data.error)
         }
     })
 
@@ -57,8 +62,8 @@ const Book = () => {
             {/* {
                 rent && 
             } */}
+
             <MessageRent rent={rent} />
-            {/* Put this part before </body> tag */}
 
             <div className="flex flex-col items-center">
                 <div className=" w-[62%] py-[60px] flex flex-row">
