@@ -25,7 +25,7 @@ const HistoryBook = () => {
             {/* <label htmlFor="history_book" className="btn">open modal</label> */}
 
             {/* Put this part before </body> tag */}
-            <input type="checkbox" id="history_book" className="modal-toggle" />
+            <input type="checkbox" id="history_book" className="modal-toggle" readOnly />
             <div className="modal">
                 <div className="modal-box w-11/12 max-w-4xl">
                     <h3 className="font-bold text-lg">Hisotry rented of book</h3>
@@ -44,7 +44,7 @@ const HistoryBook = () => {
                                 {/* row 1 */}
                                 {
                                     books && books?.map(item => (
-                                        <tr>
+                                        <tr key={item?._id}>
                                             <td>
                                                 <div className="flex items-center space-x-3">
                                                     <div className="avatar">

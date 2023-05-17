@@ -31,6 +31,7 @@ const Navigation = ({ setLog }) => {
         }
         const keyword = encodeURIComponent(search)
         navigate(`/search?keyword=${keyword}`);
+        setSearch('')
         console.log(search)
     }
 
