@@ -38,6 +38,14 @@ export const rentBook = async (info) => {
     return result.data
 }
 
+export const rentBookAdmin = async ({ book_id, email }) => {
+    const result = await axios.post('direct_hire', {
+        book_id: book_id,
+        email: email
+    })
+    return result.data
+}
+
 export const addBook = async (data) => {
     const result = await axios.post('/books', data)
     return result.data

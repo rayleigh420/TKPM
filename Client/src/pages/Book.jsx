@@ -9,6 +9,7 @@ import AuthContext from "../context/AuthProvider"
 import LocationVersion from "../components/admin/LocationVersion"
 import MessageRent from "../components/modals/MessageRent"
 import { toast } from "react-toastify"
+import DirectHire from "../components/modals/DirectHire"
 
 //status:
 
@@ -51,6 +52,9 @@ const Book = () => {
 
     const handleRentBook = (item) => {
         // setRent('123123123')
+        if (auth?.role == 'admin') {
+            return;
+        }
         rentBookMutate.mutate({
             book_id: id,
             user_id: auth?.user_id
@@ -63,7 +67,8 @@ const Book = () => {
                 rent && 
             } */}
 
-            <MessageRent rent={rent} />
+            {auth?.role == 'user' && <MessageRent rent={rent} />}
+            {auth?.role == 'admin' && <DirectHire />}
 
             <div className="flex flex-col items-center">
                 <div className=" w-[62%] py-[60px] flex flex-row">
@@ -87,7 +92,7 @@ const Book = () => {
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Producer: {book?.publisher}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Publishing Location: {book?.publishing_location}</p>
                         <button className="btn w-[150px] mt-[55px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600" onClick={() => handleRentBook(book?.book_name)}>
-                            <label htmlFor="messagerent" className="bg-transparent border-none cursor-pointer">
+                            <label htmlFor={auth?.role == 'user' ? "messagerent" : "directhire"} className="bg-transparent border-none cursor-pointer">
                                 Rent Book
                             </label>
                         </button>
