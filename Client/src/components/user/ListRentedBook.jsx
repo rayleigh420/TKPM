@@ -13,7 +13,7 @@ const ListRentedBook = () => {
         queryFn: () => getListRentedBook(auth?.user_id)
     })
 
-    // console.log(books)
+    console.log(books)
 
     return (
         <div className="ml-[180px] w-[880px]" >
@@ -52,7 +52,7 @@ const ListRentedBook = () => {
                                     </td>
                                     <td>{item?.book_detail_id}</td>
                                     <td>{item?.date_borrowed}</td>
-                                    <td>{item?.date_return}</td>
+                                    <td>{item?.date_return || item?.reserve_date}</td>
                                     <td>
                                         {
                                             item?.status == 'returned'
@@ -62,7 +62,7 @@ const ListRentedBook = () => {
                                                 )
                                                 :
                                                 (
-                                                    item?.status == 'booked'
+                                                    item?.book_detail.status == 'booked'
                                                         ?
                                                         (
                                                             <div className="badge bg-yellow-500 text-[#ffffff] font-semibold">Booked</div>

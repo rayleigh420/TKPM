@@ -61,7 +61,7 @@ const HistoryBook = () => {
                                             </td>
                                             <td>{item?.book_detail_id}</td>
                                             <td>{item?.date_borrowed}</td>
-                                            <td>{item?.date_return}</td>
+                                            <td>{item?.date_return || item?.reserve_date}</td>
                                             <td>
                                                 {
 
