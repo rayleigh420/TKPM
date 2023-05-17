@@ -57,5 +57,9 @@ export const searchBook = async (search_text, page) => {
     const result = await axios.post(`/books/search?page=${page}`, {
         search_text: search_text
     })
-    return result.data
+    console.log(result)
+    return {
+        books: result.data,
+        maxPage: result.headers.total
+    }
 }
