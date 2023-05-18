@@ -591,6 +591,15 @@ func RentABook() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "bad rent model"})
 			return
 		}
+		//check if user exists
+		res := UserCollection.FindOne(ctx,bson.M{"user_id":obj["user_id"].(string)})
+		if res.Err() == mongo.ErrNoDocuments{
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": "failed",
+				"error":  "user not exists",
+			})
+			return
+		}
 		//check if user is already borrowing
 		count, _ := BookRentCollection.CountDocuments(ctx, bson.M{"user_id": obj["user_id"].(string)})
 		if count > 0 {

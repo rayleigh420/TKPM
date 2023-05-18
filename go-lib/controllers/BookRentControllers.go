@@ -18,6 +18,7 @@ func UpdateRentRequest() error {
 	defer cancel()
 	now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 	yest, _ := time.Parse(time.RFC3339, time.Now().Add(-24*time.Hour).Format(time.RFC3339))
+	// min1, _ := time.Parse(time.RFC3339, time.Now().Add(-1*time.Minute).Format(time.RFC3339))
 	//delete rent request and update status to ready if over 24 hrs
 	updateObj := bson.D{{Key: "$set", Value: bson.D{{Key: "status", Value: "ready"}, {Key: "updated_at", Value: now}}}}
 
@@ -34,6 +35,18 @@ func UpdateRentRequest() error {
 			},
 		}},
 	}
+	// matchStage := bson.D{
+	// 	{Key: "$match", Value: bson.D{
+	// 		{Key: "$and", Value: bson.A{
+	// 			bson.D{
+	// 				{Key: "updated_at", Value: bson.D{
+	// 					{Key: "$lte", Value: min1},
+	// 				}},
+	// 				{Key: "status", Value: "booked"},
+	// 			}},
+	// 		},
+	// 	}},
+	// }
 	groupStage := bson.D{
 		{Key: "$group", Value: bson.D{
 			{Key: "_id", Value: "$book_id"},
@@ -67,12 +80,25 @@ func UpdateRentRequest() error {
 				}},
 				{Key: "status", Value: "booked"},
 			}}}}, updateObj)
+	// BookDetailCollection.UpdateMany(ctx, bson.D{
+	// 	{Key: "$and", Value: bson.A{
+	// 		bson.D{
+	// 			{Key: "updated_at", Value: bson.D{
+	// 				{Key: "$lte", Value: min1},
+	// 			}},
+	// 			{Key: "status", Value: "booked"},
+	// 		}}}}, updateObj)
 	//step delete rent request
 	BookRentCollection.DeleteMany(ctx, bson.D{
 		{Key: "reserve_date", Value: bson.D{
 			{Key: "$lte", Value: yest},
 		}},
 	})
+	// BookRentCollection.DeleteMany(ctx, bson.D{
+	// 	{Key: "reserve_date", Value: bson.D{
+	// 		{Key: "$lte", Value: min1},
+	// 	}},
+	// })
 	return nil
 }
 func GetRentList() gin.HandlerFunc {
