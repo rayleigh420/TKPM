@@ -2,9 +2,11 @@ import { useContext, useState } from "react"
 import AuthContext from "../../context/AuthProvider"
 import { useMutation } from "@tanstack/react-query"
 import { uploadAva } from "../../api/imgApi"
+import { updateProfile } from "../../api/profileApi"
+import { toast } from "react-toastify"
 
 const ProfileForm = () => {
-    const { auth } = useContext(AuthContext)
+    const { auth, setAuth } = useContext(AuthContext)
 
     const [img, setImg] = useState(null)
     const [imgURL, setImgURL] = useState(auth.ava)
@@ -14,7 +16,26 @@ const ProfileForm = () => {
     const uploadAvaMutation = useMutation({
         mutationFn: (imgForm) => uploadAva(imgForm),
         onSuccess: (data) => {
+            console.log("Img", data)
+            setImgURL(data)
+            // setAuth
+        }
+    })
+
+    const updateProfileMutate = useMutation({
+        mutationFn: (info) => updateProfile(info),
+        onSuccess: (data) => {
             console.log(data)
+            if (data.status == 'success') {
+                toast.info("Update profile success!")
+                setAuth({
+                    ...auth,
+                    name: name,
+                    email: email,
+                    ava: imgURL,
+                    token: data.token
+                })
+            }
         }
     })
 
@@ -38,9 +59,16 @@ const ProfileForm = () => {
 
         uploadAvaMutation.mutate(imgForm)
 
-        setImgURL(null)
-        setName('')
-        setEmail('')
+        updateProfileMutate.mutate({
+            user_id: auth?.user_id,
+            name: name,
+            avatar: imgURL,
+            email: email
+        })
+
+        // setImgURL(null)
+        // setName('')
+        // setEmail('')
     }
 
     return (
@@ -65,7 +93,7 @@ const ProfileForm = () => {
                         <label className="label">
                             <span className="label-text text-[#ffffff] font-semibold">Name</span>
                         </label>
-                        <input value={name} onChange={handleChangeName} type="text" placeholder="Le Nhat Duy" className="input input-bordered w-full max-w-xs" />
+                        <input value={name} onChange={handleChangeName} type="text" placeholder="Enter your name" className="input input-bordered w-full max-w-xs" />
                     </div>
                 </div>
 
@@ -74,7 +102,7 @@ const ProfileForm = () => {
                         <label className="label">
                             <span className="label-text text-[#ffffff] font-semibold">Email</span>
                         </label>
-                        <input value={email} onChange={handleChangeEmail} type="email" placeholder="strip@gmail.com" className="input input-bordered w-full max-w-xs" />
+                        <input value={email} onChange={handleChangeEmail} type="email" placeholder="Enter your email" className="input input-bordered w-full max-w-xs" />
                     </div>
                 </div>
                 <button className="lg:ml-[600px] btn w-[125px] mt-[35px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600" onClick={handleSaveProfile}>Save</button>

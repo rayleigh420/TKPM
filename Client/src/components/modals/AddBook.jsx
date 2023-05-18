@@ -3,9 +3,11 @@ import { useState } from "react"
 import { addBook } from "../../api/bookApi"
 import { toast } from "react-toastify"
 import { getListType } from "../../api/typeApi"
+import { uploadAva } from "../../api/imgApi"
 
 const AddBook = () => {
     const [img, setImg] = useState(null)
+    const [imgURL, setImgURL] = useState('')
     const [name, setName] = useState('')
     const [author, setAuthor] = useState('')
     const [type, setType] = useState('')
@@ -24,6 +26,13 @@ const AddBook = () => {
         queryFn: () => getListType(),
     })
 
+    const uploadAvaMutation = useMutation({
+        mutationFn: (imgForm) => uploadAva(imgForm),
+        onSuccess: (data) => {
+            console.log(data)
+        }
+    })
+
     const addBookMutate = useMutation({
         mutationFn: (data) => addBook(data),
         onSuccess: (data) => {
@@ -39,7 +48,9 @@ const AddBook = () => {
     })
 
     const handleChangeImage = (e) => {
-        setImg(URL.createObjectURL(e.target.files[0]))
+        // setImg(URL.createObjectURL(e.target.files[0]))
+        setImgURL(URL.createObjectURL(e.target.files[0]))
+        setImg(e.target.files[0])
     }
 
     const handleChangeAuthor = (e) => {
@@ -89,6 +100,11 @@ const AddBook = () => {
         //     return;
         // }
 
+        const imgForm = new FormData();
+        imgForm.append('image', img);
+
+        uploadAvaMutation.mutate(imgForm)
+
         addBookMutate.mutate({
             "name": name,
             "publisher": producer,
@@ -127,7 +143,7 @@ const AddBook = () => {
                         <div className="avatar">
                             <div className="w-24 rounded-full hover:shadow-md ring hover:ring-[#121314] ring-[#064CF6] ring-offset-base-100 ring-offset-2">
                                 <label className="cursor-pointer" htmlFor="file_input">
-                                    <img src={img || "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/1200px-OOjs_UI_icon_userAvatar.svg.png"} />
+                                    <img src={imgURL || "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/1200px-OOjs_UI_icon_userAvatar.svg.png"} />
                                 </label>
                                 <input className="hidden" id="file_input" type="file" accept=".jpg,.jpeg,.png" onChange={handleChangeImage}></input>
                             </div>
