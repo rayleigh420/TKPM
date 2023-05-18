@@ -3,10 +3,12 @@ import { useEffect, useState } from "react"
 import { updateBook } from "../../api/bookApi"
 import { toast } from "react-toastify"
 import { getListType } from "../../api/typeApi"
+import { uploadAva } from "../../api/imgApi"
 
 const EditBook = ({ book }) => {
     console.log(book)
-    const [img, setImg] = useState(book?.book_img)
+    const [img, setImg] = useState(null)
+    const [imgURL, setImgURL] = useState(book?.book_img)
     const [name, setName] = useState(book?.name)
     const [author, setAuthor] = useState(book?.author)
     const [type, setType] = useState(book?.type.typename)
@@ -25,11 +27,47 @@ const EditBook = ({ book }) => {
         queryFn: () => getListType(),
     })
 
+    const uploadAvaMutation = useMutation({
+        mutationFn: (imgForm) => uploadAva(imgForm),
+        onSuccess: (data) => {
+            console.log(data)
+            setImgURL(prev => data)
+
+            updateBookMutate.mutate({
+                book_id: book?.book_id,
+                info: {
+                    "name": name,
+                    "publisher": producer,
+                    "yearpublished": Number(year),
+                    "author": author,
+                    "book_image": data,
+                    "type_name": type,
+                    "page": Number(page),
+                    "publishing_location": publishing,
+                    "license": licensed,
+                    "description": description,
+                    "details": detail
+                }
+            })
+        }
+    })
+
     const updateBookMutate = useMutation({
         mutationFn: (data) => updateBook(data),
         onSuccess: (data) => {
             console.log(data)
             toast.info("Update book successed!")
+            setImg(null)
+            setImgURL('')
+            setName('')
+            setAuthor('')
+            setType('')
+            setYear('')
+            setPage('')
+            setLicensed('')
+            setProducer('')
+            setPublishing('')
+            setDescription('')
         },
         onError: () => {
             toast.error("Something wrong. Please try again")
@@ -54,7 +92,8 @@ const EditBook = ({ book }) => {
     }, [book])
 
     const handleChangeImage = (e) => {
-        setImg(URL.createObjectURL(e.target.files[0]))
+        setImgURL(URL.createObjectURL(e.target.files[0]))
+        setImg(e.target.files[0])
     }
 
     const handleChangeAuthor = (e) => {
@@ -104,33 +143,30 @@ const EditBook = ({ book }) => {
             return;
         }
 
-        updateBookMutate.mutate({
-            book_id: book?.book_id,
-            info: {
-                "name": name,
-                "publisher": producer,
-                "yearpublished": Number(year),
-                "author": author,
-                "book_image": book?.book_img || "https://play-lh.googleusercontent.com/wnIIGkeBT-1w5TUAJlnfAbg7Ko8g2Hc4ynTyuEvEGS9gG-OXugAhf1pGNg2BkDC2NA",
-                "type_name": type,
-                "page": Number(page),
-                "publishing_location": publishing,
-                "license": licensed,
-                "description": description,
-                "details": detail
-            }
-        })
+        if (img != null) {
+            const imgForm = new FormData();
+            imgForm.append('image', img);
 
-        setName('')
-        setAuthor('')
-        setType('')
-        setYear('')
-        setPage('')
-        setLicensed('')
-        setProducer('')
-        setPublishing('')
-        setDescription('')
-
+            uploadAvaMutation.mutate(imgForm)
+        }
+        else {
+            updateBookMutate.mutate({
+                book_id: book?.book_id,
+                info: {
+                    "name": name,
+                    "publisher": producer,
+                    "yearpublished": Number(year),
+                    "author": author,
+                    "book_image": "https://play-lh.googleusercontent.com/wnIIGkeBT-1w5TUAJlnfAbg7Ko8g2Hc4ynTyuEvEGS9gG-OXugAhf1pGNg2BkDC2NA",
+                    "type_name": type,
+                    "page": Number(page),
+                    "publishing_location": publishing,
+                    "license": licensed,
+                    "description": description,
+                    "details": detail
+                }
+            })
+        }
 
     }
 
@@ -144,7 +180,7 @@ const EditBook = ({ book }) => {
                         <div className="avatar">
                             <div className="w-24 rounded-full hover:shadow-md ring hover:ring-[#121314] ring-[#064CF6] ring-offset-base-100 ring-offset-2">
                                 <label className="cursor-pointer" htmlFor="file_input">
-                                    <img src={img || "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/1200px-OOjs_UI_icon_userAvatar.svg.png"} />
+                                    <img src={imgURL || "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/1200px-OOjs_UI_icon_userAvatar.svg.png"} />
                                 </label>
                                 <input className="hidden" id="file_input" type="file" accept=".jpg,.jpeg,.png" onChange={handleChangeImage}></input>
                             </div>
