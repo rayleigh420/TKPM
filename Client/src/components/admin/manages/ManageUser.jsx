@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { data } from "../../../pages/home"
 import { useContext, useState } from "react"
 import useDebounce from "../../../hooks/useDebounce"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { deleteUser, getAllUser } from "../../../api/userApi"
 import AuthContext from "../../../context/AuthProvider"
 import { toast } from "react-toastify"
@@ -12,6 +12,8 @@ const ManageUser = () => {
     const debounced = useDebounce(search, 1000)
 
     const { auth, setAuth } = useContext(AuthContext)
+
+    const queryClient = useQueryClient()
 
     const { data: users, isLoading, isError } = useQuery({
         queryKey: ['admin', 'users'],
@@ -25,6 +27,9 @@ const ManageUser = () => {
         },
         onError: () => {
             toast.error("Delete failed! Please try again")
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'users'] })
         }
     })
 
