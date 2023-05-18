@@ -70,8 +70,8 @@ const SearchResult = () => {
                                 data.books && data.books?.map(item => (
                                     <div className="flex flex-row gap-[12px]" key={item.book_id}>
                                         <Link to={"/book/" + item.book_id}>
-                                            <div className=" cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px] overflow-hidden">
-                                                <img src={item.book_img} className="w-full h-full" />
+                                            <div className=" cursor-pointer min-w-[125px] max-w-[130px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px] overflow-hidden">
+                                                <img src={item?.book_img || item?.book_image} className="w-full h-full" />
                                             </div>
                                             {/* <div className={`bg-[url('${item.book_img}')]` + " cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px]"}></div> */}
                                         </Link>
