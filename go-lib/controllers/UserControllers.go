@@ -160,7 +160,16 @@ func Updateuser() gin.HandlerFunc {
 		}
 		updateObj := bson.D{}
 		if userModel.Email != "" {
-			count, _ := UserCollection.CountDocuments(ctx, bson.D{{Key: "email", Value: userModel.Email}})
+			count, err := UserCollection.CountDocuments(ctx, bson.D{
+				{Key: "$and",Value: bson.A{
+					bson.D{{Key: "email", Value: userModel.Email}},
+					bson.D{{Key: "user_id", Value: bson.D{{Key: "$ne", Value: user_id}}}},
+				}},
+			})
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
 			if count > 0 {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "email already exists"})
 				return
@@ -231,9 +240,9 @@ func DeleteUser() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "error deleting"})
 			return
 		}
-		BookBorrowedCollection.DeleteMany(ctx,bson.M{"user_id":user_id})
-		BookRentCollection.DeleteMany(ctx,bson.M{"user_id":user_id})
-		HistoryCollection.DeleteMany(ctx,bson.M{"user_id":user_id})
+		BookBorrowedCollection.DeleteMany(ctx, bson.M{"user_id": user_id})
+		BookRentCollection.DeleteMany(ctx, bson.M{"user_id": user_id})
+		HistoryCollection.DeleteMany(ctx, bson.M{"user_id": user_id})
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "success",
 			"user_id": user_id,
@@ -241,7 +250,7 @@ func DeleteUser() gin.HandlerFunc {
 	}
 }
 
-func InPhieu(maPhieu string, tenSach string,idBook string,tenUser string, idVersion string, viTri string, ngayDat string) *gofpdf.Fpdf {
+func InPhieu(maPhieu string, tenSach string, idBook string, tenUser string, idVersion string, viTri string, ngayDat string) *gofpdf.Fpdf {
 	pdf := gofpdf.New("P", "mm", "A4", "")
 
 	pdf.AddPage()
@@ -250,12 +259,12 @@ func InPhieu(maPhieu string, tenSach string,idBook string,tenUser string, idVers
 
 	x := 10.0
 	y := 20.0
-	w := []float64{25.0, 50.0, 20.0, 30.0, 20.0,25.0,20.0}
+	w := []float64{25.0, 50.0, 20.0, 30.0, 20.0, 25.0, 20.0}
 	h := 20.0
-	header := []string{"Mã phiếu", "Tên sách","id Book", "Tên", "id Version","Vị trí", "Ngày đặt"}
+	header := []string{"Mã phiếu", "Tên sách", "id Book", "Tên", "id Version", "Vị trí", "Ngày đặt"}
 
 	data := [][]string{
-		{maPhieu, tenSach, idBook, tenUser,idVersion,viTri, ngayDat},
+		{maPhieu, tenSach, idBook, tenUser, idVersion, viTri, ngayDat},
 	}
 	pdf.SetFillColor(240, 240, 240)
 	pdf.SetTextColor(0, 0, 0)
@@ -298,8 +307,8 @@ func RequestInPhieu() gin.HandlerFunc {
 		// ngay2,_ := time.Parse(time.RFC3339,ngay)
 		ngay2 := ngay.Time().Format("02/01/2006")
 		// test = test.Local()
-		
-		pdf := InPhieu(maPhieu, tenSach,idBook,tenUser,idVersion,viTri,ngay2)
+
+		pdf := InPhieu(maPhieu, tenSach, idBook, tenUser, idVersion, viTri, ngay2)
 		c.Header("Content-Type", "application/pdf")
 		err = pdf.Output(c.Writer)
 		if err != nil {
@@ -366,7 +375,7 @@ func RequestInPhieuMuon() gin.HandlerFunc {
 			b.WriteString(rec[length-2])
 			b.WriteString(" ")
 			b.WriteString(rec[length-1])
-			tenUser = b.String() 
+			tenUser = b.String()
 		}
 		idSach := rent["book_id"].(string)
 		idVersion := rent["book_detail_id"].(string)

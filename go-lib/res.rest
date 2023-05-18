@@ -40,7 +40,7 @@ Content-Type: application/json
    "publisher":"Booklife",
    "yearpublished": 2020,
    "author":"Joy Woodward",
-   "book_image":"https://fastly.picsum.photos/id/14/200/300.jpg?hmac=FMdb1SH_oeEo4ibDe66-ORzb8p0VYJUS3xWfN3h2qDU",
+   "book_img":"https://fastly.picsum.photos/id/14/200/300.jpg?hmac=FMdb1SH_oeEo4ibDe66-ORzb8p0VYJUS3xWfN3h2qDU",
    "amount":0,
    "type_name":"Biology",
    "page":280,
@@ -60,7 +60,7 @@ Content-Type: application/json
    "publisher":"BookLife",
    "yearpublished": 2001,
    "author":"Joy Woodward",
-   "book_image":"https://fastly.picsum.photos/id/14/200/300.jpg?hmac=FMdb1SH_oeEo4ibDe66-ORzb8p0VYJUS3xWfN3h2qDU",
+   "book_img":"https://fastly.picsum.photos/id/14/200/300.jpg?hmac=FMdb1SH_oeEo4ibDe66-ORzb8p0VYJUS3xWfN3h2qDU",
    "type_name":"Biology Advanced",
    "page":300,
    "publishing_location":"USA",
@@ -160,11 +160,13 @@ GET http://localhost:8080/admin/users
 
 
 ###
-PUT http://localhost:8080/user/U02
+PUT http://localhost:8080/user/U01
 Content-Type: application/json
 
 {
-    "name":"User 020"
+    "name":"User 1 admin vip 12 pro",
+    "avatar":"",
+    "email":"user1@gmail.com"
 }
 
 ###

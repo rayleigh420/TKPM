@@ -303,7 +303,7 @@ func CreateBook() gin.HandlerFunc {
 		// bookModel.Type_id = typeid
 		// bookModel.Amount = rec["amount"].(int64)
 		// bookModel.Author = rec["author"].(string)
-		// bookModel.Book_img = rec["book_image"].(string)
+		// bookModel.Book_img = rec["book_img"].(string)
 		// bookModel.Borrowed_quantity = rec["borrowed_quantity"].(int64)
 		// bookModel.Description = rec["description"].(string)
 		// bookModel.Details = rec["details"].(string)
@@ -354,8 +354,8 @@ func UpdateBook() gin.HandlerFunc {
 		if lic := bookModel["license"].(string); lic != "" {
 			updateObj = append(updateObj, bson.E{Key: "license", Value: lic})
 		}
-		if a := bookModel["book_image"].(string); a != "" {
-			updateObj = append(updateObj, bson.E{Key: "book_image", Value: a})
+		if a := bookModel["book_img"].(string); a != "" {
+			updateObj = append(updateObj, bson.E{Key: "book_img", Value: a})
 		}
 		if des := bookModel["publisher"].(string); des != "" {
 			updateObj = append(updateObj, bson.E{Key: "publisher", Value: des})
