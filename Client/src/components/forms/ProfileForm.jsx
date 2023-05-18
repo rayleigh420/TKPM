@@ -61,10 +61,20 @@ const ProfileForm = () => {
     }
 
     const handleSaveProfile = () => {
-        const imgForm = new FormData();
-        imgForm.append('image', img);
+        if (img != null) {
+            const imgForm = new FormData();
+            imgForm.append('image', img);
+            uploadAvaMutation.mutate(imgForm)
+        }
+        else {
+            updateProfileMutate.mutate({
+                user_id: auth?.user_id,
+                name: name,
+                avatar: imgURL,
+                email: email
+            })
+        }
 
-        uploadAvaMutation.mutate(imgForm)
 
         // setImgURL(null)
         // setName('')
