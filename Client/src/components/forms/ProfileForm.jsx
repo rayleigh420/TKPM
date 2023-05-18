@@ -18,6 +18,13 @@ const ProfileForm = () => {
         onSuccess: (data) => {
             console.log("Img", data)
             setImgURL(data)
+
+            updateProfileMutate.mutate({
+                user_id: auth?.user_id,
+                name: name,
+                avatar: data,
+                email: email
+            })
             // setAuth
         }
     })
@@ -58,13 +65,6 @@ const ProfileForm = () => {
         imgForm.append('image', img);
 
         uploadAvaMutation.mutate(imgForm)
-
-        updateProfileMutate.mutate({
-            user_id: auth?.user_id,
-            name: name,
-            avatar: imgURL,
-            email: email
-        })
 
         // setImgURL(null)
         // setName('')

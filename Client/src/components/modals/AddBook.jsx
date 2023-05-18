@@ -30,6 +30,23 @@ const AddBook = () => {
         mutationFn: (imgForm) => uploadAva(imgForm),
         onSuccess: (data) => {
             console.log(data)
+            setImgURL(prev => data)
+
+            addBookMutate.mutate({
+                "name": name,
+                "publisher": producer,
+                "yearpublished": Number(year),
+                "author": author,
+                "book_image": data,
+                "amount": Number(0),
+                "type_name": type,
+                "page": Number(page),
+                "publishing_location": publishing,
+                "borrowed_quantity": Number(0),
+                "license": licensed,
+                "description": description,
+                "details": detail
+            })
         }
     })
 
@@ -38,6 +55,18 @@ const AddBook = () => {
         onSuccess: (data) => {
             console.log(data)
             toast.info("Add new book success!")
+            setImg(null)
+            setImgURL('')
+            setName('')
+            setAuthor('')
+            setType('')
+            setYear('')
+            setPage('')
+            setLicensed('')
+            setProducer('')
+            setPublishing('')
+            setDetail('')
+            setDescription('')
         },
         onError: () => {
             toast.error("Somethings wrong. Pleaes try again!")
@@ -105,32 +134,6 @@ const AddBook = () => {
 
         uploadAvaMutation.mutate(imgForm)
 
-        addBookMutate.mutate({
-            "name": name,
-            "publisher": producer,
-            "yearpublished": Number(year),
-            "author": author,
-            "book_image": img,
-            "amount": Number(0),
-            "type_name": type,
-            "page": Number(page),
-            "publishing_location": publishing,
-            "borrowed_quantity": Number(0),
-            "license": licensed,
-            "description": description,
-            "details": detail
-        })
-
-        setName('')
-        setAuthor('')
-        setType('')
-        setYear('')
-        setPage('')
-        setLicensed('')
-        setProducer('')
-        setPublishing('')
-        setDetail('')
-        setDescription('')
     }
 
     return (
