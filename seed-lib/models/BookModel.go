@@ -13,7 +13,7 @@ type BookModel struct {
 	Yearpublished       int64              `json:"yearpublished"`
 	Author              string             `json:"author"`
 	Book_id             string             `json:"book_id"`
-	Book_img            string             `json:"book_image"`
+	Book_img            string             `json:"book_img"`
 	Amount              int64              `json:"amount"`
 	Type_id             string             `json:"type_id"`
 	Page                int64              `json:"page"`

@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjMiLCJlbWFpbCI6InVzZXIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwidXNlcl9pZCI6IjZjbG9tV2p5ck0xbiIsImF2YXRhciI6IiIsImV4cCI6MTY4Mjk1MjczNn0.lZfG41HGZw2mGqz_3w0kUgkRzp8FBGUJzkPjOk4hdBg
+GET http://localhost:8080/token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVXNlciAxIiwiZW1haWwiOiJ1c2VyMUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJ1c2VyX2lkIjoiVTAxIiwiYXZhdGFyIjoiaHR0cHM6Ly9mYXN0bHkucGljc3VtLnBob3Rvcy9pZC82NzYvMjAwLzIwMC5qcGc_aG1hYz1oZ2VNUUVJSzRNbjI3UTJvTFJXalhvMXJneHdUYmsxQ25KRTk1NGhfSHlNIiwiZXhwIjoxNjg0NDIzMTMwfQ.cGdIkQiXYdRlrW1VpqoMB7jzTEDECtEFq01Q27nzbdM
 
 ###
 GET http://localhost:8080/books?page=2
@@ -28,7 +28,7 @@ POST http://localhost:8080/books/search?page=1
 Content-Type: application/json
 
 {
-    "search_text":"Cô gái"
+    "search_text":"Co"
 }
 
 ###
@@ -164,7 +164,7 @@ PUT http://localhost:8080/user/U01
 Content-Type: application/json
 
 {
-    "name":"User 1 admin vip 12 pro",
+    "name":"User 1",
     "avatar":"",
     "email":"user1@gmail.com"
 }
