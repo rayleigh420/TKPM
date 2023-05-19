@@ -103,7 +103,7 @@ const Book = () => {
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Year: {book?.yearpublished}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Producer: {book?.publisher}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Publishing Location: {book?.publishing_location}</p>
-                        <button disabled={auth?.name != ''} className="btn w-[150px] mt-[55px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600" onClick={() => handleRentBook(book?.book_name)}>
+                        <button disabled={auth?.name == undefined} className="btn w-[150px] mt-[55px] bg-gradient-to-r from-indigo-700 to-blue-700 text-[#ffffff] leading-[24px] hover:from-indigo-600 hover:to-blue-600" onClick={() => handleRentBook(book?.book_name)}>
                             <label htmlFor={auth?.role == 'user' ? "messagerent" : "directhire"} className="bg-transparent border-none cursor-pointer">
                                 Rent Book
                             </label>
