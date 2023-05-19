@@ -42,7 +42,7 @@ func HireABook() gin.HandlerFunc {
 			return
 		}
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-		month1, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
+		week1, _ := time.Parse(time.RFC3339, time.Now().Add(7*24*time.Hour).Format(time.RFC3339))
 		obj := bson.M{}
 		obj2 := bson.M{}
 		if err := BookRentCollection.FindOne(ctx, bson.M{"book_rent_id": book_rent_id}).Decode(&obj); err != nil {
@@ -64,7 +64,7 @@ func HireABook() gin.HandlerFunc {
 		bookBorrowModel.Book_detail_id = book_detail_id
 		bookBorrowModel.Book_hire_id, _ = gonanoid.Generate(NanoidString, 12)
 		bookBorrowModel.Date_borrowed = now
-		bookBorrowModel.Date_end = month1
+		bookBorrowModel.Date_end = week1
 
 		//update book detail status
 		updateObj := bson.D{
@@ -78,6 +78,7 @@ func HireABook() gin.HandlerFunc {
 		historyModel.User_id = user_id
 		historyModel.Book_detail_id = book_detail_id
 		historyModel.Date_borrowed = now
+		historyModel.Date_return = week1
 		historyModel.History_id, _ = gonanoid.Generate(NanoidString, 12)
 		historyModel.Book_hire_id = bookBorrowModel.Book_hire_id
 		historyModel.Status = "borrowing"
@@ -92,7 +93,7 @@ func HireABook() gin.HandlerFunc {
 			"location":       obj2["location"].(string),
 			"book_id":        book_id,
 			"date_borrowed":  now.Local(),
-			"date_end":       month1.Local(),
+			"date_end":       week1.Local(),
 			"book_hire_id":   bookBorrowModel.Book_hire_id,
 		})
 	}
@@ -464,7 +465,7 @@ func DirectlyBorrow(email string, book_id string) (bson.M, error) {
 		return result, newErr
 	}
 	now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
-	month1, _ := time.Parse(time.RFC3339, time.Now().Add(30*24*time.Hour).Format(time.RFC3339))
+	week1, _ := time.Parse(time.RFC3339, time.Now().Add(7*24*time.Hour).Format(time.RFC3339))
 	bookBorrowModel := models.BookBorrowModel{}
 	book, bookErr := FindBookToRentWithId(book_id)
 	if bookErr != nil {
@@ -474,7 +475,7 @@ func DirectlyBorrow(email string, book_id string) (bson.M, error) {
 	bookBorrowModel.Book_id = book_id
 	bookBorrowModel.Book_detail_id = book["book_detail_id"].(string)
 	bookBorrowModel.Date_borrowed = now
-	bookBorrowModel.Date_end = month1
+	bookBorrowModel.Date_end = week1
 	bookBorrowModel.Id = primitive.NewObjectID()
 	bookBorrowModel.User_id = user.User_id
 	bookBorrowModel.Book_hire_id, _ = gonanoid.Generate(NanoidString, 12)
@@ -489,6 +490,7 @@ func DirectlyBorrow(email string, book_id string) (bson.M, error) {
 	historyModel.Id = primitive.NewObjectID()
 	historyModel.History_id, _ = gonanoid.Generate(NanoidString, 12)
 	historyModel.Date_borrowed = now
+	historyModel.Date_return = week1
 	historyModel.Book_id = book_id
 	historyModel.User_id = user.User_id
 	historyModel.Book_detail_id = book["book_detail_id"].(string)

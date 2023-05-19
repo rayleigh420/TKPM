@@ -145,7 +145,7 @@ POST http://localhost:8080/hire
 Content-Type: application/json
 
 {
-    "book_rent_id": "rdpGxHEwIi94",
+    "book_rent_id": "rOvtRKvsYx2d",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODQyNDg4ODd9.396qVk0AmJQ7t6lPLamqI-9Z6I8fbEpi2-mpcCVEMlo"
 }
 
