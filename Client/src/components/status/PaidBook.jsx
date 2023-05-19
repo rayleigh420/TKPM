@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom"
 import { data } from "../../pages/home"
-import AddBook from "../modals/AddBook"
-import EditBook from "../modals/EditBook"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { getPaidBook } from "../../api/manageApi"
+import moment from "moment/moment"
 
 const PaidBook = () => {
     const [search, setSearch] = useState('')
@@ -82,8 +81,8 @@ const PaidBook = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{item?.date_borrowed}</td>
-                                        <td>{item?.date_return}</td>
+                                        <td>{moment(item?.date_borrowed).format('YYYY-MM-DD')}</td>
+                                        <td>{moment(item?.date_return).format('YYYY-MM-DD')}</td>
                                     </tr>
                                 ))
                             }

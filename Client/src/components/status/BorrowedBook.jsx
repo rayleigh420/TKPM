@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getBorrowedBook, paidBook, searchBorrowedBook } from "../../api/manageApi"
 import { toast } from "react-toastify"
 import AuthContext from "../../context/AuthProvider"
+import moment from "moment"
 
 const BorrowedBook = () => {
     const [search, setSearch] = useState('')
@@ -138,10 +139,17 @@ const BorrowedBook = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{item?.date_borrowed}</td>
-                                        <td>{item?.date_end}</td>
+                                        <td>{moment(item?.date_borrowed).format('YYYY-MM-DD')}</td>
+                                        <td>{moment(item?.date_return).format('YYYY-MM-DD')}</td>
                                         <td>
-                                            <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">{item?.book_detail.status}</div>
+                                            <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">
+                                                {
+                                                    moment().isBefore(moment(item?.date_return)) ?
+                                                        "Overdue"
+                                                        :
+                                                        item?.book_detail.status
+                                                }
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -182,10 +190,17 @@ const BorrowedBook = () => {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{searchResult?.date_borrowed}</td>
-                                            <td>{searchResult?.date_end}</td>
+                                            <td>{moment(searchResult?.date_borrowed).format('YYYY-MM-DD')}</td>
+                                            <td>{moment(searchResult?.date_return).format('YYYY-MM-DD')}</td>
                                             <td>
-                                                <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">{searchResult?.book_detail.status}</div>
+                                                <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">
+                                                    {
+                                                        moment().isBefore(moment(searchResult?.date_return)) ?
+                                                            "Overdue"
+                                                            :
+                                                            searchResult?.book_detail.status
+                                                    }
+                                                </div>
                                             </td>
                                         </tr>
                                     )

@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { borrowedBook, getBookedBook, searchBookedBook } from "../../api/manageApi"
 import { toast } from "react-toastify"
 import AuthContext from "../../context/AuthProvider"
+import moment from "moment"
 
 const BookedBook = () => {
     const [search, setSearch] = useState('')
@@ -137,7 +138,7 @@ const BookedBook = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{item?.reserve_date}</td>
+                                        <td>{moment(item?.reserve_date).format('YYYY-MM-DD')}</td>
                                     </tr>
                                 ))
                                     :
