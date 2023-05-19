@@ -140,7 +140,7 @@ const BorrowedBook = () => {
                                             </div>
                                         </td>
                                         <td>{moment(item?.date_borrowed).format('YYYY-MM-DD')}</td>
-                                        <td>{moment(item?.date_return).format('YYYY-MM-DD')}</td>
+                                        <td>{moment(item?.date_end).format('YYYY-MM-DD')}</td>
                                         <td>
                                             <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">
                                                 {
@@ -191,7 +191,7 @@ const BorrowedBook = () => {
                                                 </div>
                                             </td>
                                             <td>{moment(searchResult?.date_borrowed).format('YYYY-MM-DD')}</td>
-                                            <td>{moment(searchResult?.date_return).format('YYYY-MM-DD')}</td>
+                                            <td>{moment(searchResult?.date_end).format('YYYY-MM-DD')}</td>
                                             <td>
                                                 <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">
                                                     {

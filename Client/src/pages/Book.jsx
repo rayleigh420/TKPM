@@ -77,7 +77,7 @@ const Book = () => {
 
             <div className="flex flex-col items-center">
                 <div className=" w-[62%] py-[60px] flex flex-row">
-                    <div className="w-[240px] h-[350px] bg-cover hover:border-[1.75px] rounded-[7px] overflow-hidden">
+                    <div className="min-w-[237px] min-h-[347px] w-[240px] h-[350px] bg-cover hover:border-[1.75px] rounded-[7px] overflow-hidden">
                         <img src={book?.book_img || book?.book_image} className="w-full h-full" />
                     </div>
                     {/* <div className={"w-[240px] h-[350px] bg-cover hover:border-[1.75px] rounded-[7px] " + `bg-[url('${book?.book_img}')]`}></div> */}

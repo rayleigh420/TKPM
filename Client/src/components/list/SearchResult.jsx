@@ -18,6 +18,9 @@ const SearchResult = () => {
     const { data, isLoading, isFetching, isError } = useQuery({
         queryKey: ['search', keyword, page],
         queryFn: () => searchBook(keyword, page),
+        onSuccess: () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
         keepPreviousData: true
     })
 

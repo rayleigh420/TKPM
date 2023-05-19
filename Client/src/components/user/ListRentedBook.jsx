@@ -4,6 +4,7 @@ import { useContext } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { getListRentedBook } from "../../api/manageApi"
 import AuthContext from "../../context/AuthProvider"
+import moment from "moment"
 
 const ListRentedBook = () => {
     const { auth } = useContext(AuthContext)
@@ -51,8 +52,8 @@ const ListRentedBook = () => {
                                         </div>
                                     </td>
                                     <td>{item?.book_detail_id}</td>
-                                    <td>{item?.date_borrowed}</td>
-                                    <td>{item?.date_return || item?.reserve_date}</td>
+                                    <td>{moment(item?.date_borrowed).format('YYYY-MM-DD')}</td>
+                                    <td>{moment(item?.date_return || item?.reserve_date).format('YYYY-MM-DD')}</td>
                                     <td>
                                         {
                                             item?.status == 'returned'
