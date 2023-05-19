@@ -113,21 +113,21 @@ const ManageBook = () => {
                                 books?.map((item, index) => {
                                     if (debouceValue == '' && typeSearch != 'Type') {
                                         if (item?.type.typename == typeSearch) {
-                                            return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
+                                            return <BookRowTable key={item?._id} item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
                                         }
                                     }
                                     else if (debouceValue != '' && typeSearch == 'Type') {
                                         if (item?.name.includes(search)) {
-                                            return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
+                                            return <BookRowTable key={item?._id} item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
                                         }
                                     }
                                     else if (debouceValue != '' && typeSearch != 'Type') {
                                         if (item?.name.includes(search) && item?.type.typename == typeSearch) {
-                                            return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
+                                            return <BookRowTable key={item?._id} item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
                                         }
                                     }
                                     else if (debouceValue == '' && typeSearch == 'Type') {
-                                        return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
+                                        return <BookRowTable key={item?._id} item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
                                     }
                                 })
                             }
