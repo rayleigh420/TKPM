@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom"
 import { getBookType, getGenericBook, searchBook } from "../../api/bookApi"
 
@@ -8,6 +8,10 @@ const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 const GenericBookList = () => {
     const { generic } = useParams();
     const [page, setPage] = useState(1)
+
+    useEffect(() => {
+        setPage(1)
+    }, [generic])
 
     const queryClient = useQueryClient()
 
@@ -23,6 +27,9 @@ const GenericBookList = () => {
             else {
                 return getBookType(generic, page)
             }
+        },
+        onSuccess: () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         },
         keepPreviousData: true
     })
