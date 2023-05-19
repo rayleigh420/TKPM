@@ -464,6 +464,16 @@ func DirectlyBorrow(email string, book_id string) (bson.M, error) {
 		newErr := fmt.Errorf("user not found")
 		return result, newErr
 	}
+	count, _ := BookRentCollection.CountDocuments(ctx, bson.M{"user_id": user.User_id})
+	if count > 0 {
+		err := fmt.Errorf("already borrowing another books")
+		return result, err
+	}
+	count2, _ := BookBorrowedCollection.CountDocuments(ctx, bson.M{"user_id": user.User_id})
+	if count2 > 0 {
+		err := fmt.Errorf("already borrowing another books")
+		return result, err
+	}
 	now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 	week1, _ := time.Parse(time.RFC3339, time.Now().Add(7*24*time.Hour).Format(time.RFC3339))
 	bookBorrowModel := models.BookBorrowModel{}
@@ -499,7 +509,7 @@ func DirectlyBorrow(email string, book_id string) (bson.M, error) {
 	///
 	BookBorrowedCollection.InsertOne(ctx, bookBorrowModel)
 	BookDetailCollection.UpdateOne(ctx, bson.M{"book_detail_id": bookBorrowModel.Book_detail_id}, updateObj)
-	BookCollection.UpdateOne(ctx,bson.M{"book_id":book_id},updateObj2)
+	BookCollection.UpdateOne(ctx, bson.M{"book_id": book_id}, updateObj2)
 	HistoryCollection.InsertOne(ctx, historyModel)
 	// c.JSON(http.StatusOK, gin.H{
 	// 		"status":         "success",
