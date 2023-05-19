@@ -91,7 +91,7 @@ func UpdateRentRequest() error {
 	//step delete rent request
 	BookRentCollection.DeleteMany(ctx, bson.D{
 		{Key: "reserve_date", Value: bson.D{
-			{Key: "$lte", Value: yest},
+			{Key: "$lte", Value: now},
 		}},
 	})
 	// BookRentCollection.DeleteMany(ctx, bson.D{

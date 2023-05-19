@@ -624,6 +624,7 @@ func RentABook() gin.HandlerFunc {
 			return
 		}
 		now, _ := time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
+		hour24, _ := time.Parse(time.RFC3339, time.Now().Add(24*time.Hour).Format(time.RFC3339))
 		amount := bson.M{}
 		opts := options.FindOne().SetProjection(bson.M{"amount": 1})
 		BookCollection.FindOne(ctx, bson.M{"book_id": book_id}, opts).Decode(&amount)
@@ -632,7 +633,7 @@ func RentABook() gin.HandlerFunc {
 		bookRentModel := models.BookRentModel{}
 		bookRentModel.Id = primitive.NewObjectID()
 		bookRentModel.Book_id = book_id
-		bookRentModel.Reserve_date = now
+		bookRentModel.Reserve_date = hour24
 		bookRentModel.Book_rent_id, _ = gonanoid.Generate(NanoidString, 12)
 		bookRentModel.Book_detail_id = bookToRent["book_detail_id"].(string)
 		bookRentModel.User_id = obj["user_id"].(string)
@@ -652,7 +653,7 @@ func RentABook() gin.HandlerFunc {
 			"user_id":        obj["user_id"].(string),
 			"book_detail_id": bookToRent["book_detail_id"].(string),
 			"book_rent_id":   bookRentModel.Book_rent_id,
-			"reserve_date":   now,
+			"reserve_date":   hour24,
 		})
 	}
 }
