@@ -6,15 +6,23 @@ import { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { deleteBook, getAllBook } from "../../../api/bookApi"
 import { toast } from "react-toastify"
+import { getListType } from "../../../api/typeApi"
+import BookRowTable from "../../helper/bookRowTable"
 
 const ManageBook = () => {
     const [search, setSearch] = useState('')
-    const [typeSearch, setTypeSearch] = useState('')
+    const [typeSearch, setTypeSearch] = useState('Type')
     const [edit, setEdit] = useState(false)
     const [editBook, setEditBook] = useState()
 
     const queryClient = useQueryClient()
 
+    const { data: types } = useQuery({
+        queryKey: ['types'],
+        queryFn: () => getListType(),
+    })
+
+    console.log(types)
     const { data: books, isLoading, isError } = useQuery({
         queryKey: ['admin', 'books'],
         queryFn: () => getAllBook()
@@ -55,7 +63,9 @@ const ManageBook = () => {
     const handleDeleteBook = (book_id) => {
         deleteBookMutate.mutate(book_id)
     }
-    console.log(books)
+
+    console.log({ search, typeSearch })
+
     return (
         <>
             {edit && <EditBook book={editBook} />}
@@ -68,9 +78,12 @@ const ManageBook = () => {
                             <input value={search} onChange={handleChangeSeach} type="text" placeholder="Search" className="input input-bordered bg-[#262627] w-[300px]  focus:ease-out" />
                         </div>
                         <select className="select select-bordered max-w-[140px]" value={typeSearch} onChange={handleChangeType}>
-                            <option disabled selected>Type</option>
-                            <option value="ln">Light Novel</option>
-                            <option value="mg">Manga</option>
+                            <option selected>Type</option>
+                            {
+                                types && types?.map(item => (
+                                    <option key={item.typename} value={item.typename}>{item.typename}</option>
+                                ))
+                            }
                         </select>
                     </form>
                     <AddBook />
@@ -94,6 +107,28 @@ const ManageBook = () => {
                         <tbody>
                             {/* row 1 */}
                             {
+                                books?.map((item, index) => {
+                                    if (search == '' && typeSearch != 'Type') {
+                                        if (item?.type.typename == typeSearch) {
+                                            return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
+                                        }
+                                    }
+                                    else if (search != '' && typeSearch == 'Type') {
+                                        if (item?.name.includes(search)) {
+                                            return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
+                                        }
+                                    }
+                                    else if (search != '' && typeSearch != 'Type') {
+                                        if (item?.name.includes(search) && item?.type.typename == typeSearch) {
+                                            return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
+                                        }
+                                    }
+                                    else if (search == '' && typeSearch == 'Type') {
+                                        return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
+                                    }
+                                })
+                            }
+                            {/* {
                                 books?.map((item, index) => (
                                     <tr key={item?._id}>
                                         <td>
@@ -131,7 +166,7 @@ const ManageBook = () => {
                                         </td>
                                     </tr>
                                 ))
-                            }
+                            } */}
                         </tbody>
                         {/* foot */}
                         <tfoot className="sticky bottom-0">

@@ -180,7 +180,7 @@ const AddBook = () => {
                                 <select required className="select select-bordered w-full max-w-xs" value={type} onChange={handleChangeType}>
                                     {
                                         types && types?.map(item => (
-                                            <option value={item.typename}>{item.typename}</option>
+                                            <option key={item.typename} value={item.typename}>{item.typename}</option>
                                         ))
                                     }
                                 </select>
