@@ -52,6 +52,10 @@ const Book = () => {
 
     const handleRentBook = (item) => {
         // setRent('123123123')
+        if (book.amount <= 0) {
+            toast.warn("All book is busy. Please wait!")
+            return;
+        }
         if (auth?.role == 'admin') {
             return;
         }
@@ -68,8 +72,8 @@ const Book = () => {
                 rent && 
             } */}
 
-            {auth?.role == 'user' && <MessageRent rent={rent} />}
-            {auth?.role == 'admin' && <DirectHire />}
+            {auth?.role == 'user' && book?.amount > 0 && <MessageRent rent={rent} />}
+            {auth?.role == 'admin' && book?.amount > 0 && <DirectHire />}
 
             <div className="flex flex-col items-center">
                 <div className=" w-[62%] py-[60px] flex flex-row">
@@ -80,7 +84,14 @@ const Book = () => {
                     {/* <div className="w-[240px] h-[350px] bg-cover hover:border-[1.75px] bg-[url('https://fastly.picsum.photos/id/200/200/300.jpg?hmac=XVCLpc2Ddr652IrKMt3L7jISDD4au5O9ZIr3fwBtxo8')] rounded-[7px]">
                     </div> */}
                     <div className="ml-[30px]">
-                        <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
+                        {
+                            book?.amount > 0
+                                ?
+                                <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
+                                :
+                                <div className="badge bg-red-500 rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Over</div>
+
+                        }
                         <h1 className="mt-[10px] text-[#ffffff] text-[32px] font-bold leading-[36.8px] tracking-[-0.64]">{book?.name}</h1>
                         <p className="mt-[20px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Author: {book?.author}</p>
                         <p className="mt-[10px] text-[#bdbdbd] text-[15.2px] font-medium leading-[18.24px] tracking-[-0.304px]">Type:

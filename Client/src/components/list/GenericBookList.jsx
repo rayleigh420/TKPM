@@ -78,7 +78,14 @@ const GenericBookList = () => {
                                         {/* <div className={`bg-[url('${item.book_img}')]` + " cursor-pointer min-w-[125px] h-[180px] bg-cover hover:border-[0.1px] hover:border-[#142B45] rounded-[7px]"}></div> */}
                                     </Link>
                                     <div className="max-h-[180px] text-ellipsis overflow-hidden">
-                                        <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
+                                        {
+                                            item?.amount > 0
+                                                ?
+                                                <div className="badge bg-[#eeeeee] rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Ongoing</div>
+                                                :
+                                                <div className="badge bg-red-500 rounded-[4px] text-[10.4px] font-bold leading-[12.48px] tracking-[-0.208] text-[#000000]">Over</div>
+
+                                        }
                                         <Link to={"/book/" + item.book_id}>
                                             <h1 className="mt-[5px] text-[#ffffff] font-bold leading-[20px] cursor-pointer">{item.name}</h1>
                                         </Link>

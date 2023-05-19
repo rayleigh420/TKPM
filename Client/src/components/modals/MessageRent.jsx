@@ -11,14 +11,13 @@ const MessageRent = ({ rent }) => {
                         )
                         :
                         (
-                            rent == "already requesting another book"
+                            rent == "already borrowing another book"
                                 ?
                                 (
                                     <p className="text-center capitalize">{rent}</p>
                                 )
                                 :
                                 (
-
                                     <>
                                         <h3 className="text-lg font-bold text-center">Congratulations you booked this book!</h3>
                                         <p className="py-4 mt-[20px]">Please show this code for librarian to borrowed book.</p>
