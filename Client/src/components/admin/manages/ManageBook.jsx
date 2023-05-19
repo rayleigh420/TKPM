@@ -8,12 +8,15 @@ import { deleteBook, getAllBook } from "../../../api/bookApi"
 import { toast } from "react-toastify"
 import { getListType } from "../../../api/typeApi"
 import BookRowTable from "../../helper/bookRowTable"
+import useDebounce from "../../../hooks/useDebounce"
 
 const ManageBook = () => {
     const [search, setSearch] = useState('')
     const [typeSearch, setTypeSearch] = useState('Type')
     const [edit, setEdit] = useState(false)
     const [editBook, setEditBook] = useState()
+
+    const debouceValue = useDebounce(search)
 
     const queryClient = useQueryClient()
 
@@ -108,22 +111,22 @@ const ManageBook = () => {
                             {/* row 1 */}
                             {
                                 books?.map((item, index) => {
-                                    if (search == '' && typeSearch != 'Type') {
+                                    if (debouceValue == '' && typeSearch != 'Type') {
                                         if (item?.type.typename == typeSearch) {
                                             return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
                                         }
                                     }
-                                    else if (search != '' && typeSearch == 'Type') {
+                                    else if (debouceValue != '' && typeSearch == 'Type') {
                                         if (item?.name.includes(search)) {
                                             return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
                                         }
                                     }
-                                    else if (search != '' && typeSearch != 'Type') {
+                                    else if (debouceValue != '' && typeSearch != 'Type') {
                                         if (item?.name.includes(search) && item?.type.typename == typeSearch) {
                                             return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
                                         }
                                     }
-                                    else if (search == '' && typeSearch == 'Type') {
+                                    else if (debouceValue == '' && typeSearch == 'Type') {
                                         return <BookRowTable item={item} handleEditBook={handleEditBook} handleDeleteBook={handleDeleteBook} />
                                     }
                                 })
