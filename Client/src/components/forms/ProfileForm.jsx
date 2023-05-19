@@ -4,9 +4,11 @@ import { useMutation } from "@tanstack/react-query"
 import { uploadAva } from "../../api/imgApi"
 import { updateProfile } from "../../api/profileApi"
 import { toast } from "react-toastify"
+import useLocalStorage from "../../hooks/useLocalStorage"
 
 const ProfileForm = () => {
     const { auth, setAuth } = useContext(AuthContext)
+    const [value, setValue] = useLocalStorage('token', '')
 
     const [img, setImg] = useState(null)
     const [imgURL, setImgURL] = useState(auth.ava)
@@ -35,6 +37,7 @@ const ProfileForm = () => {
             console.log(data)
             if (data.status == 'success') {
                 toast.info("Update profile success!")
+                setValue(data.token)
                 setAuth({
                     ...auth,
                     name: name,
