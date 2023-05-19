@@ -40,7 +40,7 @@ const EditBook = ({ book }) => {
                     "publisher": producer,
                     "yearpublished": Number(year),
                     "author": author,
-                    "book_image": data,
+                    "book_img": data,
                     "type_name": type,
                     "page": Number(page),
                     "publishing_location": publishing,

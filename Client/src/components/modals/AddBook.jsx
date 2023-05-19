@@ -37,7 +37,7 @@ const AddBook = () => {
                 "publisher": producer,
                 "yearpublished": Number(year),
                 "author": author,
-                "book_image": data,
+                "book_img": data,
                 "amount": Number(0),
                 "type_name": type,
                 "page": Number(page),
