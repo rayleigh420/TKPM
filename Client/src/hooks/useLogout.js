@@ -12,6 +12,7 @@ const useLogout = (log = false) => {
 
     useEffect(() => {
         if (logout) {
+            // console.log("Logout nha")
             setAuth({})
             setValue("")
             toast.info("Logout success!")
