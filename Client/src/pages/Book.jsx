@@ -143,6 +143,15 @@ const Book = () => {
                             </div>
                             <div className="divider bordered border-[#ffffff]"></div>
                             <div className="text-[#e0e0e0] leading-[24px] tracking-[-0.32px]">
+                                <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px] mb-[25px]">Description</h4>
+                                {book?.description}
+                                {/* For decades, he had lived as a puppet of the tower.
+                                Throughout that time, who knew how many deaths he had encountered?
+                                One day, however, his memories returned to him.
+                                The First Floor Boss finally awakened */}
+                            </div>
+                            <div className="divider bordered border-[#ffffff]"></div>
+                            <div className="text-[#e0e0e0] leading-[24px] tracking-[-0.32px]">
                                 <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px] mb-[25px]">Details</h4>
                                 {book?.details}
                                 {/* Status in Korean: Completed @ 254 chapters <br />
@@ -152,15 +161,6 @@ const Book = () => {
                                 Editor: Dot, SoSam <br />
                                 <br />
                                 Release rate: 5 chapters a week with an occasional bonus 6th chapter */}
-                            </div>
-                            <div className="divider bordered border-[#ffffff]"></div>
-                            <div className="text-[#e0e0e0] leading-[24px] tracking-[-0.32px]">
-                                <h4 className="text-[#ffffff] text-[20px] font-bold leading-[24px] tracking-[-0.4px] mb-[25px]">Description</h4>
-                                {book?.description}
-                                {/* For decades, he had lived as a puppet of the tower.
-                                Throughout that time, who knew how many deaths he had encountered?
-                                One day, however, his memories returned to him.
-                                The First Floor Boss finally awakened */}
                             </div>
                             <div className="divider bordered border-[#ffffff]"></div>
                         </div>) :

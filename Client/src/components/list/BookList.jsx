@@ -24,7 +24,7 @@ const BookList = ({ data, isLoading }) => {
                             <div className='w-[158px] h-[270px] rounded-[7px] cursor-pointer' key={item?.book_id}>
                                 <Link to={`/book/${item.book_id}`}>
                                     <img src={item.book_img} className='w-full h-[230px]' />
-                                    <p className='text-[#e0e0e0] text-[15.2px] font-semibold leaiding-[18.24px] tracking-[-0.304px] mt-1'>{item.name}</p>
+                                    <p className='text-[#e0e0e0] text-[15.2px] font-semibold leaiding-[18.24px] tracking-[-0.304px] mt-1 truncate overflow-hidden'>{item.name}</p>
                                 </Link>
                             </div>
                         ))
