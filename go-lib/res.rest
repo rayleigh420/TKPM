@@ -98,7 +98,7 @@ GET http://localhost:8080/books/newest
 GET http://localhost:8080/books/popular
 
 ###
-GET http://localhost:8080/books/B11
+GET http://localhost:8080/books/B39
 
 ###
 GET http://localhost:8080/books/B8/detail
@@ -129,7 +129,7 @@ POST http://localhost:8080/rent
 Content-Type: application/json
 
 {
-    "book_id": "B2",
+    "book_id": "B1",
     "user_id": "U02"
 }
 
@@ -145,12 +145,12 @@ POST http://localhost:8080/hire
 Content-Type: application/json
 
 {
-    "book_rent_id": "iFo1LZ6V2lNA",
+    "book_rent_id": "Jom1YQ5Zy2JW",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidXNlcjEiLCJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInVzZXJfaWQiOiJVMDEiLCJhdmF0YXIiOiJodHRwczovL2Zhc3RseS5waWNzdW0ucGhvdG9zL2lkLzY3Ni8yMDAvMjAwLmpwZz9obWFjPWhnZU1RRUlLNE1uMjdRMm9MUldqWG8xcmd4d1RiazFDbkpFOTU0aF9IeU0iLCJleHAiOjE2ODQ1MDYzMzR9.cENnzru9_k4npxwgngrOJibt_NVJGLzmRf_Utq8hoJ0"
 }
 
 ###
-POST http://localhost:8080/return/DUU2OkTbvULJ
+POST http://localhost:8080/return/jwcJPDh4q5wY
 Content-Type: application/json
 
 {
