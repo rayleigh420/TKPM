@@ -56,11 +56,10 @@ func SignUp() gin.HandlerFunc {
 		count, _ := UserCollection.CountDocuments(ctx, bson.D{
 			{Key: "$or", Value: []bson.D{
 				{{Key: "email", Value: userModel.Email}},
-				{{Key: "phone", Value: userModel.Phone}},
 			}},
 		})
 		if count > 0 {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "email or phone already exists"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "email already exists"})
 			return
 		}
 		userModel.Id = primitive.NewObjectID()
