@@ -3,7 +3,7 @@ import HistoryBook from "../components/admin/HistoryBook"
 import AddVersionBook from "../components/modals/AddVersionBook"
 import RelatedBook from "../components/list/RelatedBook"
 import { Link, useParams } from "react-router-dom"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getDetailBook, rentBook } from "../api/bookApi"
 import AuthContext from "../context/AuthProvider"
 import LocationVersion from "../components/admin/LocationVersion"
@@ -24,6 +24,8 @@ const Book = () => {
     const { error, setError } = useState('')
 
     const { auth } = useContext(AuthContext)
+
+    const queryClient = useQueryClient()
 
     const { data: book, isLoading, isError } = useQuery({
         queryKey: ["book", id],

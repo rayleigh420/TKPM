@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
 import { rentBookAdmin } from "../../api/bookApi"
@@ -8,10 +8,13 @@ const DirectHire = () => {
     const [email, setEmail] = useState('')
     const { id } = useParams()
 
+    const queryClient = useQueryClient()
+
     const rentBookAdminMutate = useMutation({
         mutationFn: (info) => rentBookAdmin(info),
         onSuccess: () => {
             toast.info('Rent book successed!')
+            queryClient.invalidateQueries({ queryKey: ['version', id] })
         },
         onError: (err) => {
             console.log(err)
