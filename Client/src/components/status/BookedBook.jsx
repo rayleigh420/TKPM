@@ -24,8 +24,10 @@ const BookedBook = () => {
     const borrowedBookMutate = useMutation({
         mutationFn: (info) => borrowedBook(info),
         onSuccess: (data) => {
-            console.log(data),
-                toast.info('Borrowed Book Success!')
+            console.log(data)
+            toast.info('Borrowed Book Success!')
+            setSearch('')
+            setSearchResult()
         },
         onError: () => {
             toast.error("Somethings error. Please try again!")

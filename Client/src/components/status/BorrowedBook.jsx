@@ -25,6 +25,8 @@ const BorrowedBook = () => {
         onSuccess: (data) => {
             console.log(data)
             toast.info("Paid Book Success!")
+            setSearch('')
+            setSearchResult()
         },
         onError: () => {
             toast.error("Somethings error. Please try again!")
