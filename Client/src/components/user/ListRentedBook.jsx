@@ -46,8 +46,8 @@ const ListRentedBook = () => {
                                             <div>
                                                 <Link to={`/book/${item.book.book_id}`}>
                                                     <div className="font-bold">{item?.book.name}</div>
-                                                    <div className="text-sm opacity-50">Code: {item?.book_rent_id || item?.book_hire_id || item?.history_id}</div>
                                                 </Link>
+                                                <div className="text-sm opacity-50">Code: {item?.book_rent_id || item?.book_hire_id || item?.history_id}</div>
                                             </div>
                                         </div>
                                     </td>

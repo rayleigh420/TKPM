@@ -178,7 +178,7 @@ const BookedBook = () => {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{searchResult?.reserve_date}</td>
+                                            <td>{moment(searchResult?.reserve_date).format('YYYY-MM-DD')}</td>
                                         </tr>
                                     )
                             }
