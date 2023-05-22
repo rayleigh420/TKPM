@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { Link, useParams } from "react-router-dom"
 import { historyVersion } from "../../api/manageApi"
 import { data } from "autoprefixer"
+import moment from "moment/moment"
 
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 
@@ -60,8 +61,8 @@ const HistoryBook = () => {
                                                 </div>
                                             </td>
                                             <td>{item?.book_detail_id}</td>
-                                            <td>{item?.date_borrowed}</td>
-                                            <td>{item?.date_return || item?.reserve_date}</td>
+                                            <td>{moment(item?.date_borrowed).format('YYYY-MM-DD')}</td>
+                                            <td>{moment(item?.date_return || item?.reserve_date).format('YYYY-MM-DD')}</td>
                                             <td>
                                                 {
 
