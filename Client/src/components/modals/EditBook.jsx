@@ -94,6 +94,8 @@ const EditBook = ({ book }) => {
     const handleChangeImage = (e) => {
         setImgURL(URL.createObjectURL(e.target.files[0]))
         setImg(e.target.files[0])
+
+        console.log(imgURL)
     }
 
     const handleChangeAuthor = (e) => {
@@ -167,8 +169,9 @@ const EditBook = ({ book }) => {
                 }
             })
         }
-
     }
+
+    console.log(imgURL)
 
     return (
         <>
@@ -214,7 +217,7 @@ const EditBook = ({ book }) => {
                                 <select className="select select-bordered w-full max-w-xs" value={type} onChange={handleChangeType}>
                                     {
                                         types && types?.map(item => (
-                                            <option value={item.typename}>{item.typename}</option>
+                                            <option key={item?.typename} value={item?.typename}>{item?.typename}</option>
                                         ))
                                     }
                                 </select>

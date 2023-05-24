@@ -25,7 +25,7 @@ const ManageBook = () => {
         queryFn: () => getListType(),
     })
 
-    console.log(types)
+    // console.log(types)
     const { data: books, isLoading, isError } = useQuery({
         queryKey: ['admin', 'books'],
         queryFn: () => getAllBook()
@@ -67,7 +67,7 @@ const ManageBook = () => {
         deleteBookMutate.mutate(book_id)
     }
 
-    console.log({ search, typeSearch })
+    // console.log({ search, typeSearch })
 
     return (
         <>

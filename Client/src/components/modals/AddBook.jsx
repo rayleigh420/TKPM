@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { addBook } from "../../api/bookApi"
 import { toast } from "react-toastify"
 import { getListType } from "../../api/typeApi"
@@ -18,6 +18,11 @@ const AddBook = () => {
     const [publishing, setPublishing] = useState('')
     const [detail, setDetail] = useState('')
     const [description, setDescription] = useState('')
+
+    // useEffect(() => {
+    //     setImgURL()
+    //     setImg(null)
+    // }, [])
 
     const queryClient = useQueryClient()
 
@@ -78,8 +83,8 @@ const AddBook = () => {
 
     const handleChangeImage = (e) => {
         // setImg(URL.createObjectURL(e.target.files[0]))
-        setImgURL(URL.createObjectURL(e.target.files[0]))
-        setImg(e.target.files[0])
+        setImgURL(prev => URL.createObjectURL(e.target.files[0]))
+        setImg(prev => e.target.files[0])
     }
 
     const handleChangeAuthor = (e) => {
@@ -135,6 +140,8 @@ const AddBook = () => {
         uploadAvaMutation.mutate(imgForm)
 
     }
+
+    console.log(imgURL)
 
     return (
         <>
