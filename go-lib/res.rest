@@ -98,7 +98,7 @@ GET http://localhost:8080/books/newest
 GET http://localhost:8080/books/popular
 
 ###
-GET http://localhost:8080/books/B39
+GET http://localhost:8080/books/B48
 
 ###
 GET http://localhost:8080/books/B8/detail
@@ -208,4 +208,12 @@ Content-Type: application/json
 {
     "book_id": "B10",
     "email": "user2@gmail.com"
+}
+
+###
+POST http://localhost:8080/admin/users/search
+Content-Type: application/json
+
+{
+    "name":"User1"
 }

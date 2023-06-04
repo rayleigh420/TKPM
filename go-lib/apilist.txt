@@ -266,3 +266,12 @@ Content-Type: application/json
     "book_id": "B1",
     "email": "user2@gmail.com"
 }
+
+###just added
+###
+POST http://localhost:8080/admin/users/search
+Content-Type: application/json
+
+{
+    "name":"User1"
+}

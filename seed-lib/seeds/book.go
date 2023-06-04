@@ -765,15 +765,15 @@ func SeedBook() {
 		Description:         `Suspendisse ut varius libero. Curabitur consectetur fringilla ante sodales suscipit. Aenean sed neque felis. Quisque mollis diam eu odio interdum ornare. Nullam facilisis metus quam, nec ultricies mauris congue id. Donec eget lobortis velit. Etiam sit amet consectetur erat. Nunc egestas nisl quis bibendum dictum`,
 	}
 
-	Book1.Book_id = "B1"
-	Book2.Book_id = "B2"
-	Book3.Book_id = "B3"
-	Book4.Book_id = "B4"
-	Book5.Book_id = "B5"
-	Book6.Book_id = "B6"
-	Book7.Book_id = "B7"
-	Book8.Book_id = "B8"
-	Book9.Book_id = "B9"
+	Book1.Book_id = "B01"
+	Book2.Book_id = "B02"
+	Book3.Book_id = "B03"
+	Book4.Book_id = "B04"
+	Book5.Book_id = "B05"
+	Book6.Book_id = "B06"
+	Book7.Book_id = "B07"
+	Book8.Book_id = "B08"
+	Book9.Book_id = "B09"
 	Book10.Book_id = "B10"
 	Book11.Book_id = "B11"
 	Book12.Book_id = "B12"
@@ -1028,315 +1028,315 @@ func SeedBookDetail() {
 	defer cancel()
 
 	BookDetail1 := models.BookDetailModel{
-		Book_id:    "B1",
+		Book_id:    "B01",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail2 := models.BookDetailModel{
-		Book_id:    "B1",
+		Book_id:    "B01",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail3 := models.BookDetailModel{
-		Book_id:    "B1",
+		Book_id:    "B01",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail4 := models.BookDetailModel{
-		Book_id:    "B1",
+		Book_id:    "B01",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail5 := models.BookDetailModel{
-		Book_id:    "B1",
+		Book_id:    "B01",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail6 := models.BookDetailModel{
-		Book_id:    "B2",
+		Book_id:    "B02",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail7 := models.BookDetailModel{
-		Book_id:    "B2",
+		Book_id:    "B02",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail8 := models.BookDetailModel{
-		Book_id:    "B2",
+		Book_id:    "B02",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail9 := models.BookDetailModel{
-		Book_id:    "B2",
+		Book_id:    "B02",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail10 := models.BookDetailModel{
-		Book_id:    "B2",
+		Book_id:    "B02",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail11 := models.BookDetailModel{
-		Book_id:    "B3",
+		Book_id:    "B03",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail12 := models.BookDetailModel{
-		Book_id:    "B3",
+		Book_id:    "B03",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail13 := models.BookDetailModel{
-		Book_id:    "B3",
+		Book_id:    "B03",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail14 := models.BookDetailModel{
-		Book_id:    "B3",
+		Book_id:    "B03",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail15 := models.BookDetailModel{
-		Book_id:    "B3",
+		Book_id:    "B03",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail16 := models.BookDetailModel{
-		Book_id:    "B4",
+		Book_id:    "B04",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail17 := models.BookDetailModel{
-		Book_id:    "B4",
+		Book_id:    "B04",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail18 := models.BookDetailModel{
-		Book_id:    "B4",
+		Book_id:    "B04",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail19 := models.BookDetailModel{
-		Book_id:    "B4",
+		Book_id:    "B04",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail20 := models.BookDetailModel{
-		Book_id:    "B4",
+		Book_id:    "B04",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail21 := models.BookDetailModel{
-		Book_id:    "B5",
+		Book_id:    "B05",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail22 := models.BookDetailModel{
-		Book_id:    "B5",
+		Book_id:    "B05",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail23 := models.BookDetailModel{
-		Book_id:    "B5",
+		Book_id:    "B05",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail24 := models.BookDetailModel{
-		Book_id:    "B5",
+		Book_id:    "B05",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail25 := models.BookDetailModel{
-		Book_id:    "B5",
+		Book_id:    "B05",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail26 := models.BookDetailModel{
-		Book_id:    "B6",
+		Book_id:    "B06",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail27 := models.BookDetailModel{
-		Book_id:    "B6",
+		Book_id:    "B06",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail28 := models.BookDetailModel{
-		Book_id:    "B6",
+		Book_id:    "B06",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail29 := models.BookDetailModel{
-		Book_id:    "B6",
+		Book_id:    "B06",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail30 := models.BookDetailModel{
-		Book_id:    "B6",
+		Book_id:    "B06",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail31 := models.BookDetailModel{
-		Book_id:    "B7",
+		Book_id:    "B07",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail32 := models.BookDetailModel{
-		Book_id:    "B7",
+		Book_id:    "B07",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail33 := models.BookDetailModel{
-		Book_id:    "B7",
+		Book_id:    "B07",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail34 := models.BookDetailModel{
-		Book_id:    "B7",
+		Book_id:    "B07",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail35 := models.BookDetailModel{
-		Book_id:    "B7",
+		Book_id:    "B07",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail36 := models.BookDetailModel{
-		Book_id:    "B8",
+		Book_id:    "B08",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail37 := models.BookDetailModel{
-		Book_id:    "B8",
+		Book_id:    "B08",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail38 := models.BookDetailModel{
-		Book_id:    "B8",
+		Book_id:    "B08",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail39 := models.BookDetailModel{
-		Book_id:    "B8",
+		Book_id:    "B08",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail40 := models.BookDetailModel{
-		Book_id:    "B8",
+		Book_id:    "B08",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail41 := models.BookDetailModel{
-		Book_id:    "B9",
+		Book_id:    "B09",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail42 := models.BookDetailModel{
-		Book_id:    "B9",
+		Book_id:    "B09",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail43 := models.BookDetailModel{
-		Book_id:    "B9",
+		Book_id:    "B09",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail44 := models.BookDetailModel{
-		Book_id:    "B9",
+		Book_id:    "B09",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
 		Updated_at: now,
 	}
 	BookDetail45 := models.BookDetailModel{
-		Book_id:    "B9",
+		Book_id:    "B09",
 		Location:   "ABC123",
 		Status:     "ready",
 		Created_at: now,
@@ -1625,7 +1625,7 @@ func SeedHistory() {
 
 	History1 := models.HistoryModel{
 		User_id:        "U02",
-		Book_id:        "B3",
+		Book_id:        "B03",
 		Book_detail_id: "D31",
 		Status:         "returned",
 		Date_borrowed:  week1,
@@ -1633,7 +1633,7 @@ func SeedHistory() {
 	}
 	History2 := models.HistoryModel{
 		User_id:        "U03",
-		Book_id:        "B5",
+		Book_id:        "B05",
 		Book_detail_id: "D51",
 		Status:         "returned",
 		Date_borrowed:  week1,
@@ -1681,7 +1681,7 @@ func SeedHistory() {
 	}
 	History8 := models.HistoryModel{
 		User_id:        "U02",
-		Book_id:        "B4",
+		Book_id:        "B04",
 		Book_detail_id: "D41",
 		Status:         "returned",
 		Date_borrowed:  week1,
@@ -1689,7 +1689,7 @@ func SeedHistory() {
 	}
 	History9 := models.HistoryModel{
 		User_id:        "U03",
-		Book_id:        "B5",
+		Book_id:        "B05",
 		Book_detail_id: "D53",
 		Status:         "returned",
 		Date_borrowed:  week1,
@@ -1697,7 +1697,7 @@ func SeedHistory() {
 	}
 	History10 := models.HistoryModel{
 		User_id:        "U04",
-		Book_id:        "B6",
+		Book_id:        "B06",
 		Book_detail_id: "D64",
 		Status:         "returned",
 		Date_borrowed:  week1,
@@ -1705,7 +1705,7 @@ func SeedHistory() {
 	}
 	History11 := models.HistoryModel{
 		User_id:        "U05",
-		Book_id:        "B7",
+		Book_id:        "B07",
 		Book_detail_id: "D71",
 		Status:         "returned",
 		Date_borrowed:  week1,
@@ -1713,7 +1713,7 @@ func SeedHistory() {
 	}
 	History12 := models.HistoryModel{
 		User_id:        "U03",
-		Book_id:        "B9",
+		Book_id:        "B09",
 		Book_detail_id: "D93",
 		Status:         "returned",
 		Date_borrowed:  week1,

@@ -17,6 +17,7 @@ import (
 	"github.com/jung-kurt/gofpdf"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -391,5 +392,31 @@ func RequestInPhieuMuon() gin.HandlerFunc {
 				gin.H{"error": err.Error()})
 			return
 		}
+	}
+}
+
+func GetUsersByName() gin.HandlerFunc{
+	return func (c *gin.Context)  {
+		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Second)
+		defer cancel()
+		rec := bson.M{}
+		c.Bind(&rec)
+		name := rec["name"].(string)
+		matchStage := bson.D{
+			{Key: "$match", Value: bson.D{
+				{Key: "name", Value: bson.D{{Key: "$regex", Value: name}, {Key: "$options", Value: "i"}}},
+			}},
+		}
+		result,err := UserCollection.Aggregate(ctx,mongo.Pipeline{
+			matchStage,
+		})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError,gin.H{
+				"error":err,
+			})
+		}
+		res := []bson.M{}
+		result.All(ctx,&res)
+		c.JSON(http.StatusOK,res)
 	}
 }

@@ -273,7 +273,7 @@ func CreateBook() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "bad book model"})
 			return
 		}
-		opt := options.FindOne().SetSort(bson.M{"$natural": -1})
+		opt := options.FindOne().SetSort(bson.M{"book_id": -1})
 		res := models.BookModel{}
 		BookCollection.FindOne(ctx, bson.M{}, opt).Decode(&res)
 		co := strings.Split(res.Book_id, "B")[1]
@@ -281,6 +281,9 @@ func CreateBook() gin.HandlerFunc {
 		count++
 		counts := strconv.Itoa(int(count))
 		id := "B" + counts
+		if rec["book_img"].(string) == ""{
+			rec["book_img"] = "https://fastly.picsum.photos/id/914/200/300.jpg?hmac=djDZMbEp4lAfV3xSWxRKuN19XXc-ILyhtGfoXFLyjuA"
+		}
 		// bookModel.Id = primitive.NewObjectID()
 		// bookModel.Book_id = id
 		// bookModel.Created_at = now
@@ -373,8 +376,11 @@ func UpdateBook() gin.HandlerFunc {
 		if des := bookModel["publishing_location"].(string); des != "" {
 			updateObj = append(updateObj, bson.E{Key: "publishing_location", Value: des})
 		}
-
-		updateRes, updateErr := BookCollection.UpdateOne(ctx, bson.M{"book_id": id}, bson.D{{Key: "$set", Value: updateObj}})
+		upsert := false
+		opt := options.UpdateOptions{
+			Upsert: &upsert,
+		}
+		updateRes, updateErr := BookCollection.UpdateOne(ctx, bson.M{"book_id": id}, bson.D{{Key: "$set", Value: updateObj}},&opt)
 		if updateErr != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "cannot update"})
 			return
