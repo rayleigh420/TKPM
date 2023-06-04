@@ -146,7 +146,7 @@ const BorrowedBook = () => {
                                         <td>
                                             <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">
                                                 {
-                                                    moment().isBefore(moment(item?.date_return)) ?
+                                                    moment().isAfter(moment(item?.date_end)) ?
                                                         "Overdue"
                                                         :
                                                         item?.book_detail.status
@@ -197,7 +197,7 @@ const BorrowedBook = () => {
                                             <td>
                                                 <div className="badge bg-red-500 text-[#ffffff] font-semibold capitalize">
                                                     {
-                                                        moment().isBefore(moment(searchResult?.date_return)) ?
+                                                        moment().isAfter(moment(searchResult?.date_end)) ?
                                                             "Overdue"
                                                             :
                                                             searchResult?.book_detail.status

@@ -48,11 +48,11 @@ const ManageUser = () => {
                 <h1 className="mt-[50px] text-[32px] text-[#ffffff] leading-[32px] font-semibold">Manage User</h1>
                 <div className="divider bordered border-[#ffffff] w-[880px]"></div>
                 <div className="flex justify-end mb-[20px]">
-                    <form className="flex flex-row gap-[20px]" onSubmit={handleSubmitSearch}>
+                    {/* <form className="flex flex-row gap-[20px]" onSubmit={handleSubmitSearch}>
                         <div className="form-control">
                             <input value={search} onChange={handleChangeSeach} type="text" placeholder="Search" className="input input-bordered bg-[#262627] w-[300px]  focus:ease-out" />
                         </div>
-                    </form>
+                    </form> */}
                 </div>
                 <div className="overflow-x-auto overflow-y-auto w-full h-[800px]">
                     <table className="table w-full relative">
